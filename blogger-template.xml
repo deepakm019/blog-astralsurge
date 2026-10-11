@@ -1406,6 +1406,7 @@ body.static_page .site-tools,body.static_page .article .crumbs,body.static_page 
 #sdq #reset-top:hover{color:var(--q-ink);border-color:var(--q-accent)}
 #sdq #reset-top.primary{background:var(--q-accent);color:var(--q-accent-ink);border-color:var(--q-accent)}
 #sdq .diagram-card{margin:0 0 16px}
+#sdq .etab{width:100%;border-collapse:collapse;font-size:14px}#sdq .etab td{padding:7px 4px;border-bottom:1px solid var(--q-line)}#sdq .etab td:last-child{text-align:right;white-space:nowrap}#sdq .gloss dt{margin-top:12px}#sdq .gloss dd{margin:2px 0 0 0;color:var(--q-muted)}#sdq .rq{margin-top:10px}
 #sdq .diagram-card .diagram{margin:10px 0 0}
 #sdq [hidden]{display:none!important}
 @media (prefers-reduced-motion: reduce){#sdq *{transition:none!important}}
@@ -2126,7 +2127,7 @@ CHAPTERS.forEach(c => { c.track = c.track || "Alex Xu"; c.lbl = c.lbl || ("Ch " 
 
 // ---------- State (per viewer, localStorage with fallback) ----------
 let state;
-function blank(){return {xp:0, read:{}, answered:{}, complete:{}, daily:{date:"", done:false, streak:0, lastDay:""}};}
+function blank(){return {xp:0, read:{}, answered:{}, complete:{}, reviewed:{}, daily:{date:"", done:false, streak:0, lastDay:""}};}
 function load(){ try{ const s=JSON.parse(localStorage.getItem(STORE_KEY)); return s?Object.assign(blank(),s):blank(); }catch(e){ return blank(); } }
 function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
 
@@ -2273,16 +2274,93 @@ function checkComplete(c){
   }
 }
 
-// ---------- Study tabs: Content (notes), Diagrams, reset ----------
+// ---------- Study tabs: Content sections, Diagrams, Review, reset ----------
 let activeTab = "today";
+let contentSection = "notes";
+let reviewItems = [];
+const SECTIONS = [["notes","Notes"],["review","Review"],["estimates","Estimates"],["walk","Walkthroughs"],["glossary","Glossary"],["mistakes","Mistakes"],["path","Learning path"]];
+
+// Deep dive, watch-out and (where no SVG exists) a step-by-step flow for each chapter.
+const DEEP = {
+ 1:{deep:"Scale in stages. One server handles everything until a resource runs out; then split the roles, add redundancy, and shard only when a single primary can no longer keep up.", mistake:"Scaling the web tier while the database is the real bottleneck."},
+ 2:{deep:"Estimates decide which design is reasonable. Convert users to requests per second, requests to storage per day, then apply a peak factor. Round aggressively; the order of magnitude is what matters.", mistake:"Skipping units or assumptions, so the final number cannot be checked.", flow:["Users per day","Actions per user","Requests per second","Peak (x2 or x3)","Storage per day"]},
+ 3:{deep:"Interviews reward a process: clarify scope, sketch the high-level design, deep dive into two or three parts, then wrap up with bottlenecks and monitoring. In a 45-minute slot, spend about 5, 10, 25 and 5 minutes.", mistake:"Diving into details before agreeing on scope and requirements.", flow:["Understand the problem","Draft high-level design","Deep dive into key parts","Wrap up: bottlenecks and monitoring"]},
+ 4:{deep:"A rate limiter caps requests per client per window. Token bucket allows bursts, leaky bucket smooths output, and window counters trade accuracy for memory. Keep counters in a shared store so every server sees the same count.", mistake:"Keeping counters per server, so one client gets a different limit on each node."},
+ 5:{deep:"Consistent hashing places servers and keys on a ring. Adding a node only moves the keys between it and its neighbour, not the whole keyspace. Virtual nodes spread load evenly across machines of different sizes.", mistake:"Using hash mod N, which remaps almost every key when a node is added."},
+ 6:{deep:"A key-value store tunes reads, writes and durability. Quorums (N, W, R) choose between strong and eventual consistency, memtables and SSTables make writes fast, and gossip detects failures without a central coordinator.", mistake:"Assuming strong consistency everywhere, then being surprised by stale reads."},
+ 7:{deep:"Unique IDs can come from a central sequence (simple, but a bottleneck) or from distributed generators that combine a timestamp, a machine ID and a counter, as in 64-bit Snowflake-style IDs.", mistake:"Using one auto-increment database as the ID source for every service."},
+ 8:{deep:"A URL shortener maps a long URL to a short key. Base62 encoding turns a unique counter into a short string; reads dominate, so cache hot keys and choose 301 or 302 redirects based on whether you need analytics.", mistake:"Ignoring collisions or forgetting that the same long URL may need the same short key."},
+ 9:{deep:"A crawler starts from seed URLs, fetches pages politely, extracts links and avoids duplicates with a URL frontier and content hashes. Respect robots.txt and limit requests per host.", mistake:"Crawling without politeness limits, so you get blocked and overload sites.", flow:["Seed URLs","URL frontier","Fetch page","Parse and extract links","Dedup check","Store content"]},
+ 10:{deep:"Notifications fan out through channel-specific queues for push, SMS and email. Retries, deduplication and user preferences belong in the pipeline, not in each producer that sends an event.", mistake:"Letting every producer call each provider directly, with no retries or dedupe.", flow:["Event source","Notification service","Preferences check","Channel queues","Push, SMS or email","Retry and log"]},
+ 11:{deep:"A feed can fan out on write (precompute each follower's feed when a post is made) or on read (merge at view time). Celebrity accounts make pure fan-out-on-write too costly, so most real designs mix both.", mistake:"Choosing one fanout strategy and ignoring accounts with millions of followers."},
+ 12:{deep:"Chat uses WebSockets for two-way delivery, stores messages keyed by conversation, and tracks presence with heartbeats. Ordering comes from per-chat sequence numbers, which also let clients detect gaps after reconnecting.", mistake:"Treating a WebSocket as reliable delivery; reconnects can lose messages without sequence numbers."},
+ 13:{deep:"Autocomplete serves prefixes from a trie or precomputed top-k lists per prefix. Those lists are rebuilt asynchronously from search logs, so the read path only does a fast lookup.", mistake:"Querying the database on every keystroke instead of serving precomputed results."},
+ 14:{deep:"Video platforms store originals in blob storage, transcode into several resolutions in async workers, and serve bytes through a CDN. Upload and playback are separate paths that scale independently.", mistake:"Serving original files to every viewer instead of transcoded renditions through a CDN.", flow:["Upload original","Blob storage","Transcode workers","Multiple resolutions","CDN edge","Viewer"]},
+ 15:{deep:"File sync splits files into chunks and hashes each one, so unchanged chunks are not uploaded again. Metadata lives in a separate service, and changes reach other devices through notifications.", mistake:"Re-uploading whole files after a small edit instead of syncing changed chunks.", flow:["Client chunks file","Hash each chunk","Upload new chunks","Metadata service","Sync notification","Other devices"]},
+ 16:{deep:"Practice builds judgment. Pick a problem, write requirements, estimate, draft a design, then compare your blueprint with a reference. Redo the same problem a month later to see what you remember.", mistake:"Practicing without a timer or without comparing against a reference.", flow:["Pick a problem","Write requirements","Estimate scale","Draft design","Compare with reference","Repeat a month later"]},
+ 101:{deep:"The relational model stores facts in tables with keys. Primary keys identify rows, foreign keys enforce relationships, and normalization removes duplicated data so each fact is stored once.", mistake:"Storing comma-separated lists in one column instead of a related table."},
+ 102:{deep:"Joins combine tables on keys. Inner joins keep only matches; outer joins also keep unmatched rows. GROUP BY aggregates after the filter, and a filter on the right table of a LEFT JOIN quietly removes the unmatched rows.", mistake:"Filtering the outer table of a LEFT JOIN in WHERE, which silently turns it into an inner join."},
+ 103:{deep:"Transactions give atomicity and isolation. Isolation levels such as read committed, repeatable read and serializable trade anomalies such as dirty reads, non-repeatable reads and write skew against throughput.", mistake:"Assuming the default isolation level prevents every race condition."},
+ 104:{deep:"Indexes trade write cost and storage for faster reads. B-trees serve equality and range queries; the planner uses an index only when it is selective enough; the column order in a composite index matters.", mistake:"Indexing every column; each index slows down writes and takes space.", flow:["Slow query","Run EXPLAIN","Find filter columns","Add index","Re-check the plan","Confirm latency"]},
+ 105:{deep:"Distributed databases split data across nodes. NoSQL stores give up joins and strict schemas for scale and flexible models, so choose by access pattern before choosing a product.", mistake:"Picking a NoSQL store because it is popular, without checking the access patterns.", flow:["Access pattern","Consistency needs","Pick data model","Partition key","Replicate","Monitor"]},
+ 201:{deep:"Git records snapshots as a graph of commits. Branches are movable pointers, and merges or rebases combine histories. Small, meaningful commits make review and rollback easy.", mistake:"Committing generated files or secrets, which then stay in history forever.", flow:["Working directory","git add","Commit snapshot","Branch","Pull request","Merge to main"]},
+ 202:{deep:"GitHub adds pull requests, reviews and CI checks. GitOps treats the repository as the source of truth for deployments, so every production change is reviewed, versioned and reversible.", mistake:"Changing production by hand instead of through reviewed Git changes.", flow:["Feature branch","Pull request","CI checks","Review","Merge","Deploy from Git"]},
+ 301:{deep:"REST models a system as resources identified by URLs and changed with standard methods. It is stateless and cacheable, which makes services easy to combine and scale.", mistake:"Treating REST as RPC over HTTP, with verbs in every URL."},
+ 302:{deep:"Good APIs use nouns for resources and HTTP methods for actions, return correct status codes, paginate lists, and version the API when a change would break clients.", mistake:"Returning 200 for every response and hiding errors in the body.", flow:["Resource noun","Choose method","Set status code","Paginate list","Version the API","Document it"]},
+ 401:{deep:"Reliable, scalable and maintainable systems are the three goals. Measure performance with percentiles rather than averages, because tail latency shows what the slowest users feel. Faults are expected, not exceptional.", mistake:"Measuring only averages; tail percentiles reveal the real user pain."},
+ 402:{deep:"Storage engines choose between log-structured designs (append, then compact) and B-trees (update in place). Compare them by write amplification, read amplification and space amplification, not by one number.", mistake:"Comparing storage engines by speed on one benchmark only."},
+ 403:{deep:"Data outlives code. Formats such as Protocol Buffers and Avro keep old and new readers compatible when fields are added or removed carefully. Rolling deploys mean both versions run at the same time.", mistake:"Renaming a field in a way that breaks old readers during a rolling deploy.", flow:["Old writer (v1)","Encoded record","Schema registry","New reader (v2)","Unknown field kept","Compatible"]},
+ 404:{deep:"Replication copies data for availability and lower latency. Single-leader is simplest; multi-leader and leaderless setups need conflict handling. Replication lag causes visible anomalies such as reading your own write from a stale replica.", mistake:"Assuming replicas are always current; reads can show stale data.", flow:["Client write","Leader","Replicate log","Follower","Lagging read","Read-your-writes fix"]},
+ 405:{deep:"Partitioning spreads data by key range or by hash. Hot keys and rebalancing are the usual pain points. Secondary indexes can be stored locally in each partition or globally across them.", mistake:"Choosing a partition key that sends most traffic to one hot partition.", flow:["Dataset","Partition key","Hash or range","Node A","Node B","Rebalance"]},
+ 406:{deep:"Isolation levels protect against concurrency bugs. Snapshot isolation prevents many anomalies, but write skew needs serializable isolation, locks or explicit conflict checks.", mistake:"Believing snapshot isolation is the same as serializable.", flow:["Transaction start","Read snapshot","Write set","Conflict check","Commit or abort","Retry"]},
+ 407:{deep:"Distributed systems fail partially. Clocks drift, packets are delayed or lost, and nodes pause for garbage collection. Design with timeouts, retries, fencing tokens and idempotent operations.", mistake:"Assuming a timeout means the other side did nothing; it may still have executed.", flow:["Request sent","Network delay","Timeout","Retry with ID","Fencing token","Safe result"]},
+ 408:{deep:"Consensus lets nodes agree on one value despite failures. Raft and Paxos underpin leader election and linearizable storage, and quorums keep the agreement safe during partitions.", mistake:"Using consensus for everything; it is slower and only needed for agreement.", flow:["Proposer","Quorum vote","Leader chosen","Log entry agreed","Applied to state","Client sees value"]},
+ 409:{deep:"Batch jobs process bounded datasets; stream jobs process unbounded events. Both rely on partitioned input, deterministic processing and recoverable state, so a failed job can be replayed.", mistake:"Treating stream results as exact without idempotent or replayable state.", flow:["Event log","Partitioned stream","Operator","State store","Output","Replay on failure"]},
+ 410:{deep:"Modern systems combine specialized tools: a database, a cache, a search index and a stream. Keep them consistent with change data capture, and be clear about which system owns each piece of data.", mistake:"Keeping copies of the same data in several systems with no clear source of truth.", flow:["Source of truth DB","Change data capture","Stream","Search index","Cache","Analytics"]}
+};
+
+// ---------- Generated flow diagrams (snake layout, 3 per row) ----------
+let svgSeq = 0;
+function wrapLabel(t){
+  const lines=[""];
+  String(t).split(" ").forEach(w=>{ const cur=lines[lines.length-1]; if(cur && (cur+" "+w).length>17) lines.push(w); else lines[lines.length-1]=cur?cur+" "+w:w; });
+  return lines.slice(0,2);
+}
+function flowSVG(nodes){
+  const id="fm"+(++svgSeq), W=640, bw=156, bh=60, per=3, gap=86, rowGap=50;
+  const rows=Math.ceil(nodes.length/per), H=rows*bh+(rows-1)*rowGap+16;
+  const pos=i=>{ const r=Math.floor(i/per); let c=i%per; if(r%2) c=per-1-c; return {x:c*(bw+gap), y:8+r*(bh+rowGap), r}; };
+  let out="";
+  nodes.forEach((label,i)=>{
+    const p=pos(i), last=i===nodes.length-1, lines=wrapLabel(label);
+    const cy=p.y+bh/2, start=cy-(lines.length-1)*8+5;
+    out+=`<rect x="${p.x}" y="${p.y}" width="${bw}" height="${bh}" rx="10" style="fill:${last?"var(--q-accent)":"var(--q-surface2)"};${last?"fill-opacity:.25;":""}stroke:${last?"var(--q-accent)":"var(--q-line2)"};stroke-width:1.5"/>`;
+    lines.forEach((t,k)=>{ out+=`<text x="${p.x+bw/2}" y="${start+k*16}" text-anchor="middle" style="fill:var(--q-ink);font-size:13px;font-weight:600">${esc(t)}</text>`; });
+  });
+  for(let i=0;i<nodes.length-1;i++){
+    const a=pos(i), b=pos(i+1);
+    let x1,y1,x2,y2;
+    if(a.r===b.r){ const fwd=b.x>a.x; y1=y2=a.y+bh/2; x1=fwd?a.x+bw+4:a.x-4; x2=fwd?b.x-4:b.x+bw+4; }
+    else { x1=x2=a.x+bw/2; y1=a.y+bh+4; y2=b.y-4; }
+    out+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" marker-end="url(#${id})" style="stroke:var(--q-muted);stroke-width:2"/>`;
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(nodes.join(", then "))}" style="width:100%;height:auto;display:block"><defs><marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--q-muted)"/></marker></defs>${out}</svg>`;
+}
+function chapterDiagram(c){
+  if(EXTRA[c.n] && EXTRA[c.n].svg) return EXTRA[c.n].svg;
+  if(DEEP[c.n] && DEEP[c.n].flow) return flowSVG(DEEP[c.n].flow);
+  return "";
+}
+
+// ---------- Study content data ----------
 const CHEAT_TRADEOFFS = [
- ["Consistency vs availability", "CAP: pick a side during partitions (Ch 6, Ch 15, DB 5, DDIA 8)"],
- ["Latency vs consistency", "W and R settings; eventual vs strong (Ch 6, DDIA 4)"],
- ["Space vs time", "cache top-k at each node; precomputed feeds; materialized views (Ch 11, Ch 13, DB 4)"],
- ["Simplicity vs scale", "single server first, then shard only when needed (Ch 1, DB 5)"],
- ["Push vs pull", "fanout on write vs read; polling vs WebSocket (Ch 11, Ch 12)"],
- ["Cost vs speed", "CDN spend vs long-tail storage (Ch 14)"],
- ["Retries vs duplicates", "retries need idempotency via keys and unique constraints (DB 5, REST 2)"]
+ ["Consistency vs availability","CAP: pick a side during partitions (Ch 6, DDIA 8)"],
+ ["Latency vs consistency","Tune W and R; eventual vs strong reads (Ch 6, DDIA 4)"],
+ ["Space vs time","Precompute top-k, feeds and materialized views (Ch 11, Ch 13, DB 4)"],
+ ["Simplicity vs scale","One server first, then shard only when needed (Ch 1, DB 5)"],
+ ["Push vs pull","Fanout on write vs read; polling vs WebSocket (Ch 11, Ch 12)"],
+ ["Cost vs speed","CDN spend vs long-tail storage (Ch 14)"],
+ ["Retries vs duplicates","Retries need idempotency keys and unique constraints (DB 5, REST 2)"]
 ];
 const CHEAT_CHECKLIST = [
  "Clarify features, users, scale, and what is out of scope",
@@ -2290,30 +2368,161 @@ const CHEAT_CHECKLIST = [
  "Pick two or three components to deep dive, and say the trade-off",
  "Cover failures, monitoring, and what changes at 10x scale"
 ];
-function renderContent(){
-  const filters = TRACKS.map(t=>`<button class="btn ${trackFilter===t?"on":""}" data-ctrack="${esc(t)}">${esc(t)}</button>`).join("");
+const LATENCY = [["L1 cache reference","~0.5 ns"],["Main memory reference","~100 ns"],["SSD random read","~150 µs"],["Round trip in same datacenter","~0.5 ms"],["Disk seek (HDD)","~10 ms"],["Round trip across continents","~150 ms"]];
+const UNITS = [["1 KB","10^3 bytes"],["1 MB","10^6 bytes"],["1 GB","10^9 bytes"],["1 TB","10^12 bytes"],["1 PB","10^15 bytes"],["1 day","~86,400 s (round to 10^5)"],["1 month","~2.5 million s"]];
+const RULES = ["1M requests per day is about 12 QPS (1M / 86,400).","Peak traffic is often 2 to 3 times the average. Size for peak.","Storage = items × size × retention. 10M items × 1 KB = 10 GB.","Write the assumption next to every number, so the interviewer can change it."];
+const WALK = [
+ {title:"Design a chat system", ch:"Ch 12", scope:"1:1 and group chat, online presence, 50M daily users.", est:"50M users × 20 messages a day ≈ 1B messages a day ≈ 12k messages per second on average.", flow:["Client","WebSocket gateway","Chat service","Message store","Delivery queue","Recipient gateway"], steps:["Clarify 1:1 vs groups, history retention and delivery guarantees.","Keep one persistent WebSocket per device; a registry maps user ID to gateway.","Store messages keyed by conversation ID and a per-chat sequence number.","Deliver through a queue. If the recipient is offline, send a push notification and sync on reconnect."], tradeoff:"WebSockets give low latency but need stateful gateways and reconnection logic. Long polling is simpler but costs more server work."},
+ {title:"Design a news feed", ch:"Ch 11", scope:"Posts from followers, ranked feed, celebrity accounts with millions of followers.", est:"300M daily users × 10 feed reads a day ≈ 35k read QPS, with peaks 2 to 3 times higher.", flow:["Post created","Fanout service","Follower feeds (cache)","Ranking","Feed read API","Client"], steps:["Clarify ranking (chronological or ranked) and freshness needs.","Fan out on write for normal accounts into cached per-user feeds.","Fan out on read for celebrity accounts and merge at view time.","Rank the merged list and return a page of post IDs with a cursor."], tradeoff:"Fan-out on write makes reads cheap but expensive for big accounts; fan-out on read is the reverse. Most systems use both."},
+ {title:"Design a rate limiter", ch:"Ch 4", scope:"Per-client limits across many API servers, with clear 429 responses.", est:"1M clients × 10 rules × 100 bytes per counter ≈ 1 GB of counter state.", flow:["Request","API gateway","Limiter check","Shared counter store","Allow or 429","Backend"], steps:["Clarify the key (user, IP, API key) and the rule (requests per minute).","Choose token bucket for bursts or a window counter for simplicity.","Store counters in a shared cache so every gateway sees the same count.","Return 429 with a Retry-After header; log rejected requests for review."], tradeoff:"A shared store adds a network hop per request. Local counters are faster but let one client exceed the limit across servers."},
+ {title:"Design YouTube", ch:"Ch 14", scope:"Uploads, transcoding into several resolutions, and global playback.", est:"5M uploads a day × 500 MB ≈ 2.5 PB of raw video per day before transcoding.", flow:["Upload","Blob storage","Transcode queue","Workers","CDN edge","Player"], steps:["Clarify upload size limits, resolutions and expected view counts.","Store originals in blob storage and send a job to a transcode queue.","Workers create several renditions and write them back to blob storage.","Serve popular videos from the CDN; fetch long-tail videos from origin."], tradeoff:"More renditions cost storage and compute but let players adapt to bandwidth. Caching only popular videos saves money on the long tail."}
+];
+
+// ---------- Rendering ----------
+function trackButtons(){
+  return TRACKS.map(t=>`<button class="btn ${trackFilter===t?"on":""}" data-ctrack="${esc(t)}">${esc(t)}</button>`).join("");
+}
+function bindTrackButtons(){
+  $$("[data-ctrack]").forEach(b=>b.addEventListener("click",()=>{ trackFilter=b.dataset.ctrack; showTab(activeTab); }));
+}
+function renderNotes(){
   const list = CHAPTERS.filter(c=>trackFilter==="All"||c.track===trackFilter);
-  const notes = list.map(c=>{
-    const ex = EXTRA[c.n] || {};
+  return list.map(c=>{
+    const ex=EXTRA[c.n]||{}, d=DEEP[c.n]||{};
     return `<div class="qcard">
       <div class="label">${esc(c.lbl)} · ${esc(c.track)} · ${esc(REALMS[c.track]||"")}</div>
       <h2>${esc(c.t)}</h2>
-      ${ex.intro ? `<p class="intro">${esc(ex.intro)}</p>` : ""}
+      ${ex.intro?`<p class="intro">${esc(ex.intro)}</p>`:""}
+      ${d.deep?`<p>${esc(d.deep)}</p>`:""}
       <h3>Key ideas</h3>
       <ul class="tree">${c.concepts.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
-      ${ex.tip ? `<div class="tip"><b>Game tip:</b> ${esc(ex.tip)}</div>` : ""}
+      ${d.mistake?`<div class="tip"><b>Watch out:</b> ${esc(d.mistake)}</div>`:""}
+      ${ex.tip?`<div class="tip"><b>Game tip:</b> ${esc(ex.tip)}</div>`:""}
     </div>`;
   }).join("");
-  const cheat = `<div class="qcard hl"><h2>Cheat sheet: recurring trade-offs</h2><ul class="tree">${CHEAT_TRADEOFFS.map(([a,b])=>`<li><b>${esc(a)}</b> · ${esc(b)}</li>`).join("")}</ul></div>
+}
+function renderCheat(){
+  return `<div class="qcard hl"><h2>Cheat sheet: recurring trade-offs</h2><ul class="tree">${CHEAT_TRADEOFFS.map(([a,b])=>`<li><b>${esc(a)}</b> · ${esc(b)}</li>`).join("")}</ul></div>
     <div class="qcard"><h2>Interview checklist</h2><ul class="tree">${CHEAT_CHECKLIST.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;
-  $("#tab-content").innerHTML = `<div class="filters" role="group" aria-label="Filter notes by source">${filters}</div>
-    <p class="muted">Read-only study notes. Earn XP for concepts and quizzes in the Chapters tab.</p>${notes}${cheat}`;
-  $$("[data-ctrack]").forEach(b=>b.addEventListener("click",()=>{ trackFilter=b.dataset.ctrack; renderContent(); }));
+}
+function qKey(q){ return q.ch+"-q"+q.id.split("-").pop(); }
+function renderReview(){
+  const missed = POOL.filter(q=>{ const a=state.answered[qKey(q)]; return a && !a.ok; });
+  const start = hashStr(dayKey()) % POOL.length;
+  const practice = [];
+  for(let i=0;i<POOL.length && practice.length<Math.min(5,POOL.length);i++){
+    const q=POOL[(start+i*3)%POOL.length];
+    if(!missed.includes(q) && !practice.includes(q)) practice.push(q);
+  }
+  reviewItems = missed.concat(practice);
+  const card = (q,idx)=>`<div class="qcard">
+      <div class="label">${esc(q.lbl)} · ${esc(q.title)}${state.reviewed[qKey(q)]?" · <b>Reviewed</b>":""}</div>
+      <b>${esc(q.q)}</b>
+      <div class="rq" data-rn="${idx}">${q.o.map((o,j)=>`<button class="opt" data-j="${j}"><span class="k">${String.fromCharCode(65+j)}</span><span>${esc(o)}</span></button>`).join("")}</div>
+      <div id="rfb-${idx}"></div></div>`;
+  const head = `<div class="qcard"><h2>Review</h2><p class="muted">Missed questions come back until you answer them correctly. Practice questions change each day. Each new correct answer earns ${REWARD.concept} XP.</p></div>`;
+  if(!reviewItems.length) return head+`<p class="muted">Nothing to review yet. Answer some quiz questions in the Chapters tab first.</p>`;
+  const missedHtml = missed.length ? `<h3>Missed (${missed.length})</h3>` + missed.map((q,i)=>card(q,i)).join("") : "";
+  const practiceHtml = practice.length ? `<h3>Practice today</h3>` + practice.map((q,i)=>card(q,missed.length+i)).join("") : "";
+  return head + missedHtml + practiceHtml;
+}
+function bindReview(){
+  reviewItems.forEach((q,idx)=>{
+    const wrap = $(`.rq[data-rn="${idx}"]`);
+    if(!wrap) return;
+    wrap.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{
+      const ok = +b.dataset.j===q.a, k=qKey(q);
+      wrap.querySelectorAll(".opt").forEach(x=>{ x.classList.remove("right","wrong"); if(+x.dataset.j===q.a) x.classList.add("right"); });
+      if(!ok) b.classList.add("wrong");
+      if(ok && !state.reviewed[k]){ state.reviewed[k]=true; gain(REWARD.concept); save(); renderHeader(); toast("+"+REWARD.concept+" XP"); }
+      $(`#rfb-${idx}`).innerHTML = `<div class="feedback ${ok?"ok":"no"}"><b>${ok?"Correct.":"Not quite."}</b> ${esc(q.ex)}</div>`;
+    }));
+  });
+}
+function renderEstimates(){
+  const rows = arr=>arr.map(([a,b])=>`<tr><td>${esc(a)}</td><td class="mono">${esc(b)}</td></tr>`).join("");
+  return `<div class="qcard"><h2>Latency numbers</h2><table class="etab"><tbody>${rows(LATENCY)}</tbody></table></div>
+    <div class="qcard"><h2>Units and time</h2><table class="etab"><tbody>${rows(UNITS)}</tbody></table></div>
+    <div class="qcard"><h2>Quick rules</h2><ul class="tree">${RULES.map(r=>`<li>${esc(r)}</li>`).join("")}</ul></div>`;
+}
+function renderWalk(){
+  return WALK.map(w=>`<div class="qcard">
+    <div class="label">${esc(w.ch)} · Walkthrough</div>
+    <h2>${esc(w.title)}</h2>
+    <p class="intro"><b>Scope:</b> ${esc(w.scope)}</p>
+    <p class="muted"><b>Estimate:</b> ${esc(w.est)}</p>
+    <div class="diagram">${flowSVG(w.flow)}</div>
+    <h3>Steps</h3><ol class="tree">${w.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
+    <div class="tip"><b>Trade-off:</b> ${esc(w.tradeoff)}</div></div>`).join("");
+}
+function renderGlossary(){
+  const G = [
+   ["Sharding","Splitting data across nodes by a key so each node holds a subset.","Ch 1, DDIA 5"],
+   ["Replication","Keeping copies of data on several nodes for availability and reads.","Ch 1, DDIA 4"],
+   ["Quorum","Reading or writing W or R of N replicas so reads overlap recent writes.","Ch 6, DDIA 8"],
+   ["Idempotency","Repeating an operation has the same effect as doing it once.","REST 2, DB 5"],
+   ["Backpressure","Slowing producers when consumers cannot keep up.","DDIA 9"],
+   ["Fanout","Delivering one event to many readers or subscribers.","Ch 11"],
+   ["Consistent hashing","Ring-based key placement that moves few keys when nodes change.","Ch 5"],
+   ["Consensus","Nodes agreeing on one value despite failures, as in Raft.","DDIA 8"],
+   ["Token bucket","Rate limit that allows bursts up to a capacity and refills over time.","Ch 4"],
+   ["CDN","Edge servers that cache static bytes close to users.","Ch 1, Ch 14"],
+   ["Write amplification","Extra disk writes caused by the storage engine's own bookkeeping.","DDIA 2"],
+   ["Index","Extra structure that speeds lookups at the cost of writes and space.","DB 4"],
+   ["Isolation level","How much concurrent transactions can see of each other's changes.","DB 3, DDIA 6"],
+   ["Eventual consistency","Replicas converge once writes stop, but reads may be stale meanwhile.","Ch 6, DDIA 4"],
+   ["Partition key","The field that decides which node stores a record.","DDIA 5"],
+   ["Hot key","A key that gets far more traffic than others and overloads one node.","DDIA 5"],
+   ["Change data capture","Streaming a database's changes to other systems.","DDIA 10"],
+   ["REST","Style with resources, URLs, HTTP methods and stateless requests.","REST 1"],
+   ["WebSocket","A persistent two-way connection between client and server.","Ch 12"],
+   ["Snapshot","A consistent view of data at one point in time.","Git 1, DDIA 6"],
+   ["Schema evolution","Changing data formats so old and new code can both read them.","DDIA 3"],
+   ["p99 latency","The response time that 99 percent of requests beat.","DDIA 1"]
+  ];
+  return `<div class="qcard"><h2>Glossary</h2><dl class="gloss">${G.map(([t,d,c])=>`<dt><b>${esc(t)}</b> <span class="muted">${esc(c)}</span></dt><dd>${esc(d)}</dd>`).join("")}</dl></div>`;
+}
+function renderMistakes(){
+  const M = [
+   ["Starting with the database before requirements","Ask about scope and scale first, then design."],
+   ["Ignoring failure","Say what happens when a node, queue or region dies."],
+   ["Skipping estimates","A 30-second estimate is enough to choose between designs."],
+   ["Naming tools without reasons","Explain the trade-off each tool buys you."],
+   ["Not naming the first bottleneck","Say which QPS or storage number breaks first."],
+   ["No monitoring or rollback plan","Mention metrics, alerts and a safe deploy path."],
+   ["Over-engineering for 10x too early","Start simple, and state the change you would make at scale."],
+   ["Silent assumptions","Write them down and let the interviewer change them."]
+  ];
+  return `<div class="qcard"><h2>Common mistakes and fixes</h2><ul class="tree">${M.map(([m,f])=>`<li><b>${esc(m)}:</b> ${esc(f)}</li>`).join("")}</ul></div>`;
+}
+function renderPath(){
+  const P = [
+   {level:"Beginner (1 to 2 weeks)", items:["Ch 1 Scale from zero","Ch 2 Estimation","Ch 3 Framework","DB 1 Relational basics","Git 1 Fundamentals"]},
+   {level:"Intermediate (3 to 4 weeks)", items:["Ch 4 Rate limiter","Ch 5 Consistent hashing","Ch 6 Key-value store","Ch 8 URL shortener","DB 2 to 4 Joins, transactions, indexes","REST 1 to 2 APIs"]},
+   {level:"Advanced (5+ weeks)", items:["Ch 9 to 15 applied designs","DDIA 4 to 8, replication to consensus","DB 5 Distributed data","Walkthroughs: chat, feed, rate limiter, YouTube","Review tab, a few questions a day"]}
+  ];
+  return P.map(p=>`<div class="qcard"><h2>${esc(p.level)}</h2><ol class="tree">${p.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ol></div>`).join("");
+}
+function renderContent(){
+  const picker = SECTIONS.map(([k,l])=>`<button class="btn ${contentSection===k?"on":""}" data-csec="${k}">${l}</button>`).join("");
+  let body="";
+  if(contentSection==="notes") body = `<div class="filters">${trackButtons()}</div><p class="muted">Study notes for every chapter. Earn XP in the Chapters tab.</p>${renderNotes()}${renderCheat()}`;
+  else if(contentSection==="review") body = renderReview();
+  else if(contentSection==="estimates") body = renderEstimates();
+  else if(contentSection==="walk") body = renderWalk();
+  else if(contentSection==="glossary") body = renderGlossary();
+  else if(contentSection==="mistakes") body = renderMistakes();
+  else body = renderPath();
+  $("#tab-content").innerHTML = `<div class="filters" role="group" aria-label="Study sections">${picker}</div>${body}`;
+  $$("[data-csec]").forEach(b=>b.addEventListener("click",()=>{ contentSection=b.dataset.csec; renderContent(); }));
+  bindTrackButtons();
+  if(contentSection==="review") bindReview();
 }
 function renderDiagrams(){
-  const items = CHAPTERS.filter(c=>EXTRA[c.n] && EXTRA[c.n].svg);
-  $("#tab-diagrams").innerHTML = `<p class="muted">${items.length} diagrams, one for each core mechanism.</p>` +
-    items.map(c=>`<figure class="qcard diagram-card"><div class="label">${esc(c.lbl)} · ${esc(REALMS[c.track]||"")}</div><h3>${esc(c.t)}</h3><div class="diagram">${EXTRA[c.n].svg}</div></figure>`).join("");
+  const list = CHAPTERS.filter(c=>(trackFilter==="All"||c.track===trackFilter) && chapterDiagram(c));
+  $("#tab-diagrams").innerHTML = `<div class="filters">${trackButtons()}</div><p class="muted">${list.length} diagrams, one per chapter. Each one shows the mechanism in the order it happens.</p>` +
+    list.map(c=>`<figure class="qcard diagram-card"><div class="label">${esc(c.lbl)} · ${esc(REALMS[c.track]||"")}</div><h3>${esc(c.t)}</h3><div class="diagram">${chapterDiagram(c)}</div></figure>`).join("");
+  bindTrackButtons();
 }
 function setupReset(btn){
   if(!btn) return;
