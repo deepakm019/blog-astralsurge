@@ -1,0 +1,73 @@
+#agx{font-family:var(--font);color:var(--text);line-height:1.72;max-width:var(--max);margin:0 auto;padding:0 0 40px;font-size:1rem}
+#agx h1{font-size:2.2rem;font-weight:800;letter-spacing:-.03em;line-height:1.12;margin:0 0 .4em;color:var(--text)}
+#agx h2{font-size:1.5rem;font-weight:750;letter-spacing:-.02em;margin:2.4em 0 .5em;padding-top:.4em;border-top:1px solid var(--border);color:var(--text);scroll-margin-top:90px}
+#agx h3{font-size:1.1rem;font-weight:700;margin:1.7em 0 .4em;color:var(--accent)}
+#agx p{margin:.7em 0}
+#agx ul,#agx ol{padding-left:1.3em;margin:.6em 0}
+#agx li{margin:.3em 0}
+#agx a{color:var(--link)}
+#agx .lede{color:var(--muted);font-size:1.08rem;margin-top:.2em}
+#agx .kicker{font-family:var(--mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin:0 0 .6em}
+#agx code{font-family:var(--mono);background:var(--surface-2);padding:1px 6px;border-radius:6px;font-size:.87em}
+#agx pre{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:.82rem;line-height:1.55;margin:1em 0}
+#agx pre code{background:none;padding:0;font-size:inherit}
+#agx table{width:100%;border-collapse:collapse;font-size:.92rem;margin:1em 0;display:block;overflow-x:auto}
+#agx th,#agx td{border-bottom:1px solid var(--border);padding:9px 10px;text-align:left;vertical-align:top}
+#agx th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+#agx .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin:16px 0}
+#agx .figure{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin:20px 0}
+#agx .figure svg{width:100%;height:auto;display:block}
+#agx figcaption{color:var(--muted);font-size:.88rem;margin-top:8px}
+#agx .toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 20px;margin:20px 0}
+#agx .toc ol{columns:2;list-style:none;padding:0;margin:0;counter-reset:t}
+#agx .toc li{break-inside:avoid;margin:.35em 0}
+#agx .toc a{text-decoration:none}
+#agx .tip{border-left:3px solid var(--accent);padding:8px 14px;background:var(--surface-2);border-radius:0 10px 10px 0;margin:14px 0;color:var(--text)}
+#agx .warn{border-left:3px solid var(--muted);padding:8px 14px;background:var(--surface-2);border-radius:0 10px 10px 0;margin:14px 0}
+#agx .sv-box{fill:var(--surface-2);stroke:var(--border-strong);stroke-width:1.3}
+#agx .sv-hot{fill:var(--accent);stroke:none}
+#agx .sv-end{fill:var(--surface);stroke:var(--accent);stroke-width:1.6}
+#agx .sv-zone{fill:none;stroke:var(--border-strong);stroke-width:1;stroke-dasharray:5 4}
+#agx .sv-line{fill:none;stroke:var(--muted);stroke-width:1.6}
+#agx .sv-dash{fill:none;stroke:var(--muted);stroke-width:1.4;stroke-dasharray:5 4}
+#agx .sv-ah{fill:var(--muted)}
+#agx .sv-t{fill:var(--text);font-family:var(--font);font-size:13px;font-weight:650}
+#agx .sv-onhot{fill:var(--accent-ink);font-family:var(--font);font-size:13px;font-weight:700}
+#agx .sv-s{fill:var(--muted);font-family:var(--font);font-size:11.5px}
+#agx .sv-tc{text-anchor:middle}
+#agx .agx-readbox{margin:22px 0 4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#agx .agx-btn{font:inherit;font-size:.9rem;font-weight:600;padding:8px 14px;border-radius:10px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);cursor:pointer}
+#agx .agx-btn:hover:not(:disabled){border-color:var(--accent)}
+#agx .agx-btn:disabled{opacity:.65;cursor:default}
+#agx .agx-opt{display:block;width:100%;text-align:left;font:inherit;font-size:.95rem;margin:6px 0;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);cursor:pointer}
+#agx .agx-opt:hover:not(:disabled){border-color:var(--accent)}
+#agx .agx-opt:disabled{cursor:default}
+#agx .agx-opt.right{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--surface-2))}
+#agx .agx-opt.wrong{border-color:#ff8a7a}
+#agx .agx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+#agx .agx-stat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px}
+#agx .agx-stat b{display:block;font-family:var(--mono);font-size:1.3rem;margin-top:4px}
+#agx .agx-bar{height:8px;background:var(--surface-2);border-radius:999px;overflow:hidden;margin-top:10px}
+#agx .agx-bar span{display:block;height:100%;background:var(--accent)}
+#agx .agx-badge{padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+#agx .agx-badge.on{border-color:var(--accent)}
+#agx .agx-q{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin:14px 0}
+#agx .agx-boss{border-color:var(--border-strong)}
+#agx .agx-note{color:var(--muted);font-size:.9rem}
+#agx .agx-cols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));align-items:start}
+#agx .agx-cols-2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+#agx .agx-cols-wide{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}
+#agx .agx-cols .agx-q{margin:0;height:100%}
+#agx .agx-msg{min-height:1.4em;color:var(--accent);font-weight:600;margin:10px 0 0}
+@media (max-width:640px){#agx h1{font-size:1.75rem}#agx .toc ol{columns:1}}
+#agx [hidden]{display:none!important}
+#agx .agx-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:22px 0 16px;padding:6px;background:var(--surface);border:1px solid var(--border);border-radius:14px}
+#agx .agx-tabs button{font:inherit;font-size:.92rem;font-weight:600;padding:9px 14px;border-radius:10px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+#agx .agx-tabs button:hover{color:var(--text)}
+#agx .agx-tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+#agx .agx-pager{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:30px 0 0;padding-top:16px;border-top:1px solid var(--border)}
+#agx .agx-pager .agx-msg{width:100%}
+#agx button.agx-card{font:inherit;text-align:left;width:100%;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;cursor:pointer}
+#agx button.agx-card:hover{border-color:var(--accent)}
+#agx .agx-diag{margin:0}
+#agx .agx-diag .figure{margin:10px 0 0}

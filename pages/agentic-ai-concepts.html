@@ -1,0 +1,1064 @@
+<style>
+#agx{font-family:var(--font);color:var(--text);line-height:1.72;max-width:var(--max);margin:0 auto;padding:0 0 40px;font-size:1rem}
+#agx h1{font-size:2.2rem;font-weight:800;letter-spacing:-.03em;line-height:1.12;margin:0 0 .4em;color:var(--text)}
+#agx h2{font-size:1.5rem;font-weight:750;letter-spacing:-.02em;margin:2.4em 0 .5em;padding-top:.4em;border-top:1px solid var(--border);color:var(--text);scroll-margin-top:90px}
+#agx h3{font-size:1.1rem;font-weight:700;margin:1.7em 0 .4em;color:var(--accent)}
+#agx p{margin:.7em 0}
+#agx ul,#agx ol{padding-left:1.3em;margin:.6em 0}
+#agx li{margin:.3em 0}
+#agx a{color:var(--link)}
+#agx .lede{color:var(--muted);font-size:1.08rem;margin-top:.2em}
+#agx .kicker{font-family:var(--mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin:0 0 .6em}
+#agx code{font-family:var(--mono);background:var(--surface-2);padding:1px 6px;border-radius:6px;font-size:.87em}
+#agx pre{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:.82rem;line-height:1.55;margin:1em 0}
+#agx pre code{background:none;padding:0;font-size:inherit}
+#agx table{width:100%;border-collapse:collapse;font-size:.92rem;margin:1em 0;display:block;overflow-x:auto}
+#agx th,#agx td{border-bottom:1px solid var(--border);padding:9px 10px;text-align:left;vertical-align:top}
+#agx th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+#agx .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin:16px 0}
+#agx .figure{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin:20px 0}
+#agx .figure svg{width:100%;height:auto;display:block}
+#agx figcaption{color:var(--muted);font-size:.88rem;margin-top:8px}
+#agx .toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 20px;margin:20px 0}
+#agx .toc ol{columns:2;list-style:none;padding:0;margin:0;counter-reset:t}
+#agx .toc li{break-inside:avoid;margin:.35em 0}
+#agx .toc a{text-decoration:none}
+#agx .tip{border-left:3px solid var(--accent);padding:8px 14px;background:var(--surface-2);border-radius:0 10px 10px 0;margin:14px 0;color:var(--text)}
+#agx .warn{border-left:3px solid var(--muted);padding:8px 14px;background:var(--surface-2);border-radius:0 10px 10px 0;margin:14px 0}
+#agx .sv-box{fill:var(--surface-2);stroke:var(--border-strong);stroke-width:1.3}
+#agx .sv-hot{fill:var(--accent);stroke:none}
+#agx .sv-end{fill:var(--surface);stroke:var(--accent);stroke-width:1.6}
+#agx .sv-zone{fill:none;stroke:var(--border-strong);stroke-width:1;stroke-dasharray:5 4}
+#agx .sv-line{fill:none;stroke:var(--muted);stroke-width:1.6}
+#agx .sv-dash{fill:none;stroke:var(--muted);stroke-width:1.4;stroke-dasharray:5 4}
+#agx .sv-ah{fill:var(--muted)}
+#agx .sv-t{fill:var(--text);font-family:var(--font);font-size:13px;font-weight:650}
+#agx .sv-onhot{fill:var(--accent-ink);font-family:var(--font);font-size:13px;font-weight:700}
+#agx .sv-s{fill:var(--muted);font-family:var(--font);font-size:11.5px}
+#agx .sv-tc{text-anchor:middle}
+#agx .agx-readbox{margin:22px 0 4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#agx .agx-btn{font:inherit;font-size:.9rem;font-weight:600;padding:8px 14px;border-radius:10px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);cursor:pointer}
+#agx .agx-btn:hover:not(:disabled){border-color:var(--accent)}
+#agx .agx-btn:disabled{opacity:.65;cursor:default}
+#agx .agx-opt{display:block;width:100%;text-align:left;font:inherit;font-size:.95rem;margin:6px 0;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);cursor:pointer}
+#agx .agx-opt:hover:not(:disabled){border-color:var(--accent)}
+#agx .agx-opt:disabled{cursor:default}
+#agx .agx-opt.right{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--surface-2))}
+#agx .agx-opt.wrong{border-color:#ff8a7a}
+#agx .agx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+#agx .agx-stat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px}
+#agx .agx-stat b{display:block;font-family:var(--mono);font-size:1.3rem;margin-top:4px}
+#agx .agx-bar{height:8px;background:var(--surface-2);border-radius:999px;overflow:hidden;margin-top:10px}
+#agx .agx-bar span{display:block;height:100%;background:var(--accent)}
+#agx .agx-badge{padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+#agx .agx-badge.on{border-color:var(--accent)}
+#agx .agx-q{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin:14px 0}
+#agx .agx-boss{border-color:var(--border-strong)}
+#agx .agx-note{color:var(--muted);font-size:.9rem}
+#agx .agx-cols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));align-items:start}
+#agx .agx-cols-2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+#agx .agx-cols-wide{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}
+#agx .agx-cols .agx-q{margin:0;height:100%}
+#agx .agx-msg{min-height:1.4em;color:var(--accent);font-weight:600;margin:10px 0 0}
+@media (max-width:640px){#agx h1{font-size:1.75rem}#agx .toc ol{columns:1}}
+#agx [hidden]{display:none!important}
+#agx .agx-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:22px 0 16px;padding:6px;background:var(--surface);border:1px solid var(--border);border-radius:14px}
+#agx .agx-tabs button{font:inherit;font-size:.92rem;font-weight:600;padding:9px 14px;border-radius:10px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+#agx .agx-tabs button:hover{color:var(--text)}
+#agx .agx-tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+#agx .agx-pager{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:30px 0 0;padding-top:16px;border-top:1px solid var(--border)}
+#agx .agx-pager .agx-msg{width:100%}
+#agx button.agx-card{font:inherit;text-align:left;width:100%;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;cursor:pointer}
+#agx button.agx-card:hover{border-color:var(--accent)}
+#agx .agx-diag{margin:0}
+#agx .agx-diag .figure{margin:10px 0 0}
+</style>
+<div id="agx">
+<p class="kicker">AI engineering · Field guide</p>
+<h1>Agentic AI, from first principles</h1>
+<p class="lede">What makes an AI system an agent, the main agent architectures, how LangGraph models them as graphs, how to evaluate them, and how retrieval-augmented generation (RAG) gives them knowledge they were never trained on. Every concept comes with a diagram or a small example.</p>
+
+<nav class="agx-tabs" role="tablist" aria-label="Sections"><button role="tab" data-tab="read" aria-selected="true">Read</button><button role="tab" data-tab="chapters" aria-selected="false">Chapters</button><button role="tab" data-tab="diagrams" aria-selected="false">Diagrams</button><button role="tab" data-tab="practice" aria-selected="false">Practice</button><button role="tab" data-tab="progress" aria-selected="false">Progress</button></nav>
+<section id="agx-p-read" class="agx-panel"><div id="agx-reader"></div><div id="agx-pager" class="agx-pager"></div></section>
+<section id="agx-p-chapters" class="agx-panel" hidden><div id="agx-chapters" class="agx-cols"></div></section>
+<section id="agx-p-diagrams" class="agx-panel" hidden><div id="agx-diagrams" class="agx-cols agx-cols-wide"></div></section>
+<section id="agx-p-practice" class="agx-panel" hidden><h2 id="agx-practice-h">Practice and scoring</h2>
+
+<p>Test yourself as you read. Each section you mark as read earns XP, each quiz question you answer correctly earns XP, and a realm is cleared when you have read all of its sections and answered all of its questions correctly. Each realm ends with a boss question worth the most XP. Progress is saved in this browser only.</p>
+
+<table>
+<thead><tr><th>Action</th><th>XP</th></tr></thead>
+<tbody>
+<tr><td>Mark a section as read (once per section)</td><td>+10</td></tr>
+<tr><td>First correct answer to a quiz question</td><td>+20</td></tr>
+<tr><td>First wrong attempt at a question</td><td>+4</td></tr>
+<tr><td>Answer today's daily question</td><td>+25, plus +15 if correct</td></tr>
+<tr><td>Clear a realm (all its sections and questions)</td><td>+50</td></tr>
+<tr><td>Defeat a realm boss</td><td>+150</td></tr>
+</tbody>
+</table>
+
+<p class="agx-note">Every 100 XP raises your level and changes your title. A streak counts consecutive days on which you answer the daily question.</p>
+
+<div id="agx-practice"></div></section>
+<section id="agx-p-progress" class="agx-panel" hidden><div id="agx-progress"></div></section>
+<div id="agx-body" hidden><h2 id="agx-1">1. Foundations</h2>
+
+<p>A large language model (LLM) takes text in and produces text out. On its own it cannot look up a fact, read your database, or change anything outside the conversation. Three ideas turn it into something more:</p>
+<ul>
+<li><strong>Context window.</strong> Everything the model can see in one call: instructions, conversation history, tool results and retrieved documents. Anything not in the window does not exist for the model in that call.</li>
+<li><strong>Tool calling.</strong> The model can emit a structured request such as <code>search_orders(customer_id="42")</code>. Your code runs the function and returns the result as a new message. The model never executes anything itself.</li>
+<li><strong>A loop.</strong> Your code calls the model again with the new result, repeating until the model returns a final answer instead of a tool request.</li>
+</ul>
+
+<p>An <strong>agent</strong> is an LLM running in such a loop, where the model decides what to do next. A <strong>chatbot</strong> answers once. A <strong>workflow</strong> follows steps you wrote in advance. An agent chooses its own steps while it runs. Most production systems sit between these two, and the rest of this guide shows how to choose the right point on that spectrum.</p>
+
+<div class="figure">
+<svg viewBox="0 0 680 250" role="img" aria-label="The agent loop: a goal goes to a model that reasons and picks an action, the action calls a tool, the tool result is observed, and the observation returns to the model until it can answer.">
+<defs><marker id="ahA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sv-ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="sv-box" x="16" y="80" width="130" height="60" rx="12"/>
+<text class="sv-t sv-tc" x="81" y="105">User goal</text>
+<text class="sv-s sv-tc" x="81" y="124">the task to solve</text>
+<rect class="sv-hot" x="186" y="80" width="150" height="60" rx="12"/>
+<text class="sv-onhot sv-tc" x="261" y="105">Reason</text>
+<text class="sv-onhot sv-tc" x="261" y="124" style="font-weight:500">LLM picks an action</text>
+<rect class="sv-box" x="376" y="80" width="130" height="60" rx="12"/>
+<text class="sv-t sv-tc" x="441" y="105">Act</text>
+<text class="sv-s sv-tc" x="441" y="124">call a tool</text>
+<rect class="sv-box" x="536" y="80" width="128" height="60" rx="12"/>
+<text class="sv-t sv-tc" x="600" y="105">Observe</text>
+<text class="sv-s sv-tc" x="600" y="124">read the result</text>
+<path class="sv-line" d="M146,110 H186" marker-end="url(#ahA)"/>
+<path class="sv-line" d="M336,110 H376" marker-end="url(#ahA)"/>
+<path class="sv-line" d="M506,110 H536" marker-end="url(#ahA)"/>
+<path class="sv-line" d="M600,140 V196 H261 V142" marker-end="url(#ahA)"/>
+<text class="sv-s sv-tc" x="430" y="188">loop until the model returns a final answer</text>
+<text class="sv-s sv-tc" x="340" y="236">The model decides the next step. Your code runs the tool and feeds back the result.</text>
+</svg>
+<figcaption>The core agent loop. Frameworks differ in packaging, but nearly all of them run this cycle.</figcaption>
+</div>
+
+<h2 id="agx-2">2. Workflows vs agents</h2>
+
+<p>Anthropic's guide <em>Building effective agents</em> draws a useful line. A <strong>workflow</strong> is a system where LLMs and tools follow predefined code paths. An <strong>agent</strong> is a system where the LLM dynamically directs its own process and tool use. Workflows are more predictable and cheaper to test. Agents suit open-ended problems where you cannot list the steps in advance.</p>
+
+<p>The common workflow building blocks:</p>
+<table>
+<thead><tr><th>Pattern</th><th>What it does</th><th>Use it when</th></tr></thead>
+<tbody>
+<tr><td>Prompt chaining</td><td>Output of one LLM call feeds the next, with optional checks in between</td><td>The task splits cleanly into fixed stages, such as outline, then draft, then translate</td></tr>
+<tr><td>Routing</td><td>A classifier sends each input to a specialised prompt or model</td><td>Inputs fall into distinct categories, such as billing, technical or sales questions</td></tr>
+<tr><td>Parallelization</td><td>Independent subtasks run at once, or the same task runs several times and results are combined</td><td>Subtasks are independent and you want speed, or you want several opinions for confidence</td></tr>
+<tr><td>Orchestrator-workers</td><td>A central LLM breaks the task into pieces at runtime and delegates them to workers</td><td>You cannot predict the subtasks in advance, such as editing many files for one change</td></tr>
+<tr><td>Evaluator-optimizer</td><td>One LLM generates, another critiques, and the loop repeats until the critique passes</td><td>Clear quality criteria exist and iteration measurably improves the result</td></tr>
+</tbody>
+</table>
+
+<div class="figure">
+<svg viewBox="0 0 680 290" role="img" aria-label="Orchestrator-workers: an orchestrator splits a task into three subtasks, workers handle each in parallel, and a synthesizer combines their outputs.">
+<defs><marker id="ahB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sv-ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="sv-box" x="16" y="115" width="132" height="60" rx="12"/>
+<text class="sv-t sv-tc" x="82" y="140">Task</text>
+<text class="sv-s sv-tc" x="82" y="158">user request</text>
+<rect class="sv-hot" x="186" y="115" width="140" height="60" rx="12"/>
+<text class="sv-onhot sv-tc" x="256" y="140">Orchestrator</text>
+<text class="sv-onhot sv-tc" x="256" y="158" style="font-weight:500">plans subtasks</text>
+<rect class="sv-box" x="372" y="30" width="170" height="54" rx="12"/>
+<text class="sv-t sv-tc" x="457" y="53">Worker A</text>
+<text class="sv-s sv-tc" x="457" y="71">subtask 1</text>
+<rect class="sv-box" x="372" y="118" width="170" height="54" rx="12"/>
+<text class="sv-t sv-tc" x="457" y="141">Worker B</text>
+<text class="sv-s sv-tc" x="457" y="159">subtask 2</text>
+<rect class="sv-box" x="372" y="206" width="170" height="54" rx="12"/>
+<text class="sv-t sv-tc" x="457" y="229">Worker C</text>
+<text class="sv-s sv-tc" x="457" y="247">subtask 3</text>
+<rect class="sv-end" x="578" y="115" width="88" height="60" rx="12"/>
+<text class="sv-t sv-tc" x="622" y="140">Synth</text>
+<text class="sv-s sv-tc" x="622" y="158">combine</text>
+<path class="sv-line" d="M148,145 H186" marker-end="url(#ahB)"/>
+<path class="sv-line" d="M326,140 C345,140 350,57 372,57" marker-end="url(#ahB)"/>
+<path class="sv-line" d="M326,145 H372" marker-end="url(#ahB)"/>
+<path class="sv-line" d="M326,150 C345,150 350,233 372,233" marker-end="url(#ahB)"/>
+<path class="sv-line" d="M542,57 C560,57 560,140 578,140" marker-end="url(#ahB)"/>
+<path class="sv-line" d="M542,145 H578" marker-end="url(#ahB)"/>
+<path class="sv-line" d="M542,233 C560,233 560,150 578,150" marker-end="url(#ahB)"/>
+<text class="sv-s" x="16" y="285">Workers run in parallel. The orchestrator decides how many workers exist, based on the task.</text>
+</svg>
+<figcaption>Orchestrator-workers. The number of subtasks is decided at runtime, which is what separates it from a fixed pipeline.</figcaption>
+</div>
+
+<div class="tip"><strong>Rule of thumb:</strong> start with the simplest thing that works. A single well-prompted call with retrieval beats an agent for most tasks. Add loops, tools and multiple agents only when a measured failure requires them.</div>
+
+<h2 id="agx-3">3. Agent types</h2>
+
+<p>These names come up constantly. They describe how the loop is organised, not which vendor provides it.</p>
+
+<h3>ReAct (reason and act)</h3>
+<p>The model alternates between a short reasoning step and a tool call, observing each result before deciding the next move. It is the default pattern for tool-using agents and the loop shown in Section 1.</p>
+
+<h3>Plan-and-execute</h3>
+<p>A planner writes the full list of steps first. An executor carries them out, and the plan is revised only when a step fails. This suits long tasks where you want a visible plan before any side effects happen.</p>
+
+<h3>Reflection (self-critique)</h3>
+<p>After producing an answer, the agent reviews its own output against criteria and revises it. The gain depends heavily on whether the critic can actually detect errors. Without a concrete check, reflection tends to rephrase rather than fix.</p>
+
+<h3>Router</h3>
+<p>A single step chooses which specialist handles the request. Simple, cheap and easy to test, and often the right first step before anything more complex.</p>
+
+<h3>Supervisor (multi-agent)</h3>
+<p>One agent receives the request, delegates to specialist agents, and decides when the work is complete. See Section 6.</p>
+
+<h3>Hierarchical teams</h3>
+<p>Supervisors manage other supervisors. Useful when a task has distinct sub-domains, each with its own tools and sub-steps, but it multiplies cost and latency quickly.</p>
+
+<h3>Handoff (swarm)</h3>
+<p>There is no central boss. The active agent transfers control directly to another agent by calling a handoff tool, and the conversation continues with the new agent's instructions and tools.</p>
+
+<table>
+<thead><tr><th>Type</th><th>Control</th><th>Strength</th><th>Main risk</th></tr></thead>
+<tbody>
+<tr><td>ReAct</td><td>Model, step by step</td><td>Flexible, simple to build</td><td>Wanders or loops without a stop rule</td></tr>
+<tr><td>Plan-and-execute</td><td>Upfront plan</td><td>Predictable, reviewable</td><td>Plan goes stale when reality differs</td></tr>
+<tr><td>Reflection</td><td>Self-review pass</td><td>Catches some errors</td><td>Costs double, and may not find real errors</td></tr>
+<tr><td>Router</td><td>One classification</td><td>Cheap, testable</td><td>Misrouted inputs fail silently</td></tr>
+<tr><td>Supervisor</td><td>Central agent</td><td>Clear ownership</td><td>Supervisor becomes a bottleneck</td></tr>
+<tr><td>Handoff</td><td>Agents pass control</td><td>Natural for conversational flows</td><td>Hard to trace where state went</td></tr>
+</tbody>
+</table>
+
+<h2 id="agx-4">4. Tools and memory</h2>
+
+<h3>Designing tools</h3>
+<p>The model chooses tools by reading their names and descriptions, so those descriptions are part of the prompt. Good tools are:</p>
+<ul>
+<li><strong>Narrow.</strong> <code>get_order_status(order_id)</code> beats <code>run_sql(query)</code>. Narrow tools are safer and easier to evaluate.</li>
+<li><strong>Typed.</strong> Use a schema for every argument, with enums where values are fixed.</li>
+<li><strong>Informative on failure.</strong> Return "order 4411 not found, check the ID format" rather than a stack trace. The model can recover from the first; it cannot from the second.</li>
+<li><strong>Least privileged.</strong> Read-only by default. Anything that spends money, sends messages or deletes data needs a confirmation step, often a human-in-the-loop interrupt (Section 5).</li>
+</ul>
+
+<h3>Kinds of memory</h3>
+<table>
+<thead><tr><th>Memory</th><th>Where it lives</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>Working</td><td>The context window for this run</td><td>The current conversation and tool results</td></tr>
+<tr><td>Short-term thread</td><td>A checkpointed state keyed by thread ID</td><td>Resuming a support chat tomorrow</td></tr>
+<tr><td>Long-term</td><td>An external store, often searched by embedding</td><td>Remembering a user's stated preferences across many sessions</td></tr>
+<tr><td>Procedural</td><td>Instructions and examples in the prompt or code</td><td>The rules for how to write a refund reply</td></tr>
+</tbody>
+</table>
+
+<div class="warn">Context is finite and expensive. Summarise or trim old tool output rather than carrying every raw result forward, and keep anything the model must follow near the end of the prompt or in the system instructions.</div>
+
+<h2 id="agx-5">5. LangGraph</h2>
+
+<p><a href="https://langchain-ai.github.io/langgraph/">LangGraph</a> is a library from the LangChain team for building agents as explicit graphs. Instead of a hidden loop, you define a shared <strong>state</strong>, <strong>nodes</strong> that are functions which read and update that state, and <strong>edges</strong> that decide which node runs next. The control flow is visible in code, can be drawn as a diagram, and can be paused, saved and resumed.</p>
+
+<h3>The four core ideas</h3>
+<ul>
+<li><strong>State.</strong> A typed record, usually a <code>TypedDict</code> or Pydantic model, that every node sees. Nodes return only the fields they change.</li>
+<li><strong>Reducers.</strong> Rules for merging updates into state. <code>Annotated[list, add_messages]</code> appends new messages rather than overwriting the list.</li>
+<li><strong>Nodes.</strong> Ordinary Python functions. A node might call an LLM, run a tool, query a database or do plain logic.</li>
+<li><strong>Edges.</strong> Fixed edges always go to the same next node. Conditional edges call a routing function that returns the name of the next node, or <code>END</code>.</li>
+</ul>
+
+<h3>A minimal tool-calling agent</h3>
+
+<pre><code>from typing import Annotated, TypedDict
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode
+from langgraph.checkpoint.memory import MemorySaver
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]   # reducer: append, do not overwrite
+
+tools = [search_orders, refund_order]         # plain functions decorated with @tool
+llm_with_tools = llm.bind_tools(tools)
+
+def call_model(state: State):
+    response = llm_with_tools.invoke(state["messages"])
+    return {"messages": [response]}           # only the field we changed
+
+def route(state: State):
+    last = state["messages"][-1]
+    return "tools" if last.tool_calls else END
+
+builder = StateGraph(State)
+builder.add_node("agent", call_model)
+builder.add_node("tools", ToolNode(tools))    # runs requested tools, returns results
+builder.add_edge(START, "agent")
+builder.add_conditional_edges("agent", route, ["tools", END])
+builder.add_edge("tools", "agent")            # always return to the model after tools
+
+app = builder.compile(checkpointer=MemorySaver())
+
+config = {"configurable": {"thread_id": "customer-42"}}
+result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</code></pre>
+
+<p>Note the <code>thread_id</code>. With a checkpointer, every call for the same thread continues from the saved state, which is how a chat keeps its history between requests.</p>
+
+<figure class="figure" style="margin:20px 0">
+<svg viewBox="0 0 680 270" role="img" aria-label="The LangGraph graph for the agent above: START goes to agent, agent conditionally goes to tools or END, tools always returns to agent. The shared state sits underneath.">
+<defs><marker id="ahC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sv-ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<circle class="sv-box" cx="50" cy="120" r="16"/>
+<text class="sv-s sv-tc" x="50" y="124" style="font-size:10px">START</text>
+<rect class="sv-hot" x="180" y="95" width="150" height="50" rx="12"/>
+<text class="sv-onhot sv-tc" x="255" y="125">agent</text>
+<rect class="sv-box" x="430" y="95" width="150" height="50" rx="12"/>
+<text class="sv-t sv-tc" x="505" y="125">tools</text>
+<circle class="sv-end" cx="622" cy="120" r="18"/>
+<text class="sv-s sv-tc" x="622" y="124" style="font-size:10px">END</text>
+<path class="sv-line" d="M66,120 H180" marker-end="url(#ahC)"/>
+<path class="sv-line" d="M330,112 H430" marker-end="url(#ahC)"/>
+<path class="sv-line" d="M505,145 V200 H255 V147" marker-end="url(#ahC)"/>
+<path class="sv-line" d="M255,95 V40 H622 V100" marker-end="url(#ahC)"/>
+<text class="sv-s" x="340" y="34" style="text-anchor:middle">no tool requested, so route to END</text>
+<text class="sv-s sv-tc" x="380" y="192">tool results return to agent</text>
+<text class="sv-s" x="330" y="108" style="text-anchor:middle;font-size:10px">tool_calls?</text>
+<rect class="sv-zone" x="16" y="226" width="648" height="34" rx="10"/>
+<text class="sv-s" x="30" y="247">shared state: messages (with add_messages reducer) · checkpointed per thread_id</text>
+</svg>
+<figcaption>The graph behind the code above. The routing function decides the path; the state persists between steps.</figcaption>
+</figure>
+
+<h3>Features that matter in practice</h3>
+<ul>
+<li><strong>Checkpointers.</strong> Save state after every step. In-memory saving is fine for tests; a database-backed checkpointer is needed for production, so a crash or deploy does not lose a conversation.</li>
+<li><strong>Human-in-the-loop.</strong> Interrupt before a sensitive node, show the proposed action to a person, then resume with their decision. Typical for refunds, deletions and outbound messages.</li>
+<li><strong>Streaming.</strong> Stream tokens, node updates or both, so a UI can show progress instead of a long wait.</li>
+<li><strong>Subgraphs.</strong> A compiled graph can be a node in another graph. Use this to package a research sub-agent with its own state.</li>
+<li><strong>Send (map-reduce).</strong> Dispatch the same node over a dynamic list of inputs in parallel, such as one worker per document, then reduce the results. This is orchestrator-workers from Section 2 expressed in code.</li>
+<li><strong>Time travel.</strong> Load an earlier checkpoint, change the state, and rerun from there. Invaluable for debugging why an agent chose a path.</li>
+</ul>
+
+<div class="tip"><strong>Why graphs?</strong> A hidden loop is easy to start and hard to control. A graph makes every branch, retry and stop condition an explicit line of code you can test, which matters once an agent can spend money or change data.</div>
+
+<h2 id="agx-6">6. Multi-agent systems</h2>
+
+<p>Split one agent into several when specialisation helps: different prompts, different tools, different permissions, or simply a context window that would otherwise fill with irrelevant detail. Splitting for its own sake usually adds cost, latency and coordination bugs.</p>
+
+<div class="figure">
+<svg viewBox="0 0 680 300" role="img" aria-label="A supervisor agent receives the user request, delegates to researcher, coder and writer agents, and all of them read and write a shared state.">
+<defs><marker id="ahD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sv-ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="sv-box" x="250" y="14" width="180" height="46" rx="12"/>
+<text class="sv-t sv-tc" x="340" y="34">User request</text>
+<text class="sv-s sv-tc" x="340" y="50">enters the system</text>
+<rect class="sv-hot" x="240" y="100" width="200" height="52" rx="12"/>
+<text class="sv-onhot sv-tc" x="340" y="122">Supervisor</text>
+<text class="sv-onhot sv-tc" x="340" y="140" style="font-weight:500">routes, then decides done</text>
+<rect class="sv-box" x="30" y="190" width="150" height="54" rx="12"/>
+<text class="sv-t sv-tc" x="105" y="213">Researcher</text>
+<text class="sv-s sv-tc" x="105" y="231">search, read sources</text>
+<rect class="sv-box" x="265" y="190" width="150" height="54" rx="12"/>
+<text class="sv-t sv-tc" x="340" y="213">Coder</text>
+<text class="sv-s sv-tc" x="340" y="231">run code, tests</text>
+<rect class="sv-box" x="500" y="190" width="150" height="54" rx="12"/>
+<text class="sv-t sv-tc" x="575" y="213">Writer</text>
+<text class="sv-s sv-tc" x="575" y="231">draft the answer</text>
+<path class="sv-line" d="M340,60 V100" marker-end="url(#ahD)"/>
+<path class="sv-line" d="M290,152 C260,170 200,170 180,190" marker-end="url(#ahD)"/>
+<path class="sv-line" d="M340,152 V190" marker-end="url(#ahD)"/>
+<path class="sv-line" d="M390,152 C420,170 480,170 500,190" marker-end="url(#ahD)"/>
+<path class="sv-dash" d="M105,244 V272 H575 V244"/>
+<text class="sv-s sv-tc" x="340" y="292">shared state: task, findings, code, draft. Each worker returns results to the supervisor.</text>
+</svg>
+<figcaption>Supervisor pattern. Each worker returns to the supervisor, which keeps control of the overall plan.</figcaption>
+</div>
+
+<h3>Common failure modes</h3>
+<ul>
+<li><strong>Agents talking past each other.</strong> Two agents redo the same work, or each assumes the other did a step. Fix with a single shared state and explicit ownership of each field.</li>
+<li><strong>Endless delegation.</strong> The supervisor keeps routing back and forth. Fix with a step budget and a stop condition in the graph, not only in the prompt.</li>
+<li><strong>Context drift.</strong> Each hand-off loses details. Pass structured state, not a paraphrase.</li>
+<li><strong>Cost blow-up.</strong> Each agent multiplies the tokens. Measure cost per task in evals before adding a fourth specialist.</li>
+</ul>
+
+<h2 id="agx-7">7. Evals</h2>
+
+<p>An eval is a repeatable test of an LLM system's behaviour. Without one, every prompt change is a guess: it may fix the example you looked at and break three others. Evals turn "it seems better" into a number you can compare.</p>
+
+<h3>What to measure</h3>
+<table>
+<thead><tr><th>Dimension</th><th>Example check</th><th>How to score</th></tr></thead>
+<tbody>
+<tr><td>Correctness</td><td>The refund amount matches the order record</td><td>Exact match or code-based assertion</td></tr>
+<tr><td>Tool use</td><td>Called <code>search_orders</code> before <code>refund_order</code></td><td>Compare the actual tool trajectory with the expected one</td></tr>
+<tr><td>Groundedness</td><td>Every claim is supported by the retrieved text</td><td>LLM judge with the source, or a human</td></tr>
+<tr><td>Style and policy</td><td>No promises of delivery dates; polite tone</td><td>Rubric scored by an LLM judge, spot-checked by humans</td></tr>
+<tr><td>Cost and latency</td><td>Tokens and seconds per task</td><td>Logged from traces, compared with a budget</td></tr>
+<tr><td>Safety</td><td>Refuses a request outside policy</td><td>Pass/fail on adversarial cases</td></tr>
+</tbody>
+</table>
+
+<h3>Ways to grade</h3>
+<ul>
+<li><strong>Deterministic code.</strong> Regular expressions, JSON schema checks, unit tests on the output. Cheap, fast and reliable, so use them wherever they can express the requirement.</li>
+<li><strong>Reference-based.</strong> Compare with a known good answer, using exact match, token overlap or semantic similarity.</li>
+<li><strong>LLM-as-judge.</strong> A model scores an output against a rubric. Useful for open-ended quality. Validate it: check its agreement with human labels, watch for bias toward longer answers, and pin the judge model and prompt so scores stay comparable.</li>
+<li><strong>Human review.</strong> The ground truth, but slow. Use it to calibrate the automated graders, not to score every run.</li>
+</ul>
+
+<div class="figure">
+<svg viewBox="0 0 680 270" role="img" aria-label="The eval loop: a golden dataset runs through the system, traces are collected and graded, scores are compared to a baseline, then the team ships or fixes, and failures are added back to the dataset.">
+<defs><marker id="ahE" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sv-ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="sv-box" x="20" y="40" width="140" height="54" rx="12"/>
+<text class="sv-t sv-tc" x="90" y="63">Golden dataset</text>
+<text class="sv-s sv-tc" x="90" y="81">inputs + expected</text>
+<rect class="sv-box" x="190" y="40" width="140" height="54" rx="12"/>
+<text class="sv-t sv-tc" x="260" y="63">Run system</text>
+<text class="sv-s sv-tc" x="260" y="81">agent or pipeline</text>
+<rect class="sv-box" x="360" y="40" width="140" height="54" rx="12"/>
+<text class="sv-t sv-tc" x="430" y="63">Collect traces</text>
+<text class="sv-s sv-tc" x="430" y="81">inputs, tools, outputs</text>
+<rect class="sv-hot" x="360" y="170" width="140" height="54" rx="12"/>
+<text class="sv-onhot sv-tc" x="430" y="193">Grade</text>
+<text class="sv-onhot sv-tc" x="430" y="211" style="font-weight:500">code, judge, human</text>
+<rect class="sv-box" x="190" y="170" width="140" height="54" rx="12"/>
+<text class="sv-t sv-tc" x="260" y="193">Compare</text>
+<text class="sv-s sv-tc" x="260" y="211">to baseline</text>
+<rect class="sv-end" x="20" y="170" width="140" height="54" rx="12"/>
+<text class="sv-t sv-tc" x="90" y="193">Ship or fix</text>
+<text class="sv-s sv-tc" x="90" y="211">gate the release</text>
+<path class="sv-line" d="M160,67 H190" marker-end="url(#ahE)"/>
+<path class="sv-line" d="M330,67 H360" marker-end="url(#ahE)"/>
+<path class="sv-line" d="M430,94 V170" marker-end="url(#ahE)"/>
+<path class="sv-line" d="M360,197 H330" marker-end="url(#ahE)"/>
+<path class="sv-line" d="M190,197 H160" marker-end="url(#ahE)"/>
+<path class="sv-dash" d="M90,170 V94" marker-end="url(#ahE)"/>
+<text class="sv-s" x="98" y="138">failures become new test cases</text>
+<text class="sv-s" x="16" y="256">Keep the golden dataset under version control. Every production bug you fix should add a case that would have caught it.</text>
+</svg>
+<figcaption>The eval loop. Shipping decisions come from comparing scores to a baseline, not from a handful of demos.</figcaption>
+</div>
+
+<h3>Building a dataset that tells you something</h3>
+<ul>
+<li><strong>Start from real traffic.</strong> Sample production inputs, especially ones that failed or confused users. Invented examples skew easy.</li>
+<li><strong>Cover categories deliberately.</strong> Common cases, edge cases, adversarial inputs and cases where the right answer is "I don't know".</li>
+<li><strong>Keep expected outputs at the right level.</strong> Often "must cite order 4411 and must not promise a date" is better than one exact sentence.</li>
+<li><strong>Separate dev and holdout sets.</strong> Tune prompts on one set and check the final version on another, or you will overfit the examples you can see.</li>
+<li><strong>Test agents on trajectories.</strong> For agents, check the sequence of tool calls and the final state, not only the final text. A correct answer reached by an unsafe path is still a failure.</li>
+</ul>
+
+<div class="tip"><strong>Statistics matter.</strong> LLM outputs vary between runs. Run each case several times or use a temperature of zero where appropriate, and report pass rates with the number of cases, not a single score. A 2-point change on 20 cases is noise.</div>
+
+<h3>Metrics for classic ML and retrieval</h3>
+<p>Retrieval has its own metrics, covered in the RAG section below: recall at k, precision at k, mean reciprocal rank and normalised discounted cumulative gain (nDCG). These measure the retriever in isolation, which is essential because a generator cannot fix documents it never received.</p>
+
+<h2 id="agx-8">8. RAG (retrieval-augmented generation)</h2>
+
+<p>An LLM knows only what it learned in training, which ends at a fixed date, and it has no access to your private data. RAG adds a retrieval step: find the most relevant passages for the question, place them in the prompt, and ask the model to answer from them. The model gets fresh, specific knowledge without retraining, and you can show the source of each claim.</p>
+
+<div class="figure">
+<svg viewBox="0 0 680 300" role="img" aria-label="RAG pipeline. Offline ingestion: documents are chunked, embedded and stored in a vector index. Online query: the question is embedded, hybrid retrieval searches the index, results are reranked, and the generator answers with citations.">
+<defs><marker id="ahF" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="sv-ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="sv-zone" x="8" y="22" width="664" height="96" rx="14"/>
+<text class="sv-s" x="20" y="40">INGEST (offline, when documents change)</text>
+<rect class="sv-box" x="20" y="52" width="130" height="50" rx="12"/>
+<text class="sv-t sv-tc" x="85" y="75">Documents</text>
+<text class="sv-s sv-tc" x="85" y="92">PDF, wiki, tickets</text>
+<rect class="sv-box" x="190" y="52" width="130" height="50" rx="12"/>
+<text class="sv-t sv-tc" x="255" y="75">Chunk</text>
+<text class="sv-s sv-tc" x="255" y="92">split with overlap</text>
+<rect class="sv-box" x="360" y="52" width="130" height="50" rx="12"/>
+<text class="sv-t sv-tc" x="425" y="75">Embed</text>
+<text class="sv-s sv-tc" x="425" y="92">vector per chunk</text>
+<rect class="sv-box" x="530" y="52" width="130" height="50" rx="12"/>
+<text class="sv-t sv-tc" x="595" y="75">Index</text>
+<text class="sv-s sv-tc" x="595" y="92">vectors + keywords</text>
+<path class="sv-line" d="M150,77 H190" marker-end="url(#ahF)"/>
+<path class="sv-line" d="M320,77 H360" marker-end="url(#ahF)"/>
+<path class="sv-line" d="M490,77 H530" marker-end="url(#ahF)"/>
+<text class="sv-s" x="20" y="146">QUERY (online, per request)</text>
+<rect class="sv-box" x="8" y="162" width="112" height="50" rx="12"/>
+<text class="sv-t sv-tc" x="64" y="185">Question</text>
+<text class="sv-s sv-tc" x="64" y="202">user input</text>
+<rect class="sv-box" x="142" y="162" width="112" height="50" rx="12"/>
+<text class="sv-t sv-tc" x="198" y="185">Embed</text>
+<text class="sv-s sv-tc" x="198" y="202">same model</text>
+<rect class="sv-hot" x="276" y="162" width="112" height="50" rx="12"/>
+<text class="sv-onhot sv-tc" x="332" y="185">Retrieve</text>
+<text class="sv-onhot sv-tc" x="332" y="202" style="font-weight:500">hybrid top-k</text>
+<rect class="sv-box" x="410" y="162" width="112" height="50" rx="12"/>
+<text class="sv-t sv-tc" x="466" y="185">Rerank</text>
+<text class="sv-s sv-tc" x="466" y="202">cross-encoder</text>
+<rect class="sv-end" x="544" y="162" width="128" height="50" rx="12"/>
+<text class="sv-t sv-tc" x="608" y="185">Generate</text>
+<text class="sv-s sv-tc" x="608" y="202">answer + citations</text>
+<path class="sv-line" d="M120,187 H142" marker-end="url(#ahF)"/>
+<path class="sv-line" d="M254,187 H276" marker-end="url(#ahF)"/>
+<path class="sv-line" d="M388,187 H410" marker-end="url(#ahF)"/>
+<path class="sv-line" d="M522,187 H544" marker-end="url(#ahF)"/>
+<path class="sv-dash" d="M595,102 V132 H332 V162" marker-end="url(#ahF)"/>
+<text class="sv-s" x="440" y="126">searches the index</text>
+<text class="sv-s sv-tc" x="340" y="252">Prompt = instructions + top reranked chunks + question. The model is told to answer only from the chunks.</text>
+<text class="sv-s sv-tc" x="340" y="276">Use the same embedding model for documents and questions, or similarity scores mean nothing.</text>
+</svg>
+<figcaption>The RAG pipeline. Ingestion runs ahead of time; the query path runs on every request.</figcaption>
+</div>
+
+<h3>Stage by stage</h3>
+
+<h3>1. Chunking</h3>
+<p>Documents are split into pieces small enough to retrieve precisely but large enough to make sense alone. Common strategies:</p>
+<ul>
+<li><strong>Fixed size with overlap.</strong> Simple and a good baseline. Overlap keeps sentences that straddle a boundary retrievable.</li>
+<li><strong>Structure-aware.</strong> Split on headings, sections or code blocks, and keep the heading path as metadata.</li>
+<li><strong>Semantic.</strong> Split where the topic shifts, detected with embedding similarity between sentences. More expensive, sometimes better.</li>
+</ul>
+<p>Attach metadata to every chunk: source, section, date, access permissions. Metadata filters are often the cheapest accuracy gain, for example "only documents from product version 3".</p>
+
+<h3>2. Embedding and indexing</h3>
+<p>An embedding model maps text to a vector so that similar meanings produce nearby vectors. A vector database stores these and finds nearest neighbours quickly. Keep the embedding model and version fixed; changing either means re-embedding everything.</p>
+
+<h3>3. Retrieval</h3>
+<ul>
+<li><strong>Dense (semantic) search</strong> finds passages that mean the same thing, even with different words.</li>
+<li><strong>Sparse (keyword) search</strong>, typically BM25, finds exact terms such as error codes, product names and identifiers, which embeddings can blur.</li>
+<li><strong>Hybrid search</strong> runs both and merges the ranked lists, often with reciprocal rank fusion. This is the sensible default for real corpora.</li>
+<li><strong>Query rewriting</strong> lets the model turn a vague follow-up into a standalone search query, using the conversation so far.</li>
+</ul>
+
+<h3>4. Reranking</h3>
+<p>Retrieval is tuned for recall, so it returns many candidates. A cross-encoder reranker reads the question and each candidate together and scores them more accurately. Retrieve around 50 candidates cheaply, rerank, then keep the top 5 or so for the prompt.</p>
+
+<h3>5. Generation with grounding</h3>
+<p>The prompt should instruct the model to answer only from the supplied context, to say when the answer is not there, and to cite chunk IDs. Number the chunks so the citations can be checked and linked back to the source.</p>
+
+<div class="card">
+<strong>A minimal, provider-neutral sketch</strong>
+<pre><code>def answer(question: str) -&gt; dict:
+    q_vec = embed(question)                       # same model as ingestion
+    candidates = hybrid_search(question, q_vec, k=50, filters={"product": "v3"})
+    top = rerank(question, candidates)[:5]        # cross-encoder scores
+    context = "\n\n".join(f"[{i+1}] ({c.source}) {c.text}" for i, c in enumerate(top))
+    prompt = (
+        "Answer using only the numbered sources. Cite them like [1]. "
+        "If the sources do not contain the answer, say so.\n\n"
+        f"Sources:\n{context}\n\nQuestion: {question}"
+    )
+    return {"answer": llm(prompt), "sources": [c.source for c in top]}</code></pre>
+</div>
+
+<h3>Evaluating RAG</h3>
+<p>Split the evaluation in two, because the failures are different:</p>
+<table>
+<thead><tr><th>Layer</th><th>Question it answers</th><th>Typical metrics</th></tr></thead>
+<tbody>
+<tr><td>Retrieval</td><td>Did the right chunks come back?</td><td>Recall at k, precision at k, MRR, nDCG, using labelled relevant documents</td></tr>
+<tr><td>Context</td><td>Is the retrieved text relevant and free of noise?</td><td>Context precision, context relevance (judge-scored)</td></tr>
+<tr><td>Faithfulness</td><td>Does the answer stick to the context?</td><td>Claim-level support check against the retrieved text</td></tr>
+<tr><td>Answer quality</td><td>Does the answer actually address the question?</td><td>Answer relevance, correctness against reference answers</td></tr>
+</tbody>
+</table>
+<p>A common mistake is to tune the prompt while the real problem is retrieval. If recall at k is low, no generator will fix the answer. Measure retrieval first.</p>
+
+<h3>Common failure modes</h3>
+<ul>
+<li><strong>Chunks too small</strong> lose the context that makes them meaningful. <strong>Chunks too large</strong> dilute the signal and waste the context window.</li>
+<li><strong>Stale index.</strong> Documents changed but embeddings did not. Track document versions and re-ingest on change.</li>
+<li><strong>Missing answers.</strong> The information is split across chunks. Try parent-document retrieval, where small chunks are matched and the larger section is passed to the model.</li>
+<li><strong>Hallucinated citations.</strong> The model cites [4] when only three sources exist. Validate citation IDs in code.</li>
+<li><strong>Prompt injection in documents.</strong> Retrieved text can contain instructions. Treat it as data, keep system instructions separate, and limit what tools the answering step can use.</li>
+</ul>
+
+<h3>Beyond basic RAG</h3>
+<ul>
+<li><strong>Agentic RAG.</strong> The agent decides whether to retrieve, what query to send, and whether the results were enough, possibly retrieving again. In LangGraph this is a retrieval tool inside the agent loop from Section 5.</li>
+<li><strong>Multi-hop retrieval.</strong> Answering one question needs facts from several documents in sequence. Each step's result shapes the next query.</li>
+<li><strong>GraphRAG.</strong> Build a knowledge graph of entities and relations from the corpus, then retrieve connected subgraphs. Helpful for "what themes run across these reports" questions that keyword and vector search handle poorly.</li>
+<li><strong>Long context instead of RAG.</strong> A large context window can hold a small corpus whole. It is simpler, but costs more per request, and quality can drop when relevant text is buried in the middle. Measure before choosing.</li>
+</ul>
+
+<h2 id="agx-9">9. Putting it together</h2>
+
+<p>A practical sequence for a new agentic feature:</p>
+<ol>
+<li><strong>Define the task and failure cost.</strong> What must never go wrong? That decides how much autonomy and how many human checks you need.</li>
+<li><strong>Write 30 to 50 eval cases</strong> from real or realistic inputs before building anything complicated.</li>
+<li><strong>Start with a single call.</strong> Add retrieval if the answer depends on private or changing data. Measure retrieval recall separately.</li>
+<li><strong>Add a workflow</strong> (routing, chaining or parallel calls) where the steps are known.</li>
+<li><strong>Add an agent loop</strong> only for the steps that genuinely need the model to choose its path. Put a step budget and a stop condition in the graph.</li>
+<li><strong>Add checkpoints and interrupts</strong> before any action with real-world effects.</li>
+<li><strong>Gate releases on evals</strong> and log traces in production so new failures become new test cases.</li>
+</ol>
+
+<table>
+<thead><tr><th>Question</th><th>Start with</th></tr></thead>
+<tbody>
+<tr><td>Answer depends on private or recent documents</td><td>RAG with hybrid retrieval and citations</td></tr>
+<tr><td>Steps are known in advance</td><td>A workflow: chaining, routing or parallel calls</td></tr>
+<tr><td>Steps depend on what the model finds</td><td>A ReAct-style agent with narrow tools</td></tr>
+<tr><td>Subtasks need different tools or permissions</td><td>Supervisor or handoff, with a shared state</td></tr>
+<tr><td>Model needs a consistent style or format</td><td>Better prompts and examples first, fine-tuning later if evals show the gap</td></tr>
+</tbody>
+</table>
+
+<h2 id="agx-11">10. The 21 agentic design patterns</h2>
+
+<p>The book <em>Agentic Design Patterns: A Hands-On Guide to Building Intelligent Systems</em> (Springer) organises agent engineering into 21 reusable patterns, one per chapter. The table below summarises each one in our own words. Use it as a map: when a design problem looks familiar, the matching pattern tells you which trade-offs to check first.</p>
+
+<p>The book uses a "canvas" metaphor for the infrastructure an agent runs on, and it builds the patterns in roughly this order: first how work is structured, then how agents act on the world, and finally how they are governed and improved.</p>
+
+<table>
+<thead><tr><th>#</th><th>Pattern</th><th>Core idea</th><th>Reach for it when</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Prompt chaining</td><td>Split a task into steps; each step's output feeds the next. Also called the pipeline pattern.</td><td>The task has clear stages and each stage needs focused attention</td></tr>
+<tr><td>2</td><td>Routing</td><td>Classify the input and send it down the right path, using rules, embeddings or an LLM.</td><td>Inputs fall into categories that need different handling</td></tr>
+<tr><td>3</td><td>Parallelization</td><td>Run independent calls or tools at the same time and merge the results.</td><td>Subtasks don't depend on each other, or you wait on slow external calls</td></tr>
+<tr><td>4</td><td>Reflection</td><td>The agent critiques its own output and revises it. A producer-critic split often works best.</td><td>Quality, accuracy or instruction-following matters more than speed</td></tr>
+<tr><td>5</td><td>Tool use</td><td>The model emits structured function calls; your code runs them and returns the results.</td><td>The agent needs live data or must take real actions</td></tr>
+<tr><td>6</td><td>Planning</td><td>Break a goal into steps that lead from the current state to the target state.</td><td>The goal is open-ended and the path must be worked out first</td></tr>
+<tr><td>7</td><td>Multi-agent collaboration</td><td>Specialist agents hand off work, run in parallel, debate, or report to a coordinator.</td><td>One problem needs several kinds of expertise or stages</td></tr>
+<tr><td>8</td><td>Memory management</td><td>Short-term memory is the current context. Long-term memory lives in external storage and is found by search.</td><td>The agent must keep context within a session or across many sessions</td></tr>
+<tr><td>9</td><td>Learning and adaptation</td><td>The agent changes its behaviour or knowledge from experience. Sub-agents and an overseer keep self-improvement on track.</td><td>Performance should improve over time without manual tuning</td></tr>
+<tr><td>10</td><td>Model Context Protocol (MCP)</td><td>An open, client-server standard that lets any LLM connect to tools, data and prompts in a consistent way.</td><td>You want one integration that works across many models and tools</td></tr>
+<tr><td>11</td><td>Goal setting and monitoring</td><td>Define the goal state and success criteria, then track progress against them.</td><td>The agent must know whether it has actually succeeded</td></tr>
+<tr><td>12</td><td>Exception handling and recovery</td><td>Detect errors, then retry, fall back, degrade gracefully, log, or escalate.</td><td>Tools fail, outputs are malformed, or dependencies time out</td></tr>
+<tr><td>13</td><td>Human-in-the-loop</td><td>Bring people in for oversight, intervention, feedback and escalation.</td><td>Mistakes are costly, or the decision needs human judgement</td></tr>
+<tr><td>14</td><td>Knowledge retrieval (RAG)</td><td>Retrieve relevant snippets and add them to the prompt. GraphRAG adds relationships between entities.</td><td>Answers depend on current, private or specialised knowledge</td></tr>
+<tr><td>15</td><td>Inter-agent communication (A2A)</td><td>An open, HTTP-based standard for agents built with different frameworks to discover and work with each other. Each agent publishes an AgentCard describing its capabilities.</td><td>Agents from different teams or vendors must cooperate</td></tr>
+<tr><td>16</td><td>Resource-aware optimization</td><td>Manage compute, time and money. Choose between accurate but costly models and fast cheap ones, and route simple queries to smaller models.</td><td>Budgets, latency or cost limits shape what the agent may do</td></tr>
+<tr><td>17</td><td>Reasoning techniques</td><td>Make reasoning explicit and spend more inference-time compute on hard problems. ReAct is the core loop.</td><td>Problems need multi-step logic, and users must trust the plan</td></tr>
+<tr><td>18</td><td>Guardrails and safety</td><td>Layer protections: input validation, output filtering, prompt constraints, tool restrictions, moderation APIs and human oversight.</td><td>The agent can affect users, data or systems in ways that need limits</td></tr>
+<tr><td>19</td><td>Evaluation and monitoring</td><td>Measure accuracy, latency, token use and compliance in live systems. Use A/B tests and watch for drift and anomalies.</td><td>The system is running in production and its quality must be kept up</td></tr>
+<tr><td>20</td><td>Prioritization</td><td>Rank tasks by urgency, importance and dependencies, and re-rank as conditions change.</td><td>Many tasks compete for limited time or resources</td></tr>
+<tr><td>21</td><td>Exploration and discovery</td><td>Proactively look for new information, generate hypotheses and test new approaches.</td><td>The domain is open-ended and static knowledge is not enough</td></tr>
+</tbody>
+</table>
+
+<h3>How the patterns combine</h3>
+<p>Most real systems use several patterns together. A research assistant, for example, might plan its steps, route each question to the right tool, retrieve sources for each claim, reflect on the draft, check guardrails before publishing, and log evaluation metrics for every run. Choosing patterns is less about picking one and more about deciding which failure modes you must cover.</p>
+
+<div class="card">
+<strong>Agent complexity levels</strong>
+<p>The book describes four levels, which is a useful way to decide how much agency a feature needs:</p>
+<ul>
+<li><strong>Level 0:</strong> an LLM alone, answering from training data with no tools, memory or live information.</li>
+<li><strong>Level 1:</strong> the LLM uses external tools such as search, databases or APIs to gather current information.</li>
+<li><strong>Level 2:</strong> the agent plans across several steps and manages its own context carefully, using techniques such as context engineering and prompt engineering.</li>
+<li><strong>Level 3:</strong> a team of specialised agents collaborates on a complex workflow, similar to a human organisation with different departments.</li>
+</ul>
+</div>
+
+<h3>Where the book sees agents heading</h3>
+<p>The closing chapter lists five hypotheses. In brief: agents may become generalists that manage long-running goals; they may become proactive and personalised; they may act in the physical world through robotics; they may take part in economic activity as autonomous actors; and future multi-agent systems may reorganise their own structure to meet a declared goal. The book presents these as possibilities, not predictions, and each one raises the same questions about reliability, evaluation and oversight that the patterns above are meant to address.</p>
+
+<h2 id="agx-12">11. Appendices: frameworks, prompting and real-world agents</h2>
+
+<p>The appendices extend the main chapters beyond design patterns:</p>
+<ul>
+<li><strong>Advanced prompting.</strong> Techniques for structuring requests, supplying context, specifying output formats and showing examples, and why poorly designed prompts give ambiguous or wrong outputs.</li>
+<li><strong>Agents that use computers and the physical world.</strong> How agents operate graphical interfaces and interact with real environments, and what that changes for automation.</li>
+<li><strong>Framework overview.</strong> LangChain and its Expression Language (LCEL) for linear, acyclic pipelines; LangGraph for stateful graphs with loops, covered in Section 5; CrewAI for orchestrating roles and tasks across multiple agents; and Google's Agent Development Kit for building, evaluating and deploying agents.</li>
+<li><strong>Enterprise agent platforms.</strong> How a platform can provide unified search across an organisation's documents, email and databases, and host specialised agents that automate processes.</li>
+<li><strong>Agents on the command line.</strong> Coding agents that understand natural language, keep context about a whole codebase, and run multi-step tasks from the terminal.</li>
+<li><strong>Inside reasoning engines.</strong> How the LLM at the core of an agent makes decisions and plans, and why understanding those mechanisms matters for building reliable systems.</li>
+<li><strong>Coding agents.</strong> "Vibe coding" as a fast way to move from an idea to a working prototype, and the discipline needed to review and harden what it produces.</li>
+</ul>
+
+<div class="tip"><strong>Start with the pattern, then the framework.</strong> The framework changes often, but the pattern underneath it is stable. A chain, a router, a critic loop or a checkpointed graph can be built in any of the frameworks above.</div>
+
+<h2 id="agx-13">12. Glossary</h2>
+<table>
+<thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>Agent</td><td>An LLM in a loop that chooses its own next action, usually with tools</td></tr>
+<tr><td>Chunk</td><td>A piece of a document stored and retrieved as one unit in RAG</td></tr>
+<tr><td>Checkpointer</td><td>Component that saves graph state so a run can resume or be inspected</td></tr>
+<tr><td>Conditional edge</td><td>A graph edge chosen at runtime by a routing function</td></tr>
+<tr><td>Embedding</td><td>A vector that represents the meaning of a piece of text</td></tr>
+<tr><td>Eval</td><td>A repeatable test that scores an LLM system's behaviour</td></tr>
+<tr><td>Golden dataset</td><td>A curated set of inputs with expected results or criteria, used for evals</td></tr>
+<tr><td>Grounding</td><td>Basing an answer on supplied sources and citing them</td></tr>
+<tr><td>Hallucination</td><td>A fluent output that is not supported by the context or facts</td></tr>
+<tr><td>Human-in-the-loop</td><td>A pause where a person approves, edits or rejects an agent's next action</td></tr>
+<tr><td>LLM-as-judge</td><td>Using a model to score another model's output against a rubric</td></tr>
+<tr><td>Node</td><td>A step in a LangGraph graph: a function that reads and updates state</td></tr>
+<tr><td>Reducer</td><td>A rule for merging a node's update into the existing state</td></tr>
+<tr><td>Reranker</td><td>A model that re-scores retrieved candidates more accurately</td></tr>
+<tr><td>Trace</td><td>A recorded log of an agent run: prompts, tool calls, results and timings</td></tr>
+<tr><td>Vector index</td><td>A data structure for fast nearest-neighbour search over embeddings</td></tr>
+</tbody>
+</table>
+
+<p class="kicker" style="margin-top:2.4em">Further reading</p>
+<ul>
+<li>Anthropic, <em>Building effective agents</em>: the workflow and agent distinction used in Section 2.</li>
+<li>LangGraph documentation: state, persistence, interrupts and multi-agent patterns.</li>
+<li>Information retrieval texts on BM25, reciprocal rank fusion and nDCG for the retrieval metrics in Section 8.</li>
+<li><em>Agentic Design Patterns: A Hands-On Guide to Building Intelligent Systems</em> (Springer): the source of the 21 patterns in Section 10 and the appendices in Section 11.</li>
+</ul>
+</div>
+<script>
+(function(){
+  var KEY = 'agx-v1';
+  var R = {concept:10, correct:20, wrong:4, daily:25, dailyCorrect:15, realm:50, boss:150};
+  var TITLES = ['Prompt Wrangler','Tool Smith','Loop Architect','Graph Engineer','Eval Guardian','Agent Master'];
+
+  var REALMS = [
+    {id:'basics', name:'Agent Basics', sections:['agx-1','agx-2','agx-3','agx-4','agx-12'],
+     boss:{name:'The Context Golem', q:'A tool returns a raw stack trace when an order is missing, and the agent retries blindly. What is the better design?', o:['Return an informative error the model can act on','Hide all errors from the model','Retry forever until it works','Remove the tool entirely'], a:0, ex:'A clear, actionable error lets the model recover, for example by asking the user for a corrected order ID.'}},
+    {id:'orch', name:'Orchestration', sections:['agx-5','agx-6','agx-9'],
+     boss:{name:'The Loop Hydra', q:'Two agents keep handing work back and forth. Which fix is most reliable?', o:['Add a step budget and a stop condition in the graph, not only in the prompt','Add more agents to break the cycle','Raise the temperature','Remove the shared state'], a:0, ex:'Prompts can be ignored. A step budget enforced in code guarantees the loop ends.'}},
+    {id:'quality', name:'Quality and Safety', sections:['agx-7','agx-11'],
+     boss:{name:'The Silent Regression', q:'Your LLM judge scores longer answers higher, even when they are less correct. What should you do?', o:['Check the judge against human labels and tighten the rubric','Trust the judge because it is automated','Delete the rubric','Ask the judge to favour short answers'], a:0, ex:'Validate automated graders against human judgement before relying on their scores.'}},
+    {id:'rag', name:'Retrieval', sections:['agx-8'],
+     boss:{name:'The Stale Index Wraith', q:'Recall at k is low, but the answers read fluently. Where should you look first?', o:['Retrieval: the right chunks never reached the prompt','The generator temperature','The number of tools','The fonts on the page'], a:0, ex:'A generator cannot cite documents it never received. Measure retrieval before tuning the prompt.'}}
+  ];
+
+  var QS = [
+    {id:'b1', realm:'basics', q:'What lets an LLM take actions outside the conversation?', o:['A larger context window','Tool calling, where your code runs the requested function','A lower temperature','Fine-tuning on more data'], a:1, ex:'The model only requests a call. Your code runs the tool and returns the result.'},
+    {id:'b2', realm:'basics', q:'In the agent loop, what happens after a tool returns a result?', o:['The loop ends immediately','The result goes back to the model, which decides the next step','The model is retrained on the result','The raw result goes straight to the user'], a:1, ex:'The observation feeds the next reasoning step, which is why the loop repeats until the model answers.'},
+    {id:'b3', realm:'basics', q:'Which pattern runs a fixed sequence of steps, passing each output to the next?', o:['Parallelization','Prompt chaining','Exploration and discovery','Routing'], a:1, ex:'Prompt chaining, also called the pipeline pattern, passes each step output forward.'},
+    {id:'o1', realm:'orch', q:'What does a conditional edge do in LangGraph?', o:['Runs every node in parallel','Chooses the next node at runtime with a routing function','Saves state to a database','Stops the graph immediately'], a:1, ex:'A routing function reads the state and returns the name of the next node, or END.'},
+    {id:'o2', realm:'orch', q:'Why does the LangGraph example pass a thread_id?', o:['To name the model','To keep state for one conversation so it can resume','To set the temperature','To choose which tool runs'], a:1, ex:'With a checkpointer, the same thread_id reloads the saved state for that conversation.'},
+    {id:'o3', realm:'orch', q:'What is the main risk of the supervisor pattern?', o:['Too few tokens per message','The supervisor becoming a bottleneck or delegating endlessly','Missing images in the output','Slow fonts on the page'], a:1, ex:'Give the supervisor a clear stop condition and a step budget, and keep ownership of each state field explicit.'},
+    {id:'q1', realm:'quality', q:'Why write evals before changing a prompt?', o:['To make the prompt longer','To measure whether the change helps or breaks other cases','To avoid using a model','To delete the logs'], a:1, ex:'Without a fixed set of cases, a fix for one example can silently break three others.'},
+    {id:'q2', realm:'quality', q:'Which check is cheapest and most reliable for "output must be valid JSON"?', o:['An LLM judge','A deterministic code check','Human review of every run','Asking the model whether its output is valid'], a:1, ex:'Use code for any requirement code can express. Save judges and humans for what code cannot check.'},
+    {id:'q3', realm:'quality', q:'What should you do after fixing a production failure?', o:['Delete the trace','Add a test case that would have caught it','Hide it from the team','Only change the prompt'], a:1, ex:'Each production failure that becomes a test case makes the eval set stronger over time.'},
+    {id:'r1', realm:'rag', q:'Why must documents and questions use the same embedding model?', o:['It is faster','Similarity scores only mean something within one vector space','It reduces the cost of storage','The index requires JSON'], a:1, ex:'Vectors from different models live in different spaces, so their distances cannot be compared.'},
+    {id:'r2', realm:'rag', q:'When is hybrid search most useful?', o:['When the corpus has exact identifiers and error codes as well as questions about meaning','Only for image collections','When there are no documents','Never, because vectors are enough'], a:0, ex:'Keyword search finds exact terms that embeddings can blur. Hybrid search combines both.'},
+    {id:'r3', realm:'rag', q:'What does a reranker do in a RAG pipeline?', o:['Creates the embeddings','Re-scores retrieved candidates more accurately','Stores the documents','Asks the user a clarifying question'], a:1, ex:'Retrieval favours recall, so it returns many candidates. The reranker picks the best few for the prompt.'}
+  ];
+
+  function blank(){
+    return {xp:0, read:{}, answered:{}, attempted:{}, realms:{}, bosses:{}, badges:{}, stats:{tries:0, right:0}, daily:{day:'', done:false, ok:false, streak:0, last:''}};
+  }
+  var S;
+  function load(){ try{ var s = JSON.parse(localStorage.getItem(KEY)); return s ? Object.assign(blank(), s) : blank(); }catch(e){ return blank(); } }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+  S = load();
+
+  var msg = '';
+  var tmp = {};
+
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function dayKey(d){ d = d || new Date(); return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); }
+  function hashStr(s){ var h = 0; for(var i=0;i<s.length;i++){ h = (h*31 + s.charCodeAt(i)) >>> 0; } return h; }
+  function levelOf(xp){ return Math.floor(xp/100) + 1; }
+  function levelTitle(lvl){ return TITLES[Math.min(lvl-1, TITLES.length-1)]; }
+  function gain(n){ S.xp += n; }
+  function correctCount(){ return Object.keys(S.answered).filter(function(k){ return S.answered[k] && S.answered[k].ok; }).length; }
+  function realmById(id){ for(var i=0;i<REALMS.length;i++){ if(REALMS[i].id===id) return REALMS[i]; } return null; }
+  function realmQs(r){ return QS.filter(function(q){ return q.realm===r.id; }); }
+  function readDone(r){ return r.sections.every(function(id){ return !!S.read[id]; }); }
+  function qsDone(r){ return realmQs(r).every(function(q){ return S.answered[q.id] && S.answered[q.id].ok; }); }
+  function cleared(r){ return readDone(r) && qsDone(r); }
+  function todayQ(){ return QS[hashStr(dayKey()) % QS.length]; }
+
+  function checkRealms(){
+    REALMS.forEach(function(r){
+      if(cleared(r) && !S.realms[r.id]){ S.realms[r.id] = true; gain(R.realm); msg = 'Realm cleared: ' + r.name + '. +' + R.realm + ' XP'; }
+    });
+  }
+  function badgeList(){
+    var list = [
+      {id:'first', name:'First Step', how:'Read or answer anything', on: Object.keys(S.read).length + Object.keys(S.answered).length > 0},
+      {id:'sharp', name:'Sharp Eye', how:'Get 10 quiz answers right', on: correctCount() >= 10},
+      {id:'streak', name:'On a Roll', how:'Reach a 3-day streak', on: S.daily.streak >= 3}
+    ];
+    REALMS.forEach(function(r){
+      list.push({id:'realm-'+r.id, name:'Realm Clear: '+r.name, how:'Read every section and answer every question in '+r.name, on: !!S.realms[r.id]});
+      list.push({id:'boss-'+r.id, name:'Boss Slain: '+r.boss.name, how:'Defeat the '+r.name+' boss', on: !!S.bosses[r.id]});
+    });
+    return list;
+  }
+  function checkBadges(){
+    badgeList().forEach(function(b){
+      if(b.on && !S.badges[b.id]){ S.badges[b.id] = true; msg = 'Badge unlocked: ' + b.name; }
+    });
+  }
+
+  function markRead(id){
+    if(S.read[id]) return;
+    S.read[id] = true; gain(R.concept); msg = 'Section read. +' + R.concept + ' XP';
+    checkRealms(); checkBadges(); save(); refresh();
+  }
+
+  function answerQuestion(qid, i){
+    var q = null;
+    for(var k=0;k<QS.length;k++){ if(QS[k].id===qid){ q = QS[k]; break; } }
+    if(!q) return;
+    var prev = S.answered[qid];
+    if(prev && prev.ok) return;
+    S.stats.tries++;
+    if(i === q.a){
+      S.stats.right++;
+      S.answered[qid] = {ok:true}; gain(R.correct); msg = 'Correct. +' + R.correct + ' XP';
+      tmp[qid] = {ok:true};
+    } else {
+      if(!S.attempted[qid]){ S.attempted[qid] = true; gain(R.wrong); }
+      tmp[qid] = {ok:false, pick:i};
+      msg = 'Not quite. Try another option.';
+    }
+    checkRealms(); checkBadges(); save(); refresh();
+  }
+
+  function answerDaily(i){
+    var t = dayKey(), d = S.daily;
+    if(d.day === t && d.done) return;
+    var q = todayQ();
+    var ok = i === q.a;
+    var y = dayKey(new Date(Date.now() - 86400000));
+    if(d.last !== t){ d.streak = (d.last === y) ? d.streak + 1 : 1; d.last = t; }
+    d.day = t; d.done = true; d.ok = ok;
+    S.stats.tries++; if(ok) S.stats.right++;
+    gain(R.daily + (ok ? R.dailyCorrect : 0));
+    if(ok){ S.answered[q.id] = {ok:true}; tmp[q.id] = {ok:true}; msg = 'Daily answered correctly. +' + (R.daily + R.dailyCorrect) + ' XP'; }
+    else { tmp[q.id] = {ok:false, pick:i}; msg = 'Daily answered. +' + R.daily + ' XP. Try again tomorrow for the bonus.'; }
+    checkRealms(); checkBadges(); save(); refresh();
+  }
+
+  function answerBoss(realmId, i){
+    var r = realmById(realmId);
+    if(!r || S.bosses[r.id] || !cleared(r)) return;
+    if(i === r.boss.a){
+      S.bosses[r.id] = true; gain(R.boss); msg = 'Boss defeated: ' + r.boss.name + '. +' + R.boss + ' XP';
+      checkBadges(); save(); refresh();
+    } else {
+      tmp['boss-'+r.id] = {ok:false, pick:i}; msg = 'Not quite. The boss is still standing.';
+      refresh();
+    }
+  }
+
+  function renderSummary(){
+    var lvl = levelOf(S.xp);
+    var totalItems = REALMS.reduce(function(n,r){ return n + r.sections.length; }, 0) + QS.length;
+    var doneItems = Object.keys(S.read).length + Object.keys(S.answered).length;
+    var pct = Math.round(100 * doneItems / totalItems);
+    return '<div class="agx-q"><div class="agx-kicker" style="font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)">Your progress · ' + esc(levelTitle(lvl)) + '</div>' +
+      '<h3 style="margin:.3em 0 0;color:var(--text)">Level ' + lvl + ' · ' + S.xp + ' XP · ' + S.daily.streak + '-day streak</h3>' +
+      '<div class="agx-bar"><span style="width:' + (S.xp % 100) + '%"></span></div>' +
+      '<p class="agx-note" style="margin:8px 0 0">' + (100 - (S.xp % 100)) + ' XP to level ' + (lvl + 1) + '. ' + pct + '% of the material covered.</p>' +
+      '<div class="agx-grid" style="margin-top:12px">' +
+        '<div class="agx-stat"><span class="agx-note">Sections read</span><b>' + Object.keys(S.read).length + ' / ' + REALMS.reduce(function(n,r){ return n + r.sections.length; }, 0) + '</b></div>' +
+        '<div class="agx-stat"><span class="agx-note">Quiz accuracy</span><b>' + (S.stats.tries ? Math.round(100 * S.stats.right / S.stats.tries) : 0) + '%</b></div>' +
+        '<div class="agx-stat"><span class="agx-note">Questions answered</span><b>' + correctCount() + ' / ' + QS.length + '</b></div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderDaily(){
+    var t = dayKey(), d = S.daily, q = todayQ();
+    var done = d.day === t && d.done;
+    var st = tmp[q.id];
+    var body = '<div class="agx-q"><div class="agx-note">Daily question · +' + (R.daily + R.dailyCorrect) + ' XP if correct · ' + d.streak + '-day streak</div>' +
+      '<p style="margin:8px 0 4px;color:var(--text)"><b>' + esc(q.q) + '</b></p>';
+    body += q.o.map(function(text, i){
+      var cls = 'agx-opt';
+      if(done){ if(i === q.a) cls += ' right'; else if(d.ok === false && st && st.pick === i) cls += ' wrong'; }
+      else if(st && st.pick === i && !st.ok) cls += ' wrong';
+      return '<button class="' + cls + '" data-daily="1" data-i="' + i + '"' + (done ? ' disabled' : '') + '>' + esc(text) + '</button>';
+    }).join('');
+    if(done){ body += '<p class="agx-note" style="margin-top:8px">' + (d.ok ? 'Answered correctly today.' : 'Answered today. Come back tomorrow for a new question.') + ' ' + esc(q.ex) + '</p>'; }
+    return body + '</div>';
+  }
+
+  function renderRealms(){
+    return REALMS.map(function(r){
+      var rs = r.sections.filter(function(id){ return !!S.read[id]; }).length;
+      var qs = realmQs(r);
+      var okQ = qs.filter(function(q){ return S.answered[q.id] && S.answered[q.id].ok; }).length;
+      var head = '<div class="agx-q"><span class="agx-note" style="font-family:var(--mono);text-transform:uppercase;font-size:.78rem;letter-spacing:.08em">Realm</span>' +
+        '<h3 style="margin:.2em 0 0;color:var(--text)">' + esc(r.name) + '</h3>' +
+        '<p class="agx-note" style="margin:6px 0 0">' + rs + ' of ' + r.sections.length + ' sections read · ' + okQ + ' of ' + qs.length + ' questions correct · ' + (S.realms[r.id] ? 'cleared' : 'in progress') + '</p>';
+      head += qs.map(function(q){
+        var st = tmp[q.id], answered = S.answered[q.id] && S.answered[q.id].ok;
+        var out = q.o.map(function(text, i){
+          var cls = 'agx-opt';
+          if(answered){ if(i === q.a) cls += ' right'; }
+          else if(st && st.pick === i && !st.ok) cls += ' wrong';
+          return '<button class="' + cls + '" data-q="' + q.id + '" data-i="' + i + '"' + (answered ? ' disabled' : '') + '>' + esc(text) + '</button>';
+        }).join('');
+        return '<p style="margin:14px 0 2px;color:var(--text)"><b>' + esc(q.q) + '</b></p>' + out + (answered ? '<p class="agx-note" style="margin:6px 0 0">' + esc(q.ex) + '</p>' : '');
+      }).join('');
+      if(cleared(r)){
+        if(S.bosses[r.id]){
+          head += '<div class="agx-q agx-boss" style="margin-top:16px"><span class="agx-note">Realm boss</span><h3 style="margin:.2em 0 0;color:var(--text)">' + esc(r.boss.name) + ': defeated</h3><p class="agx-note" style="margin:6px 0 0">' + esc(r.boss.ex) + '</p></div>';
+        } else {
+          var bst = tmp['boss-'+r.id];
+          head += '<div class="agx-q agx-boss" style="margin-top:16px"><span class="agx-note">Realm boss · +' + R.boss + ' XP</span><h3 style="margin:.2em 0 0;color:var(--text)">' + esc(r.boss.name) + '</h3><p style="margin:8px 0 2px;color:var(--text)">' + esc(r.boss.q) + '</p>' +
+            r.boss.o.map(function(text, i){
+              var cls = 'agx-opt' + (bst && bst.pick === i ? ' wrong' : '');
+              return '<button class="' + cls + '" data-boss="' + r.id + '" data-i="' + i + '">' + esc(text) + '</button>';
+            }).join('') + '</div>';
+        }
+      } else {
+        head += '<p class="agx-note" style="margin-top:14px">Boss locked. Read every section and answer every question to face ' + esc(r.boss.name) + '.</p>';
+      }
+      return head + '</div>';
+    }).join('');
+  }
+
+  function renderBadges(){
+    return '<h3 style="margin:22px 0 10px;color:var(--text)">Badges</h3><div class="agx-grid">' +
+      badgeList().map(function(b){
+        return '<div class="agx-badge ' + (b.on ? 'on' : '') + '"><b style="color:var(--text)">' + esc(b.name) + '</b><div class="agx-note" style="font-size:.85rem;margin-top:4px">' + (b.on ? 'Unlocked' : esc(b.how)) + '</div></div>';
+      }).join('') + '</div>';
+  }
+
+  var root = document.getElementById('agx');
+  var body = document.getElementById('agx-body');
+  var reader = document.getElementById('agx-reader');
+  var pager = document.getElementById('agx-pager');
+  var chapterGrid = document.getElementById('agx-chapters');
+  var diagramGrid = document.getElementById('agx-diagrams');
+  var practiceEl = document.getElementById('agx-practice');
+  var progressEl = document.getElementById('agx-progress');
+  if(!root || !body || !reader) return;
+
+  var chapters = [];
+  var current = 0;
+  var tab = 'read';
+
+  function realmOf(id){
+    for(var i = 0; i < REALMS.length; i++){ if(REALMS[i].sections.indexOf(id) !== -1) return REALMS[i]; }
+    return null;
+  }
+
+  function msgHtml(){ return msg ? '<p class="agx-msg" role="status">' + esc(msg) + '</p>' : ''; }
+
+  function buildChapters(){
+    var cur = null;
+    Array.prototype.slice.call(body.children).forEach(function(el){
+      if(el.tagName === 'H2'){
+        cur = {id: el.id, title: el.textContent.replace(/^[0-9]+\.\s*/, ''), nodes: [], realm: realmOf(el.id), box: null};
+        chapters.push(cur);
+      }
+      if(cur) cur.nodes.push(el);
+    });
+    chapters.forEach(function(c){
+      if(c.realm){
+        var box = document.createElement('div');
+        box.className = 'agx-readbox';
+        box.innerHTML = '<button class="agx-btn" data-read="' + c.id + '"></button><span class="agx-note">Realm: ' + esc(c.realm.name) + '</span>';
+        c.box = box;
+      }
+    });
+    body.innerHTML = '';
+  }
+
+  function buildDiagrams(){
+    diagramGrid.innerHTML = '';
+    var count = 0;
+    chapters.forEach(function(c){
+      c.nodes.forEach(function(n){
+        if(!n.querySelectorAll) return;
+        var list = [];
+        if(n.classList && n.classList.contains('figure')) list.push(n);
+        Array.prototype.slice.call(n.querySelectorAll('.figure')).forEach(function(f){ list.push(f); });
+        list.forEach(function(f){
+          var card = document.createElement('div');
+          card.className = 'agx-q agx-diag';
+          card.innerHTML = '<span class="agx-note">' + esc(c.title) + '</span>';
+          card.appendChild(f.cloneNode(true));
+          diagramGrid.appendChild(card);
+          count++;
+        });
+      });
+    });
+    if(!count){ diagramGrid.innerHTML = '<p class="agx-note">No diagrams found.</p>'; }
+  }
+
+  function updateReadButtons(){
+    root.querySelectorAll('[data-read]').forEach(function(b){
+      var done = !!S.read[b.getAttribute('data-read')];
+      b.textContent = done ? 'Read · +' + R.concept + ' XP earned' : 'Mark as read · +' + R.concept + ' XP';
+      b.disabled = done;
+    });
+  }
+
+  function renderPager(){
+    pager.innerHTML =
+      '<button class="agx-btn" data-prev="1"' + (current === 0 ? ' disabled' : '') + '>Previous</button>' +
+      '<span class="agx-note">Chapter ' + (current + 1) + ' of ' + chapters.length + '</span>' +
+      '<button class="agx-btn" data-next="1"' + (current === chapters.length - 1 ? ' disabled' : '') + '>Next</button>' +
+      msgHtml();
+  }
+
+  function showChapter(i){
+    if(i < 0 || i >= chapters.length) return;
+    current = i;
+    var c = chapters[i];
+    reader.innerHTML = '';
+    c.nodes.forEach(function(n){ reader.appendChild(n); });
+    if(c.box) reader.appendChild(c.box);
+    renderPager();
+    updateReadButtons();
+  }
+
+  function renderChapters(){
+    chapterGrid.innerHTML = chapters.map(function(c, i){
+      var status = c.realm ? (S.read[c.id] ? 'Read' : 'Not read yet') : 'Reference';
+      return '<button class="agx-card" data-go="' + i + '"><span class="agx-note">Chapter ' + (i + 1) + (c.realm ? ' · ' + esc(c.realm.name) : '') + '</span><b style="display:block;margin-top:4px;color:var(--text)">' + esc(c.title) + '</b><span class="agx-note">' + status + '</span></button>';
+    }).join('');
+  }
+
+  function renderPractice(){
+    practiceEl.innerHTML = msgHtml() +
+      '<h3 style="margin:22px 0 10px;color:var(--text)">Daily question</h3>' + renderDaily() +
+      '<h3 style="margin:26px 0 10px;color:var(--text)">Realms and bosses</h3>' +
+      '<div class="agx-cols">' + renderRealms() + '</div>';
+  }
+
+  function renderProgress(){
+    progressEl.innerHTML = msgHtml() +
+      renderSummary() +
+      renderBadges() +
+      '<div class="agx-q" style="margin-top:22px"><h3 style="margin:0 0 6px;color:var(--text)">Reset progress</h3><p class="agx-note" style="margin:0 0 10px">Clears XP, streaks, badges, answers and reads stored in this browser.</p><button class="agx-btn" data-reset="1">Reset</button></div>';
+  }
+
+  function refresh(){
+    if(tab === 'read') showChapter(current);
+    if(tab === 'diagrams') buildDiagrams();
+    if(tab === 'chapters') renderChapters();
+    if(tab === 'practice') renderPractice();
+    if(tab === 'progress') renderProgress();
+    msg = '';
+  }
+
+  function showTab(name){
+    tab = name;
+    root.querySelectorAll('[data-tab]').forEach(function(b){
+      b.setAttribute('aria-selected', String(b.getAttribute('data-tab') === name));
+    });
+    ['read','chapters','diagrams','practice','progress'].forEach(function(t){
+      document.getElementById('agx-p-' + t).hidden = (t !== name);
+    });
+    refresh();
+  }
+
+  function scrollToTabs(){
+    var el = root.querySelector('.agx-tabs');
+    if(el && el.scrollIntoView){ el.scrollIntoView({block: 'start'}); }
+  }
+
+  root.addEventListener('click', function(e){
+    var t = e.target.closest ? e.target.closest('button') : null;
+    if(!t || t.disabled) return;
+    if(t.hasAttribute('data-tab')){ showTab(t.getAttribute('data-tab')); return; }
+    if(t.hasAttribute('data-go')){ current = +t.getAttribute('data-go'); showTab('read'); return; }
+    if(t.hasAttribute('data-prev')){ showChapter(current - 1); scrollToTabs(); return; }
+    if(t.hasAttribute('data-next')){ showChapter(current + 1); scrollToTabs(); return; }
+    if(t.hasAttribute('data-read')){ markRead(t.getAttribute('data-read')); return; }
+    if(t.hasAttribute('data-q')){ answerQuestion(t.getAttribute('data-q'), +t.getAttribute('data-i')); return; }
+    if(t.hasAttribute('data-daily')){ answerDaily(+t.getAttribute('data-i')); return; }
+    if(t.hasAttribute('data-boss')){ answerBoss(t.getAttribute('data-boss'), +t.getAttribute('data-i')); return; }
+    if(t.hasAttribute('data-reset')){
+      if(!t.dataset.armed){
+        t.dataset.armed = '1'; t.textContent = 'Tap again to confirm';
+        setTimeout(function(){ t.dataset.armed = ''; t.textContent = 'Reset'; }, 3000);
+        return;
+      }
+      S = blank(); tmp = {}; msg = 'Progress reset'; save(); refresh();
+    }
+  });
+
+  buildChapters();
+  checkRealms(); checkBadges(); save();
+  showTab('read');
+})();
+</script>
+</div>
