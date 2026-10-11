@@ -567,7 +567,7 @@ body.static_page .article .crumbs,body.static_page .article .article-meta,body.s
 /* Quest page: no sidebar, full-width column, focus-style layout */
 body.static_page .sidebar{display:none!important}
 body.static_page .layout{grid-template-columns:minmax(0,1fr)!important}
-body.static_page .wrap,body.static_page .article{max-width:none!important}
+body.static_page .article{max-width:var(--max)!important}
 ]]></b:skin>
 </head>
 
