@@ -3588,6 +3588,8 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
   }
 
   function buildDiagrams(){
+    diagramGrid.innerHTML = '';
+    var found = 0;
     chapters.forEach(function(c){
       c.nodes.forEach(function(n){
         if(!n.querySelectorAll) return;
@@ -3597,9 +3599,11 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
           card.innerHTML = '<span class="agx-note">' + esc(c.title) + '</span>';
           card.appendChild(f.cloneNode(true));
           diagramGrid.appendChild(card);
+          found++;
         });
       });
     });
+    if(!found){ diagramGrid.innerHTML = '<p class="agx-note">No diagrams found.</p>'; }
   }
 
   function updateReadButtons(){
@@ -3652,6 +3656,7 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
 
   function refresh(){
     if(tab === 'read') showChapter(current);
+    if(tab === 'diagrams') buildDiagrams();
     if(tab === 'chapters') renderChapters();
     if(tab === 'practice') renderPractice();
     if(tab === 'progress') renderProgress();
@@ -3696,7 +3701,6 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
   });
 
   buildChapters();
-  buildDiagrams();
   checkRealms(); checkBadges(); save();
   showTab('read');
 })();
