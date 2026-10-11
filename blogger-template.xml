@@ -561,6 +561,8 @@ button,.tool-btn,.main-nav a,.hero-topics a,.post-labels a,.sidebar li a{touch-a
   .sidebar .label-count,.sidebar .post-count{margin-left:6px}
   .pop-item{padding:10px 0}
 }
+/* Static pages (quest): the widget already shows the title, so hide the duplicate post heading */
+body.static_page .article h1{display:none}
 ]]></b:skin>
 </head>
 
