@@ -1401,6 +1401,11 @@ body.static_page .article h1{display:none}
 #sdq .badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
 #sdq .badge{padding:12px 14px;border:1px solid var(--q-line);border-radius:12px;background:var(--q-surface)}
 #sdq .badge.on{border-color:var(--q-accent)}
+#sdq #reset-top{margin-left:auto;align-self:center;font:inherit;font-size:13px;font-weight:600;background:none;border:1px solid var(--q-line2);color:var(--q-muted);border-radius:999px;padding:6px 12px;cursor:pointer}
+#sdq #reset-top:hover{color:var(--q-ink);border-color:var(--q-accent)}
+#sdq #reset-top.primary{background:var(--q-accent);color:var(--q-accent-ink);border-color:var(--q-accent)}
+#sdq .diagram-card{margin:0 0 16px}
+#sdq .diagram-card .diagram{margin:10px 0 0}
 #sdq [hidden]{display:none!important}
 @media (prefers-reduced-motion: reduce){#sdq *{transition:none!important}}
 
@@ -1424,13 +1429,16 @@ body.static_page .article h1{display:none}
   <nav class="tabs" role="tablist">
     <button role="tab" data-tab="today" aria-selected="true">Today</button>
     <button role="tab" data-tab="chapters" aria-selected="false">Chapters</button>
-    <button role="tab" data-tab="outline" aria-selected="false">Outline</button>
+    <button role="tab" data-tab="content" aria-selected="false">Content</button>
+    <button role="tab" data-tab="diagrams" aria-selected="false">Diagrams</button>
+    <button class="reset-top" id="reset-top" type="button">Reset progress</button>
     <button role="tab" data-tab="progress" aria-selected="false">Progress</button>
   </nav>
 
   <section id="tab-today"></section>
   <section id="tab-chapters" hidden></section>
-  <section id="tab-outline" hidden></section>
+  <section id="tab-content" hidden></section>
+  <section id="tab-diagrams" hidden></section>
   <section id="tab-progress" hidden></section>
 </div>
 <div class="toast" id="sdq-toast" role="status" aria-live="polite"></div>
@@ -2148,12 +2156,15 @@ function renderHeader(){
 }
 
 // ---------- Tabs ----------
-$$("nav.tabs button").forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab)));
+$$("nav.tabs button[data-tab]").forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab)));
 function showTab(name){
-  $$("nav.tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab===name));
-  ["today","chapters","outline","progress"].forEach(t => $("#tab-"+t).hidden = t!==name);
+  activeTab = name;
+  $$("nav.tabs button[data-tab]").forEach(b => b.setAttribute("aria-selected", b.dataset.tab===name));
+  ["today","chapters","content","diagrams","progress"].forEach(t => $("#tab-"+t).hidden = t!==name);
   if(name==="today") renderToday();
   if(name==="chapters") renderChapters();
+  if(name==="content") renderContent();
+  if(name==="diagrams") renderDiagrams();
   if(name==="progress") renderProgress();
 }
 
@@ -2161,35 +2172,30 @@ function showTab(name){
 function renderToday(){
   const today = dayKey();
   const q = POOL[hashStr(today) % POOL.length];
-  const done = state.daily.date===today && state.daily.done;
+  const answeredToday = state.daily.date===today && state.daily.done;
   const streakNote = state.daily.streak ? state.daily.streak+"-day streak" : "Start a streak today";
-  let body = `<div class="qcard hl">
+  const hint = answeredToday ? "Answered today. Tap any option to review the explanation." : "Pick an answer to earn XP.";
+  $("#tab-today").innerHTML = `<div class="qcard hl">
     <div class="row" style="justify-content:space-between"><span class="label">Daily question · ${esc(q.title)}</span><span class="mono muted">+${REWARD.dailyCorrect+REWARD.daily} XP</span></div>
-    <h2 style="margin-top:8px">${esc(q.q)}</h2>`;
-  if(done){
-    body += `<p class="muted">Done for today. ${esc(streakNote)}. Come back tomorrow for a new question.</p>`;
-  }
-  body += `<div id="dq">`;
-  q.o.forEach((opt,i)=>{
-    body += `<button class="opt" data-i="${i}" ${done?"disabled":""}><span class="k">${String.fromCharCode(65+i)}</span><span>${esc(opt)}</span></button>`;
-  });
-  body += `</div><div id="dfb"></div></div>`;
-  body += `<div class="row"><button class="btn" id="goch">Open ${esc(q.lbl)}</button><span class="muted">${esc(streakNote)}</span></div>`;
-  $("#tab-today").innerHTML = body;
+    <h2 style="margin-top:8px">${esc(q.q)}</h2>
+    <p class="muted">${esc(streakNote)}. ${esc(hint)}</p>
+    <div id="dq">${q.o.map((opt,i)=>`<button class="opt" data-i="${i}"><span class="k">${String.fromCharCode(65+i)}</span><span>${esc(opt)}</span></button>`).join("")}</div>
+    <div id="dfb"></div></div>
+    <div class="row"><button class="btn" id="goch">Open ${esc(q.lbl)}</button><span class="muted">${esc(streakNote)}</span></div>`;
   $$("#dq .opt").forEach(b=>b.addEventListener("click", ()=>{
-    const i = +b.dataset.i; const ok = i===q.a;
-    $$("#dq .opt").forEach(x=>x.disabled=true);
-    b.classList.add(ok?"right":"wrong");
-    if(!done){
+    const i = +b.dataset.i, ok = i===q.a;
+    const first = !(state.daily.date===today && state.daily.done);
+    $$("#dq .opt").forEach(x=>{ x.classList.remove("right","wrong"); if(+x.dataset.i===q.a) x.classList.add("right"); });
+    if(!ok) b.classList.add("wrong");
+    if(first){
       const yesterday = dayKey(new Date(Date.now()-86400000));
       state.daily.streak = state.daily.lastDay===yesterday ? state.daily.streak+1 : 1;
       state.daily = Object.assign(state.daily,{date:today,done:true,lastDay:today});
       gain(REWARD.daily + (ok?REWARD.dailyCorrect:0));
-      save();
+      save(); renderHeader();
+      if(ok) toast("+"+REWARD.dailyCorrect+" XP");
     }
     $("#dfb").innerHTML = `<div class="feedback ${ok?"ok":"no"}"><b>${ok?"Correct.":"Not quite."}</b> ${esc(q.ex)}</div>`;
-    renderHeader();
-    if(ok) toast("+"+REWARD.dailyCorrect+" XP");
   }));
   $("#goch").addEventListener("click", ()=>{ showTab("chapters"); openChapter(q.ch); });
 }
@@ -2237,13 +2243,9 @@ function renderChapterDetail(n){
       <div id="q${k}">${q.o.map((o,j)=>`<button class="opt" data-q="${k}" data-i="${j}" data-a="${q.a}" ${a?"disabled":""}><span class="k">${String.fromCharCode(65+j)}</span><span>${esc(o)}</span></button>`).join("")}</div>
       <div id="f${k}">${a?`<div class="feedback ${a.ok?"ok":"no"}">${esc(q.ex)}</div>`:""}</div></div>`;
   }).join("");
-  const intro = ex.intro ? `<p class="intro">${esc(ex.intro)}</p>` : "";
-  const figure = ex.svg ? `<figure class="diagram">${ex.svg}</figure>` : "";
-  const tip = ex.tip ? `<div class="tip"><b>Game tip:</b> ${esc(ex.tip)}</div>` : "";
   $("#chdetail").innerHTML = `<div class="qcard hl" style="margin-top:18px">
     <div class="label">${esc(c.lbl)} · ${esc(c.track)} · Realm: ${esc(REALMS[c.track]||"")}</div>
     <h2>${esc(c.t)}</h2>
-    ${intro}${figure}${tip}
     <h3 style="margin-top:14px">Key concepts</h3>${checks}
     <h3 style="margin-top:18px">Quiz</h3>${qs}
     <div class="row" style="margin-top:12px"><button class="btn" id="closech">Close</button></div></div>`;
@@ -2270,53 +2272,9 @@ function checkComplete(c){
   }
 }
 
-// ---------- Outline (organized brainstorm) ----------
-const OUTLINE = [
- {h:"Foundations", d:"How to think before drawing boxes", items:[
-   ["Scale from zero to millions", "single server → LB → replicas → cache/CDN → queues → sharding", "Ch 1"],
-   ["Back-of-envelope", "QPS, storage, bandwidth; powers of two; latency and nines", "Ch 2"],
-   ["Interview framework", "scope → high-level → deep dive → wrap-up; time split for 45 min", "Ch 3"]]},
- {h:"Building blocks", d:"Reusable components that appear in many designs", items:[
-   ["Rate limiter", "token bucket, leaky bucket, fixed/sliding windows, Redis counters, 429", "Ch 4"],
-   ["Consistent hashing", "hash ring, virtual nodes, minimal key movement", "Ch 5"],
-   ["Unique ID generator", "Snowflake layout, time-sortable 64-bit IDs", "Ch 7"]]},
- {h:"Data & storage", d:"Where data lives and how it stays correct", items:[
-   ["Relational fundamentals", "keys, constraints, relationships, normalization", "DB 1"],
-   ["SQL and joins", "DDL/DML/DCL/TCL, WHERE vs HAVING, join types, window functions", "DB 2"],
-   ["Transactions and isolation", "ACID, isolation levels, anomalies, serializable", "DB 3"],
-   ["Indexing and tuning", "B-trees, bitmap indexes, EXPLAIN, views", "DB 4"],
-   ["Key-value store", "CAP, quorums W/R/N, versioning, gossip, Merkle trees, LSM write path", "Ch 6"],
-   ["Foundations of data systems", "reliability, scalability, models, declarative queries", "DDIA 1"],
-   ["Storage engines", "hash indexes, LSM-trees, B-trees, OLTP vs OLAP", "DDIA 2"],
-   ["Encoding and evolution", "Avro, Protobuf, compatibility, RPC", "DDIA 3"]]},
- {h:"Distribution & correctness", d:"What breaks when data lives on many machines", items:[
-   ["Distributed data and NoSQL", "CAP/BASE, replication lag, sharding costs, idempotent retries", "DB 5"],
-   ["Replication", "leaders and followers, lag, multi-leader conflicts, quorums", "DDIA 4"],
-   ["Partitioning", "key range vs hash, hot spots, secondary indexes, rebalancing", "DDIA 5"],
-   ["Transactions in depth", "snapshot isolation, write skew, 2PL, SSI", "DDIA 6"],
-   ["Distributed system troubles", "partial failures, clocks, pauses, fencing tokens", "DDIA 7"],
-   ["Consistency and consensus", "linearizability, 2PC, consensus", "DDIA 8"]]},
- {h:"Applied designs", d:"Full end-to-end systems", items:[
-   ["URL shortener", "base 62, 301 vs 302, cache redirects", "Ch 8"],
-   ["Web crawler", "BFS, politeness, prioritization, duplicates", "Ch 9"],
-   ["Notifications", "APNS/FCM/SMS/email, queues, dedupe, opt-out", "Ch 10"],
-   ["News feed", "fanout on write vs read, hybrid for celebrities", "Ch 11"],
-   ["Chat", "WebSocket, service discovery, presence heartbeats", "Ch 12"],
-   ["Autocomplete", "trie, cached top-k, weekly rebuild, sharding", "Ch 13"],
-   ["YouTube", "transcoding DAG, pre-signed uploads, CDN cost", "Ch 14"],
-   ["Google Drive", "block servers, sync conflicts, long polling", "Ch 15"]]},
- {h:"APIs & collaboration", d:"Interfaces between services and the people building them", items:[
-   ["REST principles", "statelessness, uniform interface, HATEOAS", "REST 1"],
-   ["API design and status codes", "nouns, methods, idempotency, 429, versioning, pagination", "REST 2"],
-   ["Git fundamentals", "commits, branches, fetch vs pull, rebase, stash", "Git 1"],
-   ["GitHub and GitOps", "pull requests, Actions, Git as source of truth, rollbacks", "Git 2"],
-   ["Dataflow and streams", "batch vs stream, logs, CDC, event sourcing", "DDIA 9"],
-   ["Future of data systems", "unbundling databases, end-to-end correctness", "DDIA 10"]]},
- {h:"Next steps", d:"Keep learning after the books", items:[
-   ["Real-world architectures", "papers and talks from large companies", "Ch 16"],
-   ["Engineering blogs", "read before interviewing with that company", "Ch 16"]]}
-];
-const TRADEOFFS = [
+// ---------- Study tabs: Content (notes), Diagrams, reset ----------
+let activeTab = "today";
+const CHEAT_TRADEOFFS = [
  ["Consistency vs availability", "CAP: pick a side during partitions (Ch 6, Ch 15, DB 5, DDIA 8)"],
  ["Latency vs consistency", "W and R settings; eventual vs strong (Ch 6, DDIA 4)"],
  ["Space vs time", "cache top-k at each node; precomputed feeds; materialized views (Ch 11, Ch 13, DB 4)"],
@@ -2325,17 +2283,45 @@ const TRADEOFFS = [
  ["Cost vs speed", "CDN spend vs long-tail storage (Ch 14)"],
  ["Retries vs duplicates", "retries need idempotency via keys and unique constraints (DB 5, REST 2)"]
 ];
-function renderOutline(){
-  const sections = OUTLINE.map(s=>`<div class="qcard"><h2>${esc(s.h)}</h2><p class="muted">${esc(s.d)}</p>
-    <ul class="tree">${s.items.map(([t,d,ch])=>`<li><b>${esc(t)}</b> · ${esc(d)} <span class="mono muted">[${esc(ch)}]</span></li>`).join("")}</ul></div>`).join("");
-  const trade = `<div class="qcard hl"><h2>Recurring trade-offs</h2><p class="muted">Themes that come back across all four sources.</p>
-    <ul class="tree">${TRADEOFFS.map(([a,b])=>`<li><b>${esc(a)}</b> · ${esc(b)}</li>`).join("")}</ul></div>`;
-  const checklist = `<div class="qcard"><h2>Interview checklist</h2><ul class="tree">
-    <li>Clarify features, users, scale, and what is out of scope</li>
-    <li>Draw the blueprint, then run a quick back-of-envelope estimate</li>
-    <li>Pick two or three components to deep dive, and say the trade-off</li>
-    <li>Cover failures, monitoring, and what changes at 10× scale</li></ul></div>`;
-  $("#tab-outline").innerHTML = `<p class="muted">Everything organized by theme across the four sources. Brackets show where each topic lives in the game.</p>${sections}${trade}${checklist}`;
+const CHEAT_CHECKLIST = [
+ "Clarify features, users, scale, and what is out of scope",
+ "Draw the blueprint, then run a quick back-of-envelope estimate",
+ "Pick two or three components to deep dive, and say the trade-off",
+ "Cover failures, monitoring, and what changes at 10x scale"
+];
+function renderContent(){
+  const filters = TRACKS.map(t=>`<button class="btn ${trackFilter===t?"on":""}" data-ctrack="${esc(t)}">${esc(t)}</button>`).join("");
+  const list = CHAPTERS.filter(c=>trackFilter==="All"||c.track===trackFilter);
+  const notes = list.map(c=>{
+    const ex = EXTRA[c.n] || {};
+    return `<div class="qcard">
+      <div class="label">${esc(c.lbl)} · ${esc(c.track)} · ${esc(REALMS[c.track]||"")}</div>
+      <h2>${esc(c.t)}</h2>
+      ${ex.intro ? `<p class="intro">${esc(ex.intro)}</p>` : ""}
+      <h3>Key ideas</h3>
+      <ul class="tree">${c.concepts.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
+      ${ex.tip ? `<div class="tip"><b>Game tip:</b> ${esc(ex.tip)}</div>` : ""}
+    </div>`;
+  }).join("");
+  const cheat = `<div class="qcard hl"><h2>Cheat sheet: recurring trade-offs</h2><ul class="tree">${CHEAT_TRADEOFFS.map(([a,b])=>`<li><b>${esc(a)}</b> · ${esc(b)}</li>`).join("")}</ul></div>
+    <div class="qcard"><h2>Interview checklist</h2><ul class="tree">${CHEAT_CHECKLIST.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;
+  $("#tab-content").innerHTML = `<div class="filters" role="group" aria-label="Filter notes by source">${filters}</div>
+    <p class="muted">Read-only study notes. Earn XP for concepts and quizzes in the Chapters tab.</p>${notes}${cheat}`;
+  $$("[data-ctrack]").forEach(b=>b.addEventListener("click",()=>{ trackFilter=b.dataset.ctrack; renderContent(); }));
+}
+function renderDiagrams(){
+  const items = CHAPTERS.filter(c=>EXTRA[c.n] && EXTRA[c.n].svg);
+  $("#tab-diagrams").innerHTML = `<p class="muted">${items.length} diagrams, one for each core mechanism.</p>` +
+    items.map(c=>`<figure class="qcard diagram-card"><div class="label">${esc(c.lbl)} · ${esc(REALMS[c.track]||"")}</div><h3>${esc(c.t)}</h3><div class="diagram">${EXTRA[c.n].svg}</div></figure>`).join("");
+}
+function setupReset(btn){
+  if(!btn) return;
+  const label = btn.textContent;
+  let armed = false;
+  btn.addEventListener("click", function(){
+    if(!armed){ armed=true; this.textContent="Tap again to reset"; this.classList.add("primary"); setTimeout(()=>{armed=false; this.textContent=label; this.classList.remove("primary");},3000); return; }
+    state = blank(); save(); renderHeader(); showTab(activeTab); toast("Progress reset");
+  });
 }
 
 // ---------- Progress ----------
@@ -2425,7 +2411,7 @@ state = load();
 renderHeader();
 renderToday();
 renderChapters();
-renderOutline();
+setupReset($("#reset-top"));
 
 })();
 </script>]]></b:widget-setting>
