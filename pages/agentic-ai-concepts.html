@@ -36,6 +36,26 @@
 #agx .sv-onhot{fill:var(--accent-ink);font-family:var(--font);font-size:13px;font-weight:700}
 #agx .sv-s{fill:var(--muted);font-family:var(--font);font-size:11.5px}
 #agx .sv-tc{text-anchor:middle}
+#agx .agx-readbox{margin:22px 0 4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#agx .agx-btn{font:inherit;font-size:.9rem;font-weight:600;padding:8px 14px;border-radius:10px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);cursor:pointer}
+#agx .agx-btn:hover:not(:disabled){border-color:var(--accent)}
+#agx .agx-btn:disabled{opacity:.65;cursor:default}
+#agx .agx-opt{display:block;width:100%;text-align:left;font:inherit;font-size:.95rem;margin:6px 0;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);cursor:pointer}
+#agx .agx-opt:hover:not(:disabled){border-color:var(--accent)}
+#agx .agx-opt:disabled{cursor:default}
+#agx .agx-opt.right{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--surface-2))}
+#agx .agx-opt.wrong{border-color:#ff8a7a}
+#agx .agx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+#agx .agx-stat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px}
+#agx .agx-stat b{display:block;font-family:var(--mono);font-size:1.3rem;margin-top:4px}
+#agx .agx-bar{height:8px;background:var(--surface-2);border-radius:999px;overflow:hidden;margin-top:10px}
+#agx .agx-bar span{display:block;height:100%;background:var(--accent)}
+#agx .agx-badge{padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+#agx .agx-badge.on{border-color:var(--accent)}
+#agx .agx-q{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin:14px 0}
+#agx .agx-boss{border-color:var(--border-strong)}
+#agx .agx-note{color:var(--muted);font-size:.9rem}
+#agx .agx-msg{min-height:1.4em;color:var(--accent);font-weight:600;margin:10px 0 0}
 @media (max-width:640px){#agx h1{font-size:1.75rem}#agx .toc ol{columns:1}}
 </style>
 
@@ -59,6 +79,7 @@
 <li><a href="#agx-11">11. The 21 design patterns</a></li>
 <li><a href="#agx-12">12. Appendices</a></li>
 <li><a href="#agx-13">13. Glossary</a></li>
+<li><a href="#agx-14">14. Practice and scoring</a></li>
 </ol>
 </nav>
 
@@ -642,6 +663,294 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
 </ul>
 
 <div class="tip"><strong>Start with the pattern, then the framework.</strong> The framework changes often, but the pattern underneath it is stable. A chain, a router, a critic loop or a checkpointed graph can be built in any of the frameworks above.</div>
+
+<h2 id="agx-14">14. Practice and scoring</h2>
+
+<p>Test yourself as you read. Each section you mark as read earns XP, each quiz question you answer correctly earns XP, and a realm is cleared when you have read all of its sections and answered all of its questions correctly. Each realm ends with a boss question worth the most XP. Progress is saved in this browser only.</p>
+
+<table>
+<thead><tr><th>Action</th><th>XP</th></tr></thead>
+<tbody>
+<tr><td>Mark a section as read (once per section)</td><td>+10</td></tr>
+<tr><td>First correct answer to a quiz question</td><td>+20</td></tr>
+<tr><td>First wrong attempt at a question</td><td>+4</td></tr>
+<tr><td>Answer today's daily question</td><td>+25, plus +15 if correct</td></tr>
+<tr><td>Clear a realm (all its sections and questions)</td><td>+50</td></tr>
+<tr><td>Defeat a realm boss</td><td>+150</td></tr>
+</tbody>
+</table>
+
+<p class="agx-note">Every 100 XP raises your level and changes your title. A streak counts consecutive days on which you answer the daily question.</p>
+
+<div id="agx-game" aria-live="polite"></div>
+
+<script>
+(function(){
+  var root = document.getElementById('agx');
+  var game = document.getElementById('agx-game');
+  if(!root || !game) return;
+
+  var KEY = 'agx-v1';
+  var R = {concept:10, correct:20, wrong:4, daily:25, dailyCorrect:15, realm:50, boss:150};
+  var TITLES = ['Prompt Wrangler','Tool Smith','Loop Architect','Graph Engineer','Eval Guardian','Agent Master'];
+
+  var REALMS = [
+    {id:'basics', name:'Agent Basics', sections:['agx-1','agx-2','agx-3','agx-4','agx-12'],
+     boss:{name:'The Context Golem', q:'A tool returns a raw stack trace when an order is missing, and the agent retries blindly. What is the better design?', o:['Return an informative error the model can act on','Hide all errors from the model','Retry forever until it works','Remove the tool entirely'], a:0, ex:'A clear, actionable error lets the model recover, for example by asking the user for a corrected order ID.'}},
+    {id:'orch', name:'Orchestration', sections:['agx-5','agx-6','agx-9'],
+     boss:{name:'The Loop Hydra', q:'Two agents keep handing work back and forth. Which fix is most reliable?', o:['Add a step budget and a stop condition in the graph, not only in the prompt','Add more agents to break the cycle','Raise the temperature','Remove the shared state'], a:0, ex:'Prompts can be ignored. A step budget enforced in code guarantees the loop ends.'}},
+    {id:'quality', name:'Quality and Safety', sections:['agx-7','agx-11'],
+     boss:{name:'The Silent Regression', q:'Your LLM judge scores longer answers higher, even when they are less correct. What should you do?', o:['Check the judge against human labels and tighten the rubric','Trust the judge because it is automated','Delete the rubric','Ask the judge to favour short answers'], a:0, ex:'Validate automated graders against human judgement before relying on their scores.'}},
+    {id:'rag', name:'Retrieval', sections:['agx-8'],
+     boss:{name:'The Stale Index Wraith', q:'Recall at k is low, but the answers read fluently. Where should you look first?', o:['Retrieval: the right chunks never reached the prompt','The generator temperature','The number of tools','The fonts on the page'], a:0, ex:'A generator cannot cite documents it never received. Measure retrieval before tuning the prompt.'}}
+  ];
+
+  var QS = [
+    {id:'b1', realm:'basics', q:'What lets an LLM take actions outside the conversation?', o:['A larger context window','Tool calling, where your code runs the requested function','A lower temperature','Fine-tuning on more data'], a:1, ex:'The model only requests a call. Your code runs the tool and returns the result.'},
+    {id:'b2', realm:'basics', q:'In the agent loop, what happens after a tool returns a result?', o:['The loop ends immediately','The result goes back to the model, which decides the next step','The model is retrained on the result','The raw result goes straight to the user'], a:1, ex:'The observation feeds the next reasoning step, which is why the loop repeats until the model answers.'},
+    {id:'b3', realm:'basics', q:'Which pattern runs a fixed sequence of steps, passing each output to the next?', o:['Parallelization','Prompt chaining','Exploration and discovery','Routing'], a:1, ex:'Prompt chaining, also called the pipeline pattern, passes each step output forward.'},
+    {id:'o1', realm:'orch', q:'What does a conditional edge do in LangGraph?', o:['Runs every node in parallel','Chooses the next node at runtime with a routing function','Saves state to a database','Stops the graph immediately'], a:1, ex:'A routing function reads the state and returns the name of the next node, or END.'},
+    {id:'o2', realm:'orch', q:'Why does the LangGraph example pass a thread_id?', o:['To name the model','To keep state for one conversation so it can resume','To set the temperature','To choose which tool runs'], a:1, ex:'With a checkpointer, the same thread_id reloads the saved state for that conversation.'},
+    {id:'o3', realm:'orch', q:'What is the main risk of the supervisor pattern?', o:['Too few tokens per message','The supervisor becoming a bottleneck or delegating endlessly','Missing images in the output','Slow fonts on the page'], a:1, ex:'Give the supervisor a clear stop condition and a step budget, and keep ownership of each state field explicit.'},
+    {id:'q1', realm:'quality', q:'Why write evals before changing a prompt?', o:['To make the prompt longer','To measure whether the change helps or breaks other cases','To avoid using a model','To delete the logs'], a:1, ex:'Without a fixed set of cases, a fix for one example can silently break three others.'},
+    {id:'q2', realm:'quality', q:'Which check is cheapest and most reliable for "output must be valid JSON"?', o:['An LLM judge','A deterministic code check','Human review of every run','Asking the model whether its output is valid'], a:1, ex:'Use code for any requirement code can express. Save judges and humans for what code cannot check.'},
+    {id:'q3', realm:'quality', q:'What should you do after fixing a production failure?', o:['Delete the trace','Add a test case that would have caught it','Hide it from the team','Only change the prompt'], a:1, ex:'Each production failure that becomes a test case makes the eval set stronger over time.'},
+    {id:'r1', realm:'rag', q:'Why must documents and questions use the same embedding model?', o:['It is faster','Similarity scores only mean something within one vector space','It reduces the cost of storage','The index requires JSON'], a:1, ex:'Vectors from different models live in different spaces, so their distances cannot be compared.'},
+    {id:'r2', realm:'rag', q:'When is hybrid search most useful?', o:['When the corpus has exact identifiers and error codes as well as questions about meaning','Only for image collections','When there are no documents','Never, because vectors are enough'], a:0, ex:'Keyword search finds exact terms that embeddings can blur. Hybrid search combines both.'},
+    {id:'r3', realm:'rag', q:'What does a reranker do in a RAG pipeline?', o:['Creates the embeddings','Re-scores retrieved candidates more accurately','Stores the documents','Asks the user a clarifying question'], a:1, ex:'Retrieval favours recall, so it returns many candidates. The reranker picks the best few for the prompt.'}
+  ];
+
+  var SECTION_REALM = {};
+  REALMS.forEach(function(r){ r.sections.forEach(function(id){ SECTION_REALM[id] = r.id; }); });
+
+  function blank(){
+    return {xp:0, read:{}, answered:{}, attempted:{}, realms:{}, bosses:{}, badges:{}, stats:{tries:0, right:0}, daily:{day:'', done:false, ok:false, streak:0, last:''}};
+  }
+  var S;
+  function load(){ try{ var s = JSON.parse(localStorage.getItem(KEY)); return s ? Object.assign(blank(), s) : blank(); }catch(e){ return blank(); } }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+  S = load();
+
+  var msg = '';
+  var tmp = {};
+
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function dayKey(d){ d = d || new Date(); return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); }
+  function hashStr(s){ var h = 0; for(var i=0;i<s.length;i++){ h = (h*31 + s.charCodeAt(i)) >>> 0; } return h; }
+  function levelOf(xp){ return Math.floor(xp/100) + 1; }
+  function levelTitle(lvl){ return TITLES[Math.min(lvl-1, TITLES.length-1)]; }
+  function gain(n){ S.xp += n; }
+  function correctCount(){ return Object.keys(S.answered).filter(function(k){ return S.answered[k] && S.answered[k].ok; }).length; }
+  function realmById(id){ for(var i=0;i<REALMS.length;i++){ if(REALMS[i].id===id) return REALMS[i]; } return null; }
+  function realmQs(r){ return QS.filter(function(q){ return q.realm===r.id; }); }
+  function readDone(r){ return r.sections.every(function(id){ return !!S.read[id]; }); }
+  function qsDone(r){ return realmQs(r).every(function(q){ return S.answered[q.id] && S.answered[q.id].ok; }); }
+  function cleared(r){ return readDone(r) && qsDone(r); }
+  function todayQ(){ return QS[hashStr(dayKey()) % QS.length]; }
+
+  function checkRealms(){
+    REALMS.forEach(function(r){
+      if(cleared(r) && !S.realms[r.id]){ S.realms[r.id] = true; gain(R.realm); msg = 'Realm cleared: ' + r.name + '. +' + R.realm + ' XP'; }
+    });
+  }
+  function badgeList(){
+    var list = [
+      {id:'first', name:'First Step', how:'Read or answer anything', on: Object.keys(S.read).length + Object.keys(S.answered).length > 0},
+      {id:'sharp', name:'Sharp Eye', how:'Get 10 quiz answers right', on: correctCount() >= 10},
+      {id:'streak', name:'On a Roll', how:'Reach a 3-day streak', on: S.daily.streak >= 3}
+    ];
+    REALMS.forEach(function(r){
+      list.push({id:'realm-'+r.id, name:'Realm Clear: '+r.name, how:'Read every section and answer every question in '+r.name, on: !!S.realms[r.id]});
+      list.push({id:'boss-'+r.id, name:'Boss Slain: '+r.boss.name, how:'Defeat the '+r.name+' boss', on: !!S.bosses[r.id]});
+    });
+    return list;
+  }
+  function checkBadges(){
+    badgeList().forEach(function(b){
+      if(b.on && !S.badges[b.id]){ S.badges[b.id] = true; msg = 'Badge unlocked: ' + b.name; }
+    });
+  }
+
+  function markRead(id){
+    if(S.read[id]) return;
+    S.read[id] = true; gain(R.concept); msg = 'Section read. +' + R.concept + ' XP';
+    checkRealms(); checkBadges(); save(); render();
+  }
+
+  function answerQuestion(qid, i){
+    var q = null;
+    for(var k=0;k<QS.length;k++){ if(QS[k].id===qid){ q = QS[k]; break; } }
+    if(!q) return;
+    var prev = S.answered[qid];
+    if(prev && prev.ok) return;
+    S.stats.tries++;
+    if(i === q.a){
+      S.stats.right++;
+      S.answered[qid] = {ok:true}; gain(R.correct); msg = 'Correct. +' + R.correct + ' XP';
+      tmp[qid] = {ok:true};
+    } else {
+      if(!S.attempted[qid]){ S.attempted[qid] = true; gain(R.wrong); }
+      tmp[qid] = {ok:false, pick:i};
+      msg = 'Not quite. Try another option.';
+    }
+    checkRealms(); checkBadges(); save(); render();
+  }
+
+  function answerDaily(i){
+    var t = dayKey(), d = S.daily;
+    if(d.day === t && d.done) return;
+    var q = todayQ();
+    var ok = i === q.a;
+    var y = dayKey(new Date(Date.now() - 86400000));
+    if(d.last !== t){ d.streak = (d.last === y) ? d.streak + 1 : 1; d.last = t; }
+    d.day = t; d.done = true; d.ok = ok;
+    S.stats.tries++; if(ok) S.stats.right++;
+    gain(R.daily + (ok ? R.dailyCorrect : 0));
+    if(ok){ S.answered[q.id] = {ok:true}; tmp[q.id] = {ok:true}; msg = 'Daily answered correctly. +' + (R.daily + R.dailyCorrect) + ' XP'; }
+    else { tmp[q.id] = {ok:false, pick:i}; msg = 'Daily answered. +' + R.daily + ' XP. Try again tomorrow for the bonus.'; }
+    checkRealms(); checkBadges(); save(); render();
+  }
+
+  function answerBoss(realmId, i){
+    var r = realmById(realmId);
+    if(!r || S.bosses[r.id] || !cleared(r)) return;
+    if(i === r.boss.a){
+      S.bosses[r.id] = true; gain(R.boss); msg = 'Boss defeated: ' + r.boss.name + '. +' + R.boss + ' XP';
+      checkBadges(); save(); render();
+    } else {
+      tmp['boss-'+r.id] = {ok:false, pick:i}; msg = 'Not quite. The boss is still standing.';
+      render();
+    }
+  }
+
+  function renderSummary(){
+    var lvl = levelOf(S.xp);
+    var totalItems = REALMS.reduce(function(n,r){ return n + r.sections.length; }, 0) + QS.length;
+    var doneItems = Object.keys(S.read).length + Object.keys(S.answered).length;
+    var pct = Math.round(100 * doneItems / totalItems);
+    return '<div class="agx-q"><div class="agx-kicker" style="font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)">Your progress · ' + esc(levelTitle(lvl)) + '</div>' +
+      '<h3 style="margin:.3em 0 0;color:var(--text)">Level ' + lvl + ' · ' + S.xp + ' XP · ' + S.daily.streak + '-day streak</h3>' +
+      '<div class="agx-bar"><span style="width:' + (S.xp % 100) + '%"></span></div>' +
+      '<p class="agx-note" style="margin:8px 0 0">' + (100 - (S.xp % 100)) + ' XP to level ' + (lvl + 1) + '. ' + pct + '% of the material covered.</p>' +
+      '<div class="agx-grid" style="margin-top:12px">' +
+        '<div class="agx-stat"><span class="agx-note">Sections read</span><b>' + Object.keys(S.read).length + ' / ' + REALMS.reduce(function(n,r){ return n + r.sections.length; }, 0) + '</b></div>' +
+        '<div class="agx-stat"><span class="agx-note">Quiz accuracy</span><b>' + (S.stats.tries ? Math.round(100 * S.stats.right / S.stats.tries) : 0) + '%</b></div>' +
+        '<div class="agx-stat"><span class="agx-note">Questions answered</span><b>' + correctCount() + ' / ' + QS.length + '</b></div>' +
+      '</div>' +
+      (msg ? '<p class="agx-msg" role="status">' + esc(msg) + '</p>' : '') +
+    '</div>';
+  }
+
+  function renderDaily(){
+    var t = dayKey(), d = S.daily, q = todayQ();
+    var done = d.day === t && d.done;
+    var st = tmp[q.id];
+    var body = '<div class="agx-q"><div class="agx-note">Daily question · +' + (R.daily + R.dailyCorrect) + ' XP if correct · ' + d.streak + '-day streak</div>' +
+      '<p style="margin:8px 0 4px;color:var(--text)"><b>' + esc(q.q) + '</b></p>';
+    body += q.o.map(function(text, i){
+      var cls = 'agx-opt';
+      if(done){ if(i === q.a) cls += ' right'; else if(d.ok === false && st && st.pick === i) cls += ' wrong'; }
+      else if(st && st.pick === i && !st.ok) cls += ' wrong';
+      return '<button class="' + cls + '" data-daily="1" data-i="' + i + '"' + (done ? ' disabled' : '') + '>' + esc(text) + '</button>';
+    }).join('');
+    if(done){ body += '<p class="agx-note" style="margin-top:8px">' + (d.ok ? 'Answered correctly today.' : 'Answered today. Come back tomorrow for a new question.') + ' ' + esc(q.ex) + '</p>'; }
+    return body + '</div>';
+  }
+
+  function renderRealms(){
+    return REALMS.map(function(r){
+      var rs = r.sections.filter(function(id){ return !!S.read[id]; }).length;
+      var qs = realmQs(r);
+      var okQ = qs.filter(function(q){ return S.answered[q.id] && S.answered[q.id].ok; }).length;
+      var head = '<div class="agx-q"><span class="agx-note" style="font-family:var(--mono);text-transform:uppercase;font-size:.78rem;letter-spacing:.08em">Realm</span>' +
+        '<h3 style="margin:.2em 0 0;color:var(--text)">' + esc(r.name) + '</h3>' +
+        '<p class="agx-note" style="margin:6px 0 0">' + rs + ' of ' + r.sections.length + ' sections read · ' + okQ + ' of ' + qs.length + ' questions correct · ' + (S.realms[r.id] ? 'cleared' : 'in progress') + '</p>';
+      head += qs.map(function(q){
+        var st = tmp[q.id], answered = S.answered[q.id] && S.answered[q.id].ok;
+        var out = q.o.map(function(text, i){
+          var cls = 'agx-opt';
+          if(answered){ if(i === q.a) cls += ' right'; }
+          else if(st && st.pick === i && !st.ok) cls += ' wrong';
+          return '<button class="' + cls + '" data-q="' + q.id + '" data-i="' + i + '"' + (answered ? ' disabled' : '') + '>' + esc(text) + '</button>';
+        }).join('');
+        return '<p style="margin:14px 0 2px;color:var(--text)"><b>' + esc(q.q) + '</b></p>' + out + (answered ? '<p class="agx-note" style="margin:6px 0 0">' + esc(q.ex) + '</p>' : '');
+      }).join('');
+      if(cleared(r)){
+        if(S.bosses[r.id]){
+          head += '<div class="agx-q agx-boss" style="margin-top:16px"><span class="agx-note">Realm boss</span><h3 style="margin:.2em 0 0;color:var(--text)">' + esc(r.boss.name) + ': defeated</h3><p class="agx-note" style="margin:6px 0 0">' + esc(r.boss.ex) + '</p></div>';
+        } else {
+          var bst = tmp['boss-'+r.id];
+          head += '<div class="agx-q agx-boss" style="margin-top:16px"><span class="agx-note">Realm boss · +' + R.boss + ' XP</span><h3 style="margin:.2em 0 0;color:var(--text)">' + esc(r.boss.name) + '</h3><p style="margin:8px 0 2px;color:var(--text)">' + esc(r.boss.q) + '</p>' +
+            r.boss.o.map(function(text, i){
+              var cls = 'agx-opt' + (bst && bst.pick === i ? ' wrong' : '');
+              return '<button class="' + cls + '" data-boss="' + r.id + '" data-i="' + i + '">' + esc(text) + '</button>';
+            }).join('') + '</div>';
+        }
+      } else {
+        head += '<p class="agx-note" style="margin-top:14px">Boss locked. Read every section and answer every question to face ' + esc(r.boss.name) + '.</p>';
+      }
+      return head + '</div>';
+    }).join('');
+  }
+
+  function renderBadges(){
+    return '<h3 style="margin:22px 0 10px;color:var(--text)">Badges</h3><div class="agx-grid">' +
+      badgeList().map(function(b){
+        return '<div class="agx-badge ' + (b.on ? 'on' : '') + '"><b style="color:var(--text)">' + esc(b.name) + '</b><div class="agx-note" style="font-size:.85rem;margin-top:4px">' + (b.on ? 'Unlocked' : esc(b.how)) + '</div></div>';
+      }).join('') + '</div>';
+  }
+
+  function render(){
+    game.innerHTML = renderSummary() +
+      '<h3 style="margin:22px 0 10px;color:var(--text)">Daily question</h3>' + renderDaily() +
+      '<h3 style="margin:22px 0 10px;color:var(--text)">Realms and bosses</h3>' + renderRealms() +
+      renderBadges() +
+      '<div class="agx-q" style="margin-top:22px"><h3 style="margin:0 0 6px;color:var(--text)">Reset progress</h3><p class="agx-note" style="margin:0 0 10px">Clears XP, streaks, badges, answers and reads stored in this browser.</p><button class="agx-btn" data-reset="1">Reset</button></div>';
+    updateReadButtons();
+    msg = '';
+  }
+
+  // Read buttons placed at the end of each counted section
+  function updateReadButtons(){
+    root.querySelectorAll('[data-read]').forEach(function(b){
+      var done = !!S.read[b.getAttribute('data-read')];
+      b.textContent = done ? 'Read · +' + R.concept + ' XP earned' : 'Mark as read · +' + R.concept + ' XP';
+      b.disabled = done;
+    });
+  }
+  function addReadButtons(){
+    REALMS.forEach(function(r){
+      r.sections.forEach(function(id){
+        var h = document.getElementById(id);
+        if(!h) return;
+        var next = h.nextElementSibling;
+        while(next && next.tagName !== 'H2' && next.id !== 'agx-game'){ next = next.nextElementSibling; }
+        var box = document.createElement('div');
+        box.className = 'agx-readbox';
+        box.innerHTML = '<button class="agx-btn" data-read="' + id + '"></button><span class="agx-note">Realm: ' + esc(r.name) + '</span>';
+        h.parentNode.insertBefore(box, next);
+      });
+    });
+  }
+
+  root.addEventListener('click', function(e){
+    var t = e.target.closest ? e.target.closest('button') : null;
+    if(!t || t.disabled) return;
+    if(t.hasAttribute('data-read')){ markRead(t.getAttribute('data-read')); return; }
+    if(t.hasAttribute('data-q')){ answerQuestion(t.getAttribute('data-q'), +t.getAttribute('data-i')); return; }
+    if(t.hasAttribute('data-daily')){ answerDaily(+t.getAttribute('data-i')); return; }
+    if(t.hasAttribute('data-boss')){ answerBoss(t.getAttribute('data-boss'), +t.getAttribute('data-i')); return; }
+    if(t.hasAttribute('data-reset')){
+      if(!t.dataset.armed){ t.dataset.armed = '1'; t.textContent = 'Tap again to confirm'; setTimeout(function(){ t.dataset.armed = ''; t.textContent = 'Reset'; }, 3000); return; }
+      S = blank(); tmp = {}; msg = 'Progress reset'; save(); render();
+    }
+  });
+
+  addReadButtons();
+  checkRealms(); checkBadges(); save();
+  render();
+})();
+</script>
 
 <p class="kicker" style="margin-top:2.4em">Further reading</p>
 <ul>
