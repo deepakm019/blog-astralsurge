@@ -2708,33 +2708,48 @@ setupReset($("#reset-top"));
 #agx .agx-cols .agx-q{margin:0;height:100%}
 #agx .agx-msg{min-height:1.4em;color:var(--accent);font-weight:600;margin:10px 0 0}
 @media (max-width:640px){#agx h1{font-size:1.75rem}#agx .toc ol{columns:1}}
+#agx [hidden]{display:none!important}
+#agx .agx-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:22px 0 16px;padding:6px;background:var(--surface);border:1px solid var(--border);border-radius:14px}
+#agx .agx-tabs button{font:inherit;font-size:.92rem;font-weight:600;padding:9px 14px;border-radius:10px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+#agx .agx-tabs button:hover{color:var(--text)}
+#agx .agx-tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+#agx .agx-pager{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:30px 0 0;padding-top:16px;border-top:1px solid var(--border)}
+#agx .agx-pager .agx-msg{width:100%}
+#agx button.agx-card{font:inherit;text-align:left;width:100%;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;cursor:pointer}
+#agx button.agx-card:hover{border-color:var(--accent)}
+#agx .agx-diag{margin:0}
+#agx .agx-diag .figure{margin:10px 0 0}
 </style>
-
 <div id="agx">
-
 <p class="kicker">AI engineering · Field guide</p>
 <h1>Agentic AI, from first principles</h1>
 <p class="lede">What makes an AI system an agent, the main agent architectures, how LangGraph models them as graphs, how to evaluate them, and how retrieval-augmented generation (RAG) gives them knowledge they were never trained on. Every concept comes with a diagram or a small example.</p>
 
-<nav class="toc" aria-label="On this page">
-<ol>
-<li><a href="#agx-1">1. Foundations</a></li>
-<li><a href="#agx-2">2. Workflows vs agents</a></li>
-<li><a href="#agx-3">3. Agent types</a></li>
-<li><a href="#agx-4">4. Tools and memory</a></li>
-<li><a href="#agx-5">5. LangGraph</a></li>
-<li><a href="#agx-6">6. Multi-agent systems</a></li>
-<li><a href="#agx-7">7. Evals</a></li>
-<li><a href="#agx-8">8. RAG</a></li>
-<li><a href="#agx-9">9. Putting it together</a></li>
-<li><a href="#agx-11">11. The 21 design patterns</a></li>
-<li><a href="#agx-12">12. Appendices</a></li>
-<li><a href="#agx-13">13. Glossary</a></li>
-<li><a href="#agx-14">14. Practice and scoring</a></li>
-</ol>
-</nav>
+<nav class="agx-tabs" role="tablist" aria-label="Sections"><button role="tab" data-tab="read" aria-selected="true">Read</button><button role="tab" data-tab="chapters" aria-selected="false">Chapters</button><button role="tab" data-tab="diagrams" aria-selected="false">Diagrams</button><button role="tab" data-tab="practice" aria-selected="false">Practice</button><button role="tab" data-tab="progress" aria-selected="false">Progress</button></nav>
+<section id="agx-p-read" class="agx-panel"><div id="agx-reader"></div><div id="agx-pager" class="agx-pager"></div></section>
+<section id="agx-p-chapters" class="agx-panel" hidden><div id="agx-chapters" class="agx-cols"></div></section>
+<section id="agx-p-diagrams" class="agx-panel" hidden><div id="agx-diagrams" class="agx-cols"></div></section>
+<section id="agx-p-practice" class="agx-panel" hidden><h2 id="agx-practice-h">Practice and scoring</h2>
 
-<h2 id="agx-1">1. Foundations</h2>
+<p>Test yourself as you read. Each section you mark as read earns XP, each quiz question you answer correctly earns XP, and a realm is cleared when you have read all of its sections and answered all of its questions correctly. Each realm ends with a boss question worth the most XP. Progress is saved in this browser only.</p>
+
+<table>
+<thead><tr><th>Action</th><th>XP</th></tr></thead>
+<tbody>
+<tr><td>Mark a section as read (once per section)</td><td>+10</td></tr>
+<tr><td>First correct answer to a quiz question</td><td>+20</td></tr>
+<tr><td>First wrong attempt at a question</td><td>+4</td></tr>
+<tr><td>Answer today's daily question</td><td>+25, plus +15 if correct</td></tr>
+<tr><td>Clear a realm (all its sections and questions)</td><td>+50</td></tr>
+<tr><td>Defeat a realm boss</td><td>+150</td></tr>
+</tbody>
+</table>
+
+<p class="agx-note">Every 100 XP raises your level and changes your title. A streak counts consecutive days on which you answer the daily question.</p>
+
+<div id="agx-practice"></div></section>
+<section id="agx-p-progress" class="agx-panel" hidden><div id="agx-progress"></div></section>
+<div id="agx-body" hidden><h2 id="agx-1">1. Foundations</h2>
 
 <p>A large language model (LLM) takes text in and produces text out. On its own it cannot look up a fact, read your database, or change anything outside the conversation. Three ideas turn it into something more:</p>
 <ul>
@@ -3227,30 +3242,7 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
 </tbody>
 </table>
 
-<h2 id="agx-13">13. Glossary</h2>
-<table>
-<thead><tr><th>Term</th><th>Meaning</th></tr></thead>
-<tbody>
-<tr><td>Agent</td><td>An LLM in a loop that chooses its own next action, usually with tools</td></tr>
-<tr><td>Chunk</td><td>A piece of a document stored and retrieved as one unit in RAG</td></tr>
-<tr><td>Checkpointer</td><td>Component that saves graph state so a run can resume or be inspected</td></tr>
-<tr><td>Conditional edge</td><td>A graph edge chosen at runtime by a routing function</td></tr>
-<tr><td>Embedding</td><td>A vector that represents the meaning of a piece of text</td></tr>
-<tr><td>Eval</td><td>A repeatable test that scores an LLM system's behaviour</td></tr>
-<tr><td>Golden dataset</td><td>A curated set of inputs with expected results or criteria, used for evals</td></tr>
-<tr><td>Grounding</td><td>Basing an answer on supplied sources and citing them</td></tr>
-<tr><td>Hallucination</td><td>A fluent output that is not supported by the context or facts</td></tr>
-<tr><td>Human-in-the-loop</td><td>A pause where a person approves, edits or rejects an agent's next action</td></tr>
-<tr><td>LLM-as-judge</td><td>Using a model to score another model's output against a rubric</td></tr>
-<tr><td>Node</td><td>A step in a LangGraph graph: a function that reads and updates state</td></tr>
-<tr><td>Reducer</td><td>A rule for merging a node's update into the existing state</td></tr>
-<tr><td>Reranker</td><td>A model that re-scores retrieved candidates more accurately</td></tr>
-<tr><td>Trace</td><td>A recorded log of an agent run: prompts, tool calls, results and timings</td></tr>
-<tr><td>Vector index</td><td>A data structure for fast nearest-neighbour search over embeddings</td></tr>
-</tbody>
-</table>
-
-<h2 id="agx-11">11. The 21 agentic design patterns</h2>
+<h2 id="agx-11">10. The 21 agentic design patterns</h2>
 
 <p>The book <em>Agentic Design Patterns: A Hands-On Guide to Building Intelligent Systems</em> (Springer) organises agent engineering into 21 reusable patterns, one per chapter. The table below summarises each one in our own words. Use it as a map: when a design problem looks familiar, the matching pattern tells you which trade-offs to check first.</p>
 
@@ -3300,7 +3292,7 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
 <h3>Where the book sees agents heading</h3>
 <p>The closing chapter lists five hypotheses. In brief: agents may become generalists that manage long-running goals; they may become proactive and personalised; they may act in the physical world through robotics; they may take part in economic activity as autonomous actors; and future multi-agent systems may reorganise their own structure to meet a declared goal. The book presents these as possibilities, not predictions, and each one raises the same questions about reliability, evaluation and oversight that the patterns above are meant to address.</p>
 
-<h2 id="agx-12">12. Appendices: frameworks, prompting and real-world agents</h2>
+<h2 id="agx-12">11. Appendices: frameworks, prompting and real-world agents</h2>
 
 <p>The appendices extend the main chapters beyond design patterns:</p>
 <ul>
@@ -3315,32 +3307,39 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
 
 <div class="tip"><strong>Start with the pattern, then the framework.</strong> The framework changes often, but the pattern underneath it is stable. A chain, a router, a critic loop or a checkpointed graph can be built in any of the frameworks above.</div>
 
-<h2 id="agx-14">14. Practice and scoring</h2>
-
-<p>Test yourself as you read. Each section you mark as read earns XP, each quiz question you answer correctly earns XP, and a realm is cleared when you have read all of its sections and answered all of its questions correctly. Each realm ends with a boss question worth the most XP. Progress is saved in this browser only.</p>
-
+<h2 id="agx-13">12. Glossary</h2>
 <table>
-<thead><tr><th>Action</th><th>XP</th></tr></thead>
+<thead><tr><th>Term</th><th>Meaning</th></tr></thead>
 <tbody>
-<tr><td>Mark a section as read (once per section)</td><td>+10</td></tr>
-<tr><td>First correct answer to a quiz question</td><td>+20</td></tr>
-<tr><td>First wrong attempt at a question</td><td>+4</td></tr>
-<tr><td>Answer today's daily question</td><td>+25, plus +15 if correct</td></tr>
-<tr><td>Clear a realm (all its sections and questions)</td><td>+50</td></tr>
-<tr><td>Defeat a realm boss</td><td>+150</td></tr>
+<tr><td>Agent</td><td>An LLM in a loop that chooses its own next action, usually with tools</td></tr>
+<tr><td>Chunk</td><td>A piece of a document stored and retrieved as one unit in RAG</td></tr>
+<tr><td>Checkpointer</td><td>Component that saves graph state so a run can resume or be inspected</td></tr>
+<tr><td>Conditional edge</td><td>A graph edge chosen at runtime by a routing function</td></tr>
+<tr><td>Embedding</td><td>A vector that represents the meaning of a piece of text</td></tr>
+<tr><td>Eval</td><td>A repeatable test that scores an LLM system's behaviour</td></tr>
+<tr><td>Golden dataset</td><td>A curated set of inputs with expected results or criteria, used for evals</td></tr>
+<tr><td>Grounding</td><td>Basing an answer on supplied sources and citing them</td></tr>
+<tr><td>Hallucination</td><td>A fluent output that is not supported by the context or facts</td></tr>
+<tr><td>Human-in-the-loop</td><td>A pause where a person approves, edits or rejects an agent's next action</td></tr>
+<tr><td>LLM-as-judge</td><td>Using a model to score another model's output against a rubric</td></tr>
+<tr><td>Node</td><td>A step in a LangGraph graph: a function that reads and updates state</td></tr>
+<tr><td>Reducer</td><td>A rule for merging a node's update into the existing state</td></tr>
+<tr><td>Reranker</td><td>A model that re-scores retrieved candidates more accurately</td></tr>
+<tr><td>Trace</td><td>A recorded log of an agent run: prompts, tool calls, results and timings</td></tr>
+<tr><td>Vector index</td><td>A data structure for fast nearest-neighbour search over embeddings</td></tr>
 </tbody>
 </table>
 
-<p class="agx-note">Every 100 XP raises your level and changes your title. A streak counts consecutive days on which you answer the daily question.</p>
-
-<div id="agx-game" aria-live="polite"></div>
-
+<p class="kicker" style="margin-top:2.4em">Further reading</p>
+<ul>
+<li>Anthropic, <em>Building effective agents</em>: the workflow and agent distinction used in Section 2.</li>
+<li>LangGraph documentation: state, persistence, interrupts and multi-agent patterns.</li>
+<li>Information retrieval texts on BM25, reciprocal rank fusion and nDCG for the retrieval metrics in Section 8.</li>
+<li><em>Agentic Design Patterns: A Hands-On Guide to Building Intelligent Systems</em> (Springer): the source of the 21 patterns in Section 10 and the appendices in Section 11.</li>
+</ul>
+</div>
 <script>
 (function(){
-  var root = document.getElementById('agx');
-  var game = document.getElementById('agx-game');
-  if(!root || !game) return;
-
   var KEY = 'agx-v1';
   var R = {concept:10, correct:20, wrong:4, daily:25, dailyCorrect:15, realm:50, boss:150};
   var TITLES = ['Prompt Wrangler','Tool Smith','Loop Architect','Graph Engineer','Eval Guardian','Agent Master'];
@@ -3370,9 +3369,6 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
     {id:'r2', realm:'rag', q:'When is hybrid search most useful?', o:['When the corpus has exact identifiers and error codes as well as questions about meaning','Only for image collections','When there are no documents','Never, because vectors are enough'], a:0, ex:'Keyword search finds exact terms that embeddings can blur. Hybrid search combines both.'},
     {id:'r3', realm:'rag', q:'What does a reranker do in a RAG pipeline?', o:['Creates the embeddings','Re-scores retrieved candidates more accurately','Stores the documents','Asks the user a clarifying question'], a:1, ex:'Retrieval favours recall, so it returns many candidates. The reranker picks the best few for the prompt.'}
   ];
-
-  var SECTION_REALM = {};
-  REALMS.forEach(function(r){ r.sections.forEach(function(id){ SECTION_REALM[id] = r.id; }); });
 
   function blank(){
     return {xp:0, read:{}, answered:{}, attempted:{}, realms:{}, bosses:{}, badges:{}, stats:{tries:0, right:0}, daily:{day:'', done:false, ok:false, streak:0, last:''}};
@@ -3425,7 +3421,7 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
   function markRead(id){
     if(S.read[id]) return;
     S.read[id] = true; gain(R.concept); msg = 'Section read. +' + R.concept + ' XP';
-    checkRealms(); checkBadges(); save(); render();
+    checkRealms(); checkBadges(); save(); refresh();
   }
 
   function answerQuestion(qid, i){
@@ -3444,7 +3440,7 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
       tmp[qid] = {ok:false, pick:i};
       msg = 'Not quite. Try another option.';
     }
-    checkRealms(); checkBadges(); save(); render();
+    checkRealms(); checkBadges(); save(); refresh();
   }
 
   function answerDaily(i){
@@ -3459,7 +3455,7 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
     gain(R.daily + (ok ? R.dailyCorrect : 0));
     if(ok){ S.answered[q.id] = {ok:true}; tmp[q.id] = {ok:true}; msg = 'Daily answered correctly. +' + (R.daily + R.dailyCorrect) + ' XP'; }
     else { tmp[q.id] = {ok:false, pick:i}; msg = 'Daily answered. +' + R.daily + ' XP. Try again tomorrow for the bonus.'; }
-    checkRealms(); checkBadges(); save(); render();
+    checkRealms(); checkBadges(); save(); refresh();
   }
 
   function answerBoss(realmId, i){
@@ -3467,10 +3463,10 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
     if(!r || S.bosses[r.id] || !cleared(r)) return;
     if(i === r.boss.a){
       S.bosses[r.id] = true; gain(R.boss); msg = 'Boss defeated: ' + r.boss.name + '. +' + R.boss + ' XP';
-      checkBadges(); save(); render();
+      checkBadges(); save(); refresh();
     } else {
       tmp['boss-'+r.id] = {ok:false, pick:i}; msg = 'Not quite. The boss is still standing.';
-      render();
+      refresh();
     }
   }
 
@@ -3488,7 +3484,6 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
         '<div class="agx-stat"><span class="agx-note">Quiz accuracy</span><b>' + (S.stats.tries ? Math.round(100 * S.stats.right / S.stats.tries) : 0) + '%</b></div>' +
         '<div class="agx-stat"><span class="agx-note">Questions answered</span><b>' + correctCount() + ' / ' + QS.length + '</b></div>' +
       '</div>' +
-      (msg ? '<p class="agx-msg" role="status">' + esc(msg) + '</p>' : '') +
     '</div>';
   }
 
@@ -3551,17 +3546,62 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
       }).join('') + '</div>';
   }
 
-  function render(){
-    game.innerHTML = '<div class="agx-cols agx-cols-2">' + renderSummary() + renderDaily() + '</div>' +
-      '<h3 style="margin:26px 0 10px;color:var(--text)">Realms and bosses</h3>' +
-      '<div class="agx-cols">' + renderRealms() + '</div>' +
-      renderBadges() +
-      '<div class="agx-q" style="margin-top:22px"><h3 style="margin:0 0 6px;color:var(--text)">Reset progress</h3><p class="agx-note" style="margin:0 0 10px">Clears XP, streaks, badges, answers and reads stored in this browser.</p><button class="agx-btn" data-reset="1">Reset</button></div>';
-    updateReadButtons();
-    msg = '';
+  var root = document.getElementById('agx');
+  var body = document.getElementById('agx-body');
+  var reader = document.getElementById('agx-reader');
+  var pager = document.getElementById('agx-pager');
+  var chapterGrid = document.getElementById('agx-chapters');
+  var diagramGrid = document.getElementById('agx-diagrams');
+  var practiceEl = document.getElementById('agx-practice');
+  var progressEl = document.getElementById('agx-progress');
+  if(!root || !body || !reader) return;
+
+  var chapters = [];
+  var current = 0;
+  var tab = 'read';
+
+  function realmOf(id){
+    for(var i = 0; i < REALMS.length; i++){ if(REALMS[i].sections.indexOf(id) !== -1) return REALMS[i]; }
+    return null;
   }
 
-  // Read buttons placed at the end of each counted section
+  function msgHtml(){ return msg ? '<p class="agx-msg" role="status">' + esc(msg) + '</p>' : ''; }
+
+  function buildChapters(){
+    var cur = null;
+    Array.prototype.slice.call(body.children).forEach(function(el){
+      if(el.tagName === 'H2'){
+        cur = {id: el.id, title: el.textContent.replace(/^[0-9]+\.\s*/, ''), nodes: [], realm: realmOf(el.id), box: null};
+        chapters.push(cur);
+      }
+      if(cur) cur.nodes.push(el);
+    });
+    chapters.forEach(function(c){
+      if(c.realm){
+        var box = document.createElement('div');
+        box.className = 'agx-readbox';
+        box.innerHTML = '<button class="agx-btn" data-read="' + c.id + '"></button><span class="agx-note">Realm: ' + esc(c.realm.name) + '</span>';
+        c.box = box;
+      }
+    });
+    body.innerHTML = '';
+  }
+
+  function buildDiagrams(){
+    chapters.forEach(function(c){
+      c.nodes.forEach(function(n){
+        if(!n.querySelectorAll) return;
+        n.querySelectorAll('.figure').forEach(function(f){
+          var card = document.createElement('div');
+          card.className = 'agx-q agx-diag';
+          card.innerHTML = '<span class="agx-note">' + esc(c.title) + '</span>';
+          card.appendChild(f.cloneNode(true));
+          diagramGrid.appendChild(card);
+        });
+      });
+    });
+  }
+
   function updateReadButtons(){
     root.querySelectorAll('[data-read]').forEach(function(b){
       var done = !!S.read[b.getAttribute('data-read')];
@@ -3569,48 +3609,98 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
       b.disabled = done;
     });
   }
-  function addReadButtons(){
-    REALMS.forEach(function(r){
-      r.sections.forEach(function(id){
-        var h = document.getElementById(id);
-        if(!h) return;
-        var next = h.nextElementSibling;
-        while(next && next.tagName !== 'H2' && next.id !== 'agx-game'){ next = next.nextElementSibling; }
-        var box = document.createElement('div');
-        box.className = 'agx-readbox';
-        box.innerHTML = '<button class="agx-btn" data-read="' + id + '"></button><span class="agx-note">Realm: ' + esc(r.name) + '</span>';
-        h.parentNode.insertBefore(box, next);
-      });
+
+  function renderPager(){
+    pager.innerHTML =
+      '<button class="agx-btn" data-prev="1"' + (current === 0 ? ' disabled' : '') + '>Previous</button>' +
+      '<span class="agx-note">Chapter ' + (current + 1) + ' of ' + chapters.length + '</span>' +
+      '<button class="agx-btn" data-next="1"' + (current === chapters.length - 1 ? ' disabled' : '') + '>Next</button>' +
+      msgHtml();
+  }
+
+  function showChapter(i){
+    if(i < 0 || i >= chapters.length) return;
+    current = i;
+    var c = chapters[i];
+    reader.innerHTML = '';
+    c.nodes.forEach(function(n){ reader.appendChild(n); });
+    if(c.box) reader.appendChild(c.box);
+    renderPager();
+    updateReadButtons();
+  }
+
+  function renderChapters(){
+    chapterGrid.innerHTML = chapters.map(function(c, i){
+      var status = c.realm ? (S.read[c.id] ? 'Read' : 'Not read yet') : 'Reference';
+      return '<button class="agx-card" data-go="' + i + '"><span class="agx-note">Chapter ' + (i + 1) + (c.realm ? ' · ' + esc(c.realm.name) : '') + '</span><b style="display:block;margin-top:4px;color:var(--text)">' + esc(c.title) + '</b><span class="agx-note">' + status + '</span></button>';
+    }).join('');
+  }
+
+  function renderPractice(){
+    practiceEl.innerHTML = msgHtml() +
+      '<h3 style="margin:22px 0 10px;color:var(--text)">Daily question</h3>' + renderDaily() +
+      '<h3 style="margin:26px 0 10px;color:var(--text)">Realms and bosses</h3>' +
+      '<div class="agx-cols">' + renderRealms() + '</div>';
+  }
+
+  function renderProgress(){
+    progressEl.innerHTML = msgHtml() +
+      renderSummary() +
+      renderBadges() +
+      '<div class="agx-q" style="margin-top:22px"><h3 style="margin:0 0 6px;color:var(--text)">Reset progress</h3><p class="agx-note" style="margin:0 0 10px">Clears XP, streaks, badges, answers and reads stored in this browser.</p><button class="agx-btn" data-reset="1">Reset</button></div>';
+  }
+
+  function refresh(){
+    if(tab === 'read') showChapter(current);
+    if(tab === 'chapters') renderChapters();
+    if(tab === 'practice') renderPractice();
+    if(tab === 'progress') renderProgress();
+    msg = '';
+  }
+
+  function showTab(name){
+    tab = name;
+    root.querySelectorAll('[data-tab]').forEach(function(b){
+      b.setAttribute('aria-selected', String(b.getAttribute('data-tab') === name));
     });
+    ['read','chapters','diagrams','practice','progress'].forEach(function(t){
+      document.getElementById('agx-p-' + t).hidden = (t !== name);
+    });
+    refresh();
+  }
+
+  function scrollToTabs(){
+    var el = root.querySelector('.agx-tabs');
+    if(el && el.scrollIntoView){ el.scrollIntoView({block: 'start'}); }
   }
 
   root.addEventListener('click', function(e){
     var t = e.target.closest ? e.target.closest('button') : null;
     if(!t || t.disabled) return;
+    if(t.hasAttribute('data-tab')){ showTab(t.getAttribute('data-tab')); return; }
+    if(t.hasAttribute('data-go')){ current = +t.getAttribute('data-go'); showTab('read'); return; }
+    if(t.hasAttribute('data-prev')){ showChapter(current - 1); scrollToTabs(); return; }
+    if(t.hasAttribute('data-next')){ showChapter(current + 1); scrollToTabs(); return; }
     if(t.hasAttribute('data-read')){ markRead(t.getAttribute('data-read')); return; }
     if(t.hasAttribute('data-q')){ answerQuestion(t.getAttribute('data-q'), +t.getAttribute('data-i')); return; }
     if(t.hasAttribute('data-daily')){ answerDaily(+t.getAttribute('data-i')); return; }
     if(t.hasAttribute('data-boss')){ answerBoss(t.getAttribute('data-boss'), +t.getAttribute('data-i')); return; }
     if(t.hasAttribute('data-reset')){
-      if(!t.dataset.armed){ t.dataset.armed = '1'; t.textContent = 'Tap again to confirm'; setTimeout(function(){ t.dataset.armed = ''; t.textContent = 'Reset'; }, 3000); return; }
-      S = blank(); tmp = {}; msg = 'Progress reset'; save(); render();
+      if(!t.dataset.armed){
+        t.dataset.armed = '1'; t.textContent = 'Tap again to confirm';
+        setTimeout(function(){ t.dataset.armed = ''; t.textContent = 'Reset'; }, 3000);
+        return;
+      }
+      S = blank(); tmp = {}; msg = 'Progress reset'; save(); refresh();
     }
   });
 
-  addReadButtons();
+  buildChapters();
+  buildDiagrams();
   checkRealms(); checkBadges(); save();
-  render();
+  showTab('read');
 })();
 </script>
-
-<p class="kicker" style="margin-top:2.4em">Further reading</p>
-<ul>
-<li>Anthropic, <em>Building effective agents</em>: the workflow and agent distinction used in Section 2.</li>
-<li>LangGraph documentation: state, persistence, interrupts and multi-agent patterns.</li>
-<li>Information retrieval texts on BM25, reciprocal rank fusion and nDCG for the retrieval metrics in Section 8.</li>
-<li><em>Agentic Design Patterns: A Hands-On Guide to Building Intelligent Systems</em> (Springer): the source of the 21 patterns in Section 11 and the appendices in Section 12.</li>
-</ul>
-
 </div>
 ]]></b:widget-setting>
           </b:widget-settings>
