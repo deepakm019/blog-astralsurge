@@ -563,6 +563,7 @@ button,.tool-btn,.main-nav a,.hero-topics a,.post-labels a,.sidebar li a{touch-a
 }
 /* Static pages (quest): the widget already shows the title, so hide the duplicate post heading */
 body.static_page .article h1{display:none}
+body.static_page .site-tools,body.static_page .article .crumbs,body.static_page .article .article-meta,body.static_page .article .share-top{display:none!important}
 ]]></b:skin>
 </head>
 
