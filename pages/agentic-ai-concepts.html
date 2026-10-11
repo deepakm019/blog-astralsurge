@@ -55,6 +55,9 @@
 #agx .agx-q{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin:14px 0}
 #agx .agx-boss{border-color:var(--border-strong)}
 #agx .agx-note{color:var(--muted);font-size:.9rem}
+#agx .agx-cols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));align-items:start}
+#agx .agx-cols-2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+#agx .agx-cols .agx-q{margin:0;height:100%}
 #agx .agx-msg{min-height:1.4em;color:var(--accent);font-weight:600;margin:10px 0 0}
 @media (max-width:640px){#agx h1{font-size:1.75rem}#agx .toc ol{columns:1}}
 </style>
@@ -901,9 +904,9 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
   }
 
   function render(){
-    game.innerHTML = renderSummary() +
-      '<h3 style="margin:22px 0 10px;color:var(--text)">Daily question</h3>' + renderDaily() +
-      '<h3 style="margin:22px 0 10px;color:var(--text)">Realms and bosses</h3>' + renderRealms() +
+    game.innerHTML = '<div class="agx-cols agx-cols-2">' + renderSummary() + renderDaily() + '</div>' +
+      '<h3 style="margin:26px 0 10px;color:var(--text)">Realms and bosses</h3>' +
+      '<div class="agx-cols">' + renderRealms() + '</div>' +
       renderBadges() +
       '<div class="agx-q" style="margin-top:22px"><h3 style="margin:0 0 6px;color:var(--text)">Reset progress</h3><p class="agx-note" style="margin:0 0 10px">Clears XP, streaks, badges, answers and reads stored in this browser.</p><button class="agx-btn" data-reset="1">Reset</button></div>';
     updateReadButtons();
