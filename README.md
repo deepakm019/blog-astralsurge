@@ -47,4 +47,4 @@ Static pages get a full-width layout with no sidebar. The template picks which p
 
 ## Licence
 
-No licence has been chosen yet. All rights reserved by the author until one is added.
+All rights reserved. Copyright (c) 2026 deepakm019. No reuse, modification or redistribution is permitted without prior written permission. See [`LICENSE`](LICENSE).
