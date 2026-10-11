@@ -57,6 +57,7 @@
 #agx .agx-note{color:var(--muted);font-size:.9rem}
 #agx .agx-cols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));align-items:start}
 #agx .agx-cols-2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+#agx .agx-cols-wide{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}
 #agx .agx-cols .agx-q{margin:0;height:100%}
 #agx .agx-msg{min-height:1.4em;color:var(--accent);font-weight:600;margin:10px 0 0}
 @media (max-width:640px){#agx h1{font-size:1.75rem}#agx .toc ol{columns:1}}
@@ -80,7 +81,7 @@
 <nav class="agx-tabs" role="tablist" aria-label="Sections"><button role="tab" data-tab="read" aria-selected="true">Read</button><button role="tab" data-tab="chapters" aria-selected="false">Chapters</button><button role="tab" data-tab="diagrams" aria-selected="false">Diagrams</button><button role="tab" data-tab="practice" aria-selected="false">Practice</button><button role="tab" data-tab="progress" aria-selected="false">Progress</button></nav>
 <section id="agx-p-read" class="agx-panel"><div id="agx-reader"></div><div id="agx-pager" class="agx-pager"></div></section>
 <section id="agx-p-chapters" class="agx-panel" hidden><div id="agx-chapters" class="agx-cols"></div></section>
-<section id="agx-p-diagrams" class="agx-panel" hidden><div id="agx-diagrams" class="agx-cols"></div></section>
+<section id="agx-p-diagrams" class="agx-panel" hidden><div id="agx-diagrams" class="agx-cols agx-cols-wide"></div></section>
 <section id="agx-p-practice" class="agx-panel" hidden><h2 id="agx-practice-h">Practice and scoring</h2>
 
 <p>Test yourself as you read. Each section you mark as read earns XP, each quiz question you answer correctly earns XP, and a realm is cleared when you have read all of its sections and answered all of its questions correctly. Each realm ends with a boss question worth the most XP. Progress is saved in this browser only.</p>
@@ -941,21 +942,24 @@ result = app.invoke({"messages": [("user", "Where is order 4411?")]}, config)</c
 
   function buildDiagrams(){
     diagramGrid.innerHTML = '';
-    var found = 0;
+    var count = 0;
     chapters.forEach(function(c){
       c.nodes.forEach(function(n){
         if(!n.querySelectorAll) return;
-        n.querySelectorAll('.figure').forEach(function(f){
+        var list = [];
+        if(n.classList && n.classList.contains('figure')) list.push(n);
+        Array.prototype.slice.call(n.querySelectorAll('.figure')).forEach(function(f){ list.push(f); });
+        list.forEach(function(f){
           var card = document.createElement('div');
           card.className = 'agx-q agx-diag';
           card.innerHTML = '<span class="agx-note">' + esc(c.title) + '</span>';
           card.appendChild(f.cloneNode(true));
           diagramGrid.appendChild(card);
-          found++;
+          count++;
         });
       });
     });
-    if(!found){ diagramGrid.innerHTML = '<p class="agx-note">No diagrams found.</p>'; }
+    if(!count){ diagramGrid.innerHTML = '<p class="agx-note">No diagrams found.</p>'; }
   }
 
   function updateReadButtons(){
