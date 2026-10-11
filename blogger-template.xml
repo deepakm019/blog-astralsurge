@@ -2647,7 +2647,7 @@ setupReset($("#reset-top"));
         <b:widget id='HTML7' locked='false' title='' type='HTML' version='2' visible='true'>
           <b:widget-settings>
             <b:widget-setting name='content'><![CDATA[<style>
-#agx{font-family:var(--font);color:var(--text);line-height:1.72;max-width:var(--reading);margin:0 auto;padding:0 0 40px;font-size:1rem}
+#agx{font-family:var(--font);color:var(--text);line-height:1.72;max-width:var(--max);margin:0 auto;padding:0 0 40px;font-size:1rem}
 #agx h1{font-size:2.2rem;font-weight:800;letter-spacing:-.03em;line-height:1.12;margin:0 0 .4em;color:var(--text)}
 #agx h2{font-size:1.5rem;font-weight:750;letter-spacing:-.02em;margin:2.4em 0 .5em;padding-top:.4em;border-top:1px solid var(--border);color:var(--text);scroll-margin-top:90px}
 #agx h3{font-size:1.1rem;font-weight:700;margin:1.7em 0 .4em;color:var(--accent)}
