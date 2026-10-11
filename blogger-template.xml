@@ -1357,6 +1357,10 @@ button,.tool-btn,.main-nav a,.hero-topics a,.post-labels a,.sidebar li a{touch-a
 #sdq .qcard.hl{border-color:var(--q-accent)}
 #sdq .qcard h2{font-size:26px;line-height:1.15;margin:0 0 8px;overflow-wrap:normal}
 #sdq .qcard p{display:block;-webkit-line-clamp:unset;overflow:visible;margin:0 0 10px}
+#sdq .qcard{display:block!important;grid-template-columns:none!important}
+#sdq .qcard>*{display:block;grid-column:auto!important;grid-row:auto!important;width:auto;float:none}
+#sdq .qcard>.row{display:flex}
+#sdq .qcard .row .btn{display:inline-flex}
 #sdq .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 #sdq .btn{font:inherit;font-weight:600;border:1px solid var(--q-line2);background:var(--q-surface2);color:var(--q-ink);padding:8px 16px;border-radius:999px;cursor:pointer}
 #sdq .btn.primary{background:var(--q-accent);border-color:var(--q-accent);color:var(--q-accent-ink)}
