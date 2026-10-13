@@ -119,7 +119,8 @@ def build_html(spec):
         f'<p class="lede">{spec.get("lede", "")}</p>\n'
         f'{spec.get("intro_html", "")}\n'
     )
-    script_body = "(function(){\n" + data_block(spec) + RUNTIME.replace("/*__DATA__*/\n", "")
+    # runtime.js already opens its IIFE and reserves /*__DATA__*/ inside it
+    script_body = RUNTIME.replace("/*__DATA__*/\n", data_block(spec))
     script_body = script_body.replace("document.getElementById('agx')", f"document.getElementById('{sid}')")
     return (
         f"<style>\n{CSS}\n</style>\n"

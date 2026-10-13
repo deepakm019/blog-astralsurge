@@ -25,6 +25,7 @@ Create each page under **Pages → New page**. The URL slug must match exactly.
 | --- | --- | --- |
 | System Design Quest | `system-design-quest` | Shows the interactive quest. No body text is needed. |
 | Agentic AI concepts | `agentic-ai-concepts` | Shows the field guide. No body text is needed. |
+| Databricks Machine Learning Associate quest | `databricks-ml-associate-quest` | Shows the exam quest. No body text is needed. |
 
 Leave the page body empty. The template renders the content from its own widget.
 

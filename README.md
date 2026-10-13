@@ -30,6 +30,7 @@ The custom Blogger theme and static pages behind [astralsurge.com](https://www.a
 | --- | --- | --- |
 | System Design Quest | `system-design-quest` | Embedded in the template |
 | Agentic AI concepts | `agentic-ai-concepts` | `pages/agentic-ai-concepts.html` |
+| Databricks Machine Learning Associate quest | `databricks-ml-associate-quest` | `pages/databricks-ml-associate-quest.html` |
 
 Static pages get a full-width layout with no sidebar. The template picks which page to render by its URL slug, so the slugs above must match exactly.
 

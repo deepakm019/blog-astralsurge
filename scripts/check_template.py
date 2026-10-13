@@ -5,7 +5,8 @@ Checks:
   * blogger-template.xml is well-formed XML.
   * Every embedded page in pages/ can be placed inside a CDATA block
     (it must not contain the CDATA terminator "]]>").
-  * Every page in pages/ has a matching static-page section in the template.
+  * Every page in pages/ has a matching static-page block in the template
+    (matched by its slug in the b:if condition).
 
 Exit status is 0 when everything passes, 1 otherwise.
 """
@@ -34,9 +35,9 @@ def main() -> int:
         before = len(errors)
         if "]]>" in content:
             errors.append(f"{page.name}: contains ']]>', which would break the CDATA block")
-        section_id = page.stem.replace("agentic-ai-concepts", "agentic")
-        if template_text and f"id='{section_id}'" not in template_text:
-            errors.append(f"{page.name}: no section with id '{section_id}' in the template")
+        slug_test = f"contains &quot;{page.stem}&quot;"
+        if template_text and slug_test not in template_text:
+            errors.append(f"{page.name}: no page block for slug '{page.stem}' in the template")
         if len(errors) == before:
             print(f"ok   {page.name} can be embedded")
 
