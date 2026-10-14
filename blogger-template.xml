@@ -201,9 +201,15 @@ html.is-hidden body::before,html.is-hidden body::after,html.is-hidden .hero::bef
 .brand{display:flex;align-items:center;gap:12px;min-width:0;color:var(--text);font-weight:800;letter-spacing:-.02em;font-size:1.02rem;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .brand:hover{color:var(--text)}
 .brand-mark{width:32px;height:32px;flex:0 0 32px;border-radius:10px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font:800 .7rem var(--mono);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 12%,transparent)}
-.main-nav{margin-left:auto}
-.main-nav ul{display:flex;gap:4px;list-style:none;margin:0;padding:0}
-.main-nav a{display:block;color:var(--muted);font-size:.9rem;font-weight:500;padding:9px 13px;border-radius:9px;transition:background .18s,color .18s}
+.main-nav{flex:1 1 auto;display:flex;justify-content:center;min-width:0}
+.top-start{display:flex;align-items:center;gap:16px;min-width:0}
+.top-end{display:flex;align-items:center;justify-content:flex-end;gap:6px;min-width:0}
+@media (min-width:961px){
+  .top .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:16px}
+  .main-nav{justify-content:center}
+}
+.main-nav ul{display:flex;flex-wrap:nowrap;gap:4px;list-style:none;margin:0;padding:0}
+.main-nav a{display:block;white-space:nowrap;color:var(--muted);font-size:.9rem;font-weight:500;padding:9px 13px;border-radius:9px;transition:background .18s,color .18s}
 .main-nav a:hover,.main-nav a[aria-current="page"]{color:var(--text);background:var(--surface-2)}
 .icon-btn{width:36px;height:36px;flex:0 0 auto;border:1px solid var(--border);background:transparent;color:var(--muted);border-radius:9px;cursor:pointer;display:grid;place-items:center;font-size:15px;transition:color .15s,border-color .15s}
 .icon-btn:hover{color:var(--text);border-color:var(--border-strong)}
@@ -1302,8 +1308,11 @@ body.static_page .article .post-body:empty {
 
 <header class='top' id='top'>
   <div class='wrap'>
+    <div class='top-start'>
     <a class='brand' expr:href='data:blog.homepageUrl'><span aria-hidden='true' class='brand-mark'>AS</span><data:blog.title/></a>
-    <span class='xp-pill' id='xp-pill' title='XP and best streak across all three quests, saved in this browser'>XP <b id='xp-pill-xp'>0</b><span aria-hidden='true' class='sep'>&#183;</span>Streak <b id='xp-pill-streak'>0</b></span>
+    <span class='xp-pill' id='xp-pill' title='XP and best streak across all three quests, saved in this browser'>XP <b id='xp-pill-xp'>0</b><span aria-hidden='true' class='sep'>&#183;</span>
+Streak <b id='xp-pill-streak'>0</b></span>
+    </div>
 
     <b:section class='main-nav' id='main-nav' maxwidgets='1' name='Navigation' showaddelement='yes'>
       <b:widget id='LinkList1' locked='false' title='Navigation' type='LinkList' version='2' visible='true'>
@@ -1339,11 +1348,13 @@ body.static_page .article .post-body:empty {
       </b:widget>
     </b:section>
 
+    <div class='top-end'>
     <button aria-controls='main-nav' aria-expanded='false' aria-label='Open menu' class='icon-btn nav-toggle' id='nav-toggle' type='button'>&#9776;</button>
     <div aria-label='Reading tools' class='top-tools no-print' role='group'>
       <button aria-pressed='false' class='tool-btn' id='focus-toggle' type='button'>Focus mode</button>
       <button aria-controls='settings' aria-expanded='false' class='tool-btn' id='settings-toggle' type='button'>&#9881; Display</button>
       <button aria-label='Switch between dark and light theme' class='icon-btn' id='theme-toggle' type='button'>&#9680;</button>
+    </div>
     </div>
   </div>
 </header>
