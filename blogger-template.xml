@@ -1422,7 +1422,7 @@ body.static_page .article{max-width:var(--max)!important}
     <div>
       <div class="label">Reading game</div>
       <h1>System Design Quest</h1>
-      <p class="muted" style="margin:4px 0 0">Four sources: Alex Xu, the database guide, Git and REST notes, and Kleppmann's DDIA</p>
+      <p class="muted" style="margin:4px 0 0">Four sources: an interview guide, the database guide, Git and REST notes, and the DDIA book</p>
     </div>
     <div class="stats">
       <div class="stat"><span class="label">Level</span><b id="lvl">1</b><span class="lvltitle" id="lvltitle"></span></div>
@@ -1453,7 +1453,7 @@ body.static_page .article{max-width:var(--max)!important}
 (function(){
 
 // ---------- Content: four sources condensed into concepts and quiz questions ----------
-// Chapters with n 1-16 are Alex Xu. Other tracks use n values 101+ and a display label `lbl`.
+// Chapters with n 1-16 are Interview Guide. Other tracks use n values 101+ and a display label `lbl`.
 const CHAPTERS = [
 {n:1,t:"Scale from zero to millions of users",theme:"Foundations",
  concepts:[
@@ -1705,7 +1705,7 @@ const CHAPTERS = [
   {q:"Which HTTP method is NOT idempotent?",o:["GET","PUT","DELETE","POST"],a:3,ex:"Repeating a POST can create a second resource."},
   {q:"Which status code means the client has sent too many requests?",o:["400","401","429","503"],a:2,ex:"429 Too Many Requests is returned when rate limiting applies."}]},
 
-/* ===== Designing Data-Intensive Applications (Kleppmann) ===== */
+/* ===== Designing Data-Intensive Applications ===== */
 {n:401,lbl:"DDIA 1",track:"DDIA",t:"Foundations of data systems",theme:"Part I",
  concepts:[
   "Reliable, scalable and maintainable are the three goals; describe load and performance with percentiles, not just averages.",
@@ -1803,12 +1803,12 @@ const CHAPTERS = [
 ];
 
 // ---------- Game layer: realms, level titles, bosses, badges ----------
-const REALMS = {"Alex Xu":"Scale Kingdom","Database":"Data Vaults","Git & REST":"API Bridges","DDIA":"Dataflow Depths"};
+const REALMS = {"Interview Guide":"Scale Kingdom","Database":"Data Vaults","Git & REST":"API Bridges","DDIA":"Dataflow Depths"};
 const LEVEL_TITLES = ["Apprentice","Builder","Architect","Systems Sage","Principal","Staff Legend"];
 function levelTitle(lvl){ return LEVEL_TITLES[Math.min(lvl-1, LEVEL_TITLES.length-1)]; }
 
 const BOSSES = {
- "Alex Xu":{name:"The Traffic Titan", q:"Traffic grows 100x in a month. Which change should you make first to scale the data tier?", o:["Add more web servers only","Shard and replicate the database","Set cache TTL to forever","Remove the load balancer"], a:1, ex:"Web servers are stateless and easy to add. The database is the bottleneck, so sharding spreads the data and replicas spread the reads."},
+ "Interview Guide":{name:"The Traffic Titan", q:"Traffic grows 100x in a month. Which change should you make first to scale the data tier?", o:["Add more web servers only","Shard and replicate the database","Set cache TTL to forever","Remove the load balancer"], a:1, ex:"Web servers are stateless and easy to add. The database is the bottleneck, so sharding spreads the data and replicas spread the reads."},
  "Database":{name:"The Slow Query Hydra", q:"A report joins three large tables and takes minutes. What is the best first step?", o:["Check the query plan with EXPLAIN and index the filter and join columns","Turn off transactions","Use SELECT * to be safe","Delete the largest table"], a:0, ex:"Read the plan before guessing. Missing indexes on filter and join columns are the most common cause of slow joins."},
  "Git & REST":{name:"The Duplicate Order Dragon", q:"A client times out on POST /orders and retries, so two orders are created. What is the best fix?", o:["Make the request idempotent with a client-supplied idempotency key","Change POST to GET","Stop all retries forever","Always return 500"], a:0, ex:"POST is not idempotent. A unique key lets the server recognize the repeat and return the result of the first attempt."},
  "DDIA":{name:"The Lagging Replica Golem", q:"A user posts a comment, reloads, and it is missing because reads go to lagging followers. What helps most?", o:["Read the user's own recent writes from the leader for a short window","Read from a random follower","Remove the leader","Switch to hash partitioning"], a:0, ex:"This is read-your-writes consistency. Sending a user's reads to the leader for a short time after they write hides replication lag from them."}
@@ -2123,11 +2123,11 @@ const EXTRA = {
 
 const REWARD = {concept:10, correct:20, wrong:4, daily:25, dailyCorrect:15, chapter:50};
 const STORE_KEY = "sdq-v1";
-const TRACKS = ["All","Alex Xu","Database","Git & REST","DDIA"];
+const TRACKS = ["All","Interview Guide","Database","Git & REST","DDIA"];
 let trackFilter = "All";
 
-// Default track for the original Alex Xu chapters.
-CHAPTERS.forEach(c => { c.track = c.track || "Alex Xu"; c.lbl = c.lbl || ("Ch " + c.n); });
+// Default track for the original Interview Guide chapters.
+CHAPTERS.forEach(c => { c.track = c.track || "Interview Guide"; c.lbl = c.lbl || ("Ch " + c.n); });
 
 // ---------- State (per viewer, localStorage with fallback) ----------
 let state;
