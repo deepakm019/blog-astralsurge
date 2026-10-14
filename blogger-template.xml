@@ -1334,7 +1334,7 @@ body.static_page .article{max-width:var(--max)!important}
 </b:includable>
         </b:widget>
       </b:section>
-    <b:if cond='data:blog.pageType == &quot;static_page&quot; and !(data:view.url contains &quot;agentic-ai-concepts&quot;) and !(data:view.url contains &quot;databricks-ml-associate-quest&quot;)'>
+    <b:if cond='data:blog.pageType == &quot;static_page&quot; and data:view.url contains &quot;system-design-quest&quot;'>
       <b:section class='quest' id='quest' maxwidgets='1' name='System Design Quest' showaddelement='no'>
         <b:widget id='HTML6' locked='false' title='' type='HTML' version='2' visible='true'>
           <b:widget-settings>
