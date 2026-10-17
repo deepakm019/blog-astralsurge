@@ -2514,7 +2514,7 @@ Streak <b id='xp-pill-streak'>0</b></span>
         <li class='quest-card' data-quest='sdq'>
           <span class='quest-kicker'>Reading game</span>
           <h3><a href='/p/system-design-quest.html'>System Design Quest</a></h3>
-          <p>Four sources: an interview guide, the database guide, Git and REST notes, and the DDIA book.</p>
+          <p>Four sources: an interview guide, the database guide, Git and REST notes, and data-systems notes.</p>
           <div aria-hidden='true' class='quest-bar'><span data-q-bar=''/></div>
           <div class='quest-stats'>
             <span>Level <b data-q-level=''>1</b></span>
@@ -3247,7 +3247,7 @@ Streak <b id='xp-pill-streak'>0</b></span>
     <div>
       <div class="label">Reading game</div>
       <h1>System Design Quest</h1>
-      <p class="muted" style="margin:4px 0 0">Four sources: an interview guide, the database guide, Git and REST notes, and the DDIA book</p>
+      <p class="muted" style="margin:4px 0 0">Four sources: an interview guide, the database guide, Git and REST notes, and data-systems notes</p>
     </div>
     <div class="stats">
       <div class="stat"><span class="label">Level</span><b id="lvl">1</b><span class="lvltitle" id="lvltitle"></span></div>
@@ -3308,7 +3308,7 @@ const CHAPTERS = [
   "Avoid over-engineering; treat the interviewer as a teammate and think out loud."],
  qs:[
   {q:"What should you do first in a system design interview?",o:["Draw the database","Ask clarifying questions and set scope","Pick a framework","Estimate the cost"],a:1,ex:"Jumping in without clarifying requirements is a red flag."},
-  {q:"What is a common red flag the book warns about?",o:["Asking questions","Over-engineering and ignoring trade-offs","Drawing diagrams","Using bullet points"],a:1,ex:"Over-engineered designs ignore compounding costs and trade-offs."}]},
+  {q:"What is a common red flag in system design interviews?",o:["Asking questions","Over-engineering and ignoring trade-offs","Drawing diagrams","Using bullet points"],a:1,ex:"Over-engineered designs ignore compounding costs and trade-offs."}]},
 {n:4,t:"Design a rate limiter",theme:"Building blocks",
  concepts:[
   "Token bucket: allows bursts; simple and memory efficient; common at Amazon and Stripe.",
@@ -3375,7 +3375,7 @@ const CHAPTERS = [
   "Use templates, rate limiting and event tracking for analytics."],
  qs:[
   {q:"Why use a separate message queue for each notification type?",o:["It is cheaper","An outage in one third-party service does not affect the others","It removes the need for workers","It stores templates"],a:1,ex:"Isolation keeps one channel's failure from blocking the rest."},
-  {q:"How does the system avoid sending duplicates?",o:["It sends everything twice","It checks whether the event ID was seen before","It disables retries","It uses SMS only"],a:1,ex:"Exactly-once delivery is not possible, so the book uses dedupe by event ID."}]},
+  {q:"How does the system avoid sending duplicates?",o:["It sends everything twice","It checks whether the event ID was seen before","It disables retries","It uses SMS only"],a:1,ex:"Exactly-once delivery is not possible, so the design uses dedupe by event ID."}]},
 {n:11,t:"Design a news feed system",theme:"Applied designs",
  concepts:[
   "Feed publishing writes posts to cache and database, then fans out to friends.",
@@ -3389,7 +3389,7 @@ const CHAPTERS = [
 {n:12,t:"Design a chat system",theme:"Applied designs",
  concepts:[
   "Polling and long polling simulate server push but are inefficient or hard to scale.",
-  "WebSocket is bidirectional and persistent; the book uses it for both sending and receiving.",
+  "WebSocket is bidirectional and persistent; the design uses it for both sending and receiving.",
   "Stateless services handle login and profiles; a stateful chat service keeps connections.",
   "Chat history fits key-value stores; message IDs must be unique and time-sortable.",
   "Presence uses heartbeats so brief disconnects do not flip status; fan out status to friends."],
@@ -3404,7 +3404,7 @@ const CHAPTERS = [
   "Data gathering aggregates logs, workers rebuild the trie weekly, and a filter layer removes unwanted suggestions.",
   "Shard by first character, then smooth uneven load using historical data."],
  qs:[
-  {q:"Why cache the top 5 queries at every trie node?",o:["To save disk","To return results in O(1) time by trading space for speed","To remove spell check","To avoid sharding"],a:1,ex:"Space is traded for response time, which the book calls well worth it."},
+  {q:"Why cache the top 5 queries at every trie node?",o:["To save disk","To return results in O(1) time by trading space for speed","To remove spell check","To avoid sharding"],a:1,ex:"Space is traded for response time, a trade that is usually well worth it."},
   {q:"Why is updating the trie on every query impractical?",o:["Tries cannot change","Billions of queries would slow the query service; weekly rebuilds are enough","Strings are immutable","It needs a CDN"],a:1,ex:"Popular suggestions change slowly, so offline rebuilds work."}]},
 {n:14,t:"Design YouTube",theme:"Applied designs",
  concepts:[
@@ -3425,7 +3425,7 @@ const CHAPTERS = [
   "Long polling notifies clients of changes; de-duplicate blocks and move old versions to cold storage."],
  qs:[
   {q:"What does delta sync transfer when a file changes?",o:["The whole file","Only the modified blocks","Only the filename","Nothing"],a:1,ex:"Changed blocks are detected by hash and uploaded alone."},
-  {q:"Why long polling instead of WebSocket for Drive notifications?",o:["WebSocket is not allowed","Notifications are one-way and infrequent, with no bursts of data","Long polling is faster","Drive has no clients"],a:1,ex:"The book chose long polling because the communication does not need to be bi-directional."}]},
+  {q:"Why long polling instead of WebSocket for Drive notifications?",o:["WebSocket is not allowed","Notifications are one-way and infrequent, with no bursts of data","Long polling is faster","Drive has no clients"],a:1,ex:"Long polling fits because the communication does not need to be bi-directional."}]},
 {n:16,t:"The learning continues",theme:"Next steps",
  concepts:[
   "Read real-world architecture papers (Facebook, Netflix, Google, Twitter, Dynamo).",
@@ -3436,7 +3436,7 @@ const CHAPTERS = [
   "Turn the design into an operations plan: service-level indicators, alerts, dashboards, capacity limits, rollout and rollback."
  ],
  qs:[
-  {q:"According to the book, what matters most in a system design interview?",o:["Memorizing one perfect architecture","Reasoning through trade-offs and constraints","Naming every technology","Finishing the design first"],a:1,ex:"The process and reasoning are the signal; there is no perfect answer."},
+  {q:"What matters most in a system design interview?",o:["Memorizing one perfect architecture","Reasoning through trade-offs and constraints","Naming every technology","Finishing the design first"],a:1,ex:"The process and reasoning are the signal; there is no perfect answer."},
   {q:"What should you clarify before choosing a database or cache?",o:["The team's favourite tool","Workload, consistency, latency and scale requirements","The number of boxes in the diagram","The cloud provider's logo"],a:1,ex:"Requirements drive the design. Workload shape and consistency needs determine which components are appropriate."},
   {q:"Which item makes a design more production-ready?",o:["No retries under any circumstances","Only a happy-path diagram","Defined failure handling, observability and recovery","Adding microservices to every component"],a:2,ex:"A credible design explains how failures are detected, contained and recovered from."}]},
 
@@ -3536,8 +3536,8 @@ const CHAPTERS = [
   {q:"Which HTTP method is NOT idempotent?",o:["GET","PUT","DELETE","POST"],a:3,ex:"Repeating a POST can create a second resource."},
   {q:"Which status code means the client has sent too many requests?",o:["400","401","429","503"],a:2,ex:"429 Too Many Requests is returned when rate limiting applies."}]},
 
-/* ===== Designing Data-Intensive Applications ===== */
-{n:401,lbl:"DDIA 1",track:"DDIA",t:"Foundations of data systems",theme:"Part I",
+/* ===== Dataflow track ===== */
+{n:401,lbl:"Dataflow 1",track:"Dataflow",t:"Foundations of data systems",theme:"Foundations",
  concepts:[
   "Reliable, scalable and maintainable are the three goals; describe load and performance with percentiles, not just averages.",
   "Maintainability covers operability, simplicity and evolvability.",
@@ -3545,9 +3545,9 @@ const CHAPTERS = [
   "Declarative query languages let the database choose how to execute; imperative code spells out each step.",
   "Graph models suit highly connected data, with property graphs and query languages such as Cypher or SPARQL."],
  qs:[
-  {q:"What does the book mean by maintainability?",o:["Only uptime","Operability, simplicity and evolvability","Lower hardware cost","Using one database"],a:1,ex:"Those three properties keep a system manageable over time."},
+  {q:"What does maintainability cover in system design?",o:["Only uptime","Operability, simplicity and evolvability","Lower hardware cost","Using one database"],a:1,ex:"Those three properties keep a system manageable over time."},
   {q:"Why do declarative query languages help?",o:["They run without a database","The database can choose the execution strategy","They remove the need for indexes","They always return results faster"],a:1,ex:"Describing what you want leaves room for the engine to optimize."}]},
-{n:402,lbl:"DDIA 2",track:"DDIA",t:"Storage and retrieval",theme:"Part I",
+{n:402,lbl:"Dataflow 2",track:"Dataflow",t:"Storage and retrieval",theme:"Foundations",
  concepts:[
   "Hash indexes give fast lookups in memory; log-structured storage appends and merges sorted segments (SSTables, LSM-trees).",
   "B-trees update pages in place and are the most common index in relational databases.",
@@ -3557,7 +3557,7 @@ const CHAPTERS = [
  qs:[
   {q:"How do LSM-trees handle writes?",o:["Update pages in place","Append to sorted segments and merge them later","Write only to disk without memory","Replace the whole table"],a:1,ex:"Sequential writes are fast; background compaction merges segments."},
   {q:"Which storage style suits large analytical scans?",o:["Column-oriented storage","A single hash index","Row-level locks","Fixed-width text files"],a:0,ex:"Column storage reads only the columns a query needs."}]},
-{n:403,lbl:"DDIA 3",track:"DDIA",t:"Encoding and evolution",theme:"Part I",
+{n:403,lbl:"Dataflow 3",track:"Dataflow",t:"Encoding and evolution",theme:"Foundations",
  concepts:[
   "Encodings include language-specific formats, JSON and XML, and binary formats like Thrift, Protocol Buffers and Avro.",
   "Schemas help compatibility; formats need forward and backward compatibility during rolling upgrades.",
@@ -3566,7 +3566,7 @@ const CHAPTERS = [
  qs:[
   {q:"Why do rolling upgrades need compatibility in both directions?",o:["Old and new code may read each other's data at the same time","Upgrades are instant","Encoding is optional","Databases cannot store JSON"],a:0,ex:"During a rollout, both versions run and exchange data."},
   {q:"What is a common weakness of RPC?",o:["It cannot send data","Network failures make a remote call behave unlike a local one","It needs no schema","It only works in one language"],a:1,ex:"Timeouts and partial failures are not visible in a plain function call."}]},
-{n:404,lbl:"DDIA 4",track:"DDIA",t:"Replication",theme:"Part II",
+{n:404,lbl:"Dataflow 4",track:"Dataflow",t:"Replication",theme:"Distributed data",
  concepts:[
   "Leader-follower replication: writes go to the leader; followers copy the log, synchronously or asynchronously.",
   "Replication lag can break read-your-writes and monotonic reads; consistent prefix reads keep causal order.",
@@ -3575,7 +3575,7 @@ const CHAPTERS = [
  qs:[
   {q:"What is read-your-writes consistency?",o:["Reading old data on purpose","After you write, your own later reads see that write","Writing only to followers","Reading from every replica"],a:1,ex:"Lagging followers can hide a write from the same user who just made it."},
   {q:"What must multi-leader setups handle?",o:["No conflicts are possible","Write conflicts between leaders accepting the same data","Lack of disks","Timeouts only"],a:1,ex:"Two leaders can accept conflicting updates at the same time."}]},
-{n:405,lbl:"DDIA 5",track:"DDIA",t:"Partitioning",theme:"Part II",
+{n:405,lbl:"Dataflow 5",track:"Dataflow",t:"Partitioning",theme:"Distributed data",
  concepts:[
   "Partition by key range (supports range scans, risks hot spots) or by hash of key (spreads load, loses range order).",
   "Skewed workloads create hot spots, such as one celebrity's key receiving most traffic.",
@@ -3584,7 +3584,7 @@ const CHAPTERS = [
  qs:[
   {q:"What is the main cost of hash partitioning?",o:["It is slow to hash","Range queries over keys become hard because order is scrambled","It needs no nodes","It forbids writes"],a:1,ex:"Hashing spreads keys evenly but destroys their natural order."},
   {q:"What is a hot spot?",o:["A broken disk","A partition that receives a disproportionate share of load","A replica in another region","A failed network link"],a:1,ex:"Even partitioning by key can still concentrate traffic on one key."}]},
-{n:406,lbl:"DDIA 6",track:"DDIA",t:"Transactions and isolation",theme:"Part II",
+{n:406,lbl:"Dataflow 6",track:"Dataflow",t:"Transactions and isolation",theme:"Distributed data",
  concepts:[
   "ACID means different things in practice; atomicity is about abort and rollback, isolation is about concurrency.",
   "Read committed prevents dirty reads; snapshot isolation gives each transaction a consistent view.",
@@ -3593,7 +3593,7 @@ const CHAPTERS = [
  qs:[
   {q:"Does snapshot isolation prevent write skew?",o:["Yes, always","No, it can still allow write skew","Only with replicas","Only with serial execution"],a:1,ex:"Two transactions can read the same snapshot and write disjoint rows that together break a rule."},
   {q:"Which technique gives full serializability?",o:["Read uncommitted","Two-phase locking or serializable snapshot isolation","Dirty writes","Eventual consistency"],a:1,ex:"These approaches make concurrent transactions equivalent to some serial order."}]},
-{n:407,lbl:"DDIA 7",track:"DDIA",t:"Distributed system troubles",theme:"Part II",
+{n:407,lbl:"Dataflow 7",track:"Dataflow",t:"Distributed system troubles",theme:"Distributed data",
  concepts:[
   "Partial failures are normal: some nodes fail while others keep running, and the system must cope.",
   "Timeouts cannot tell a dead node from a slow one; networks are asynchronous and unbounded in delay.",
@@ -3603,7 +3603,7 @@ const CHAPTERS = [
  qs:[
   {q:"Which clock should you use to measure how long an operation took?",o:["Time-of-day clock","Monotonic clock","Any NTP clock","A wall clock from the user's phone"],a:1,ex:"Monotonic clocks never go backwards, so differences are reliable."},
   {q:"Why are fencing tokens useful?",o:["They encrypt messages","They stop an old leader that paused from writing after its lease expired","They speed up networks","They replace databases"],a:1,ex:"A higher token number lets storage reject writes from a stale holder."}]},
-{n:408,lbl:"DDIA 8",track:"DDIA",t:"Consistency and consensus",theme:"Part II",
+{n:408,lbl:"Dataflow 8",track:"Dataflow",t:"Consistency and consensus",theme:"Distributed data",
  concepts:[
   "Linearizability makes a system behave as if there is one copy of the data with instant updates.",
   "Causality and ordering: sequence numbers and total order broadcast give a shared order of events.",
@@ -3612,7 +3612,7 @@ const CHAPTERS = [
  qs:[
   {q:"What is the known weakness of two-phase commit?",o:["It is too fast","If the coordinator fails, participants can be left blocked","It cannot commit","It requires no network"],a:1,ex:"Participants that voted yes must wait for the coordinator's decision."},
   {q:"What does linearizability promise?",o:["Eventual agreement only","Operations appear to take effect atomically at one point in time","No ordering at all","Reads may be stale"],a:1,ex:"Every read reflects the most recent completed write."}]},
-{n:409,lbl:"DDIA 9",track:"DDIA",t:"Batch and stream processing",theme:"Part III",
+{n:409,lbl:"Dataflow 9",track:"Dataflow",t:"Batch and stream processing",theme:"Operations",
  concepts:[
   "Batch processing reads large inputs and writes new outputs; MapReduce runs map, shuffle and reduce steps.",
   "Reduce-side joins group by key; map-side joins work when inputs are partitioned the same way.",
@@ -3622,7 +3622,7 @@ const CHAPTERS = [
  qs:[
   {q:"What is the main goal of event sourcing?",o:["Delete old events","Store changes as an immutable log from which state can be derived","Replace all databases","Avoid timestamps"],a:1,ex:"Current state is a result of replaying the log of events."},
   {q:"When can a map-side join be used?",o:["When inputs are unpartitioned","When inputs are partitioned and sorted the same way","Only for streams","When there is no key"],a:1,ex:"Matching partitions let each mapper join locally without a shuffle."}]},
-{n:410,lbl:"DDIA 10",track:"DDIA",t:"Future of data systems",theme:"Part III",
+{n:410,lbl:"Dataflow 10",track:"Dataflow",t:"Future of data systems",theme:"Operations",
  concepts:[
   "Unbundling databases: combine specialized tools (search, cache, queue, warehouse) by deriving data between them.",
   "Designing applications around dataflow makes derived state easier to rebuild and reason about.",
@@ -3634,7 +3634,7 @@ const CHAPTERS = [
 ];
 
 // ---------- Game layer: realms, level titles, bosses, badges ----------
-const REALMS = {"Interview Guide":"Scale Kingdom","Database":"Data Vaults","Git & REST":"API Bridges","DDIA":"Dataflow Depths"};
+const REALMS = {"Interview Guide":"Scale Kingdom","Database":"Data Vaults","Git & REST":"API Bridges","Dataflow":"Dataflow Depths"};
 const LEVEL_TITLES = ["Apprentice","Builder","Architect","Systems Sage","Principal","Staff Legend"];
 function levelTitle(lvl){ return LEVEL_TITLES[Math.min(lvl-1, LEVEL_TITLES.length-1)]; }
 
@@ -3642,7 +3642,7 @@ const BOSSES = {
  "Interview Guide":{name:"The Traffic Titan", q:"Traffic grows 100x in a month. Which change should you make first to scale the data tier?", o:["Add more web servers only","Shard and replicate the database","Set cache TTL to forever","Remove the load balancer"], a:1, ex:"Web servers are stateless and easy to add. The database is the bottleneck, so sharding spreads the data and replicas spread the reads."},
  "Database":{name:"The Slow Query Hydra", q:"A report joins three large tables and takes minutes. What is the best first step?", o:["Check the query plan with EXPLAIN and index the filter and join columns","Turn off transactions","Use SELECT * to be safe","Delete the largest table"], a:0, ex:"Read the plan before guessing. Missing indexes on filter and join columns are the most common cause of slow joins."},
  "Git & REST":{name:"The Duplicate Order Dragon", q:"A client times out on POST /orders and retries, so two orders are created. What is the best fix?", o:["Make the request idempotent with a client-supplied idempotency key","Change POST to GET","Stop all retries forever","Always return 500"], a:0, ex:"POST is not idempotent. A unique key lets the server recognize the repeat and return the result of the first attempt."},
- "DDIA":{name:"The Lagging Replica Golem", q:"A user posts a comment, reloads, and it is missing because reads go to lagging followers. What helps most?", o:["Read the user's own recent writes from the leader for a short window","Read from a random follower","Remove the leader","Switch to hash partitioning"], a:0, ex:"This is read-your-writes consistency. Sending a user's reads to the leader for a short time after they write hides replication lag from them."}
+ "Dataflow":{name:"The Lagging Replica Golem", q:"A user posts a comment, reloads, and it is missing because reads go to lagging followers. What helps most?", o:["Read the user's own recent writes from the leader for a short window","Read from a random follower","Remove the leader","Switch to hash partitioning"], a:0, ex:"This is read-your-writes consistency. Sending a user's reads to the leader for a short time after they write hides replication lag from them."}
 };
 
 const BADGE_DEFS = [
@@ -3911,7 +3911,7 @@ const EXTRA = {
 </svg>`},
  302:{intro:"Good APIs use nouns for resources, HTTP methods for actions, and status codes that tell clients what happened. Idempotency and pagination prevent many production bugs.",
     tip:"Use 429 for rate limits and include a Retry-After header when you can."},
- 401:{intro:"Data systems must be reliable, scalable and maintainable. This part of the book covers data models, query languages and how to measure performance honestly.",
+ 401:{intro:"Data systems must be reliable, scalable and maintainable. This part covers data models, query languages and how to measure performance honestly.",
     tip:"Averages hide the slow requests users notice. Look at p95 and p99 latency."},
  402:{intro:"Storage engines decide how data is written and read. B-trees update pages in place; log-structured engines append and merge, which favors writes. OLTP and OLAP workloads need different layouts.",
     tip:"Column storage suits analytics because a query reads only the columns it needs.",
@@ -3954,7 +3954,7 @@ const EXTRA = {
 
 const REWARD = {concept:10, correct:20, wrong:4, daily:25, dailyCorrect:15, chapter:50};
 const STORE_KEY = "sdq-v1";
-const TRACKS = ["All","Interview Guide","Database","Git & REST","DDIA"];
+const TRACKS = ["All","Interview Guide","Database","Git & REST","Dataflow"];
 let trackFilter = "All";
 
 // Default track for the original Interview Guide chapters.
@@ -4216,8 +4216,8 @@ function chapterDiagram(c){
 
 // ---------- Study content data ----------
 const CHEAT_TRADEOFFS = [
- ["Consistency vs availability","CAP: pick a side during partitions (Ch 6, DDIA 8)"],
- ["Latency vs consistency","Tune W and R; eventual vs strong reads (Ch 6, DDIA 4)"],
+ ["Consistency vs availability","CAP: pick a side during partitions (Ch 6, Dataflow 8)"],
+ ["Latency vs consistency","Tune W and R; eventual vs strong reads (Ch 6, Dataflow 4)"],
  ["Space vs time","Precompute top-k, feeds and materialized views (Ch 11, Ch 13, DB 4)"],
  ["Simplicity vs scale","One server first, then shard only when needed (Ch 1, DB 5)"],
  ["Push vs pull","Fanout on write vs read; polling vs WebSocket (Ch 11, Ch 12)"],
@@ -4319,28 +4319,28 @@ function renderWalk(){
 }
 function renderGlossary(){
   const G = [
-   ["Sharding","Splitting data across nodes by a key so each node holds a subset.","Ch 1, DDIA 5"],
-   ["Replication","Keeping copies of data on several nodes for availability and reads.","Ch 1, DDIA 4"],
-   ["Quorum","Reading or writing W or R of N replicas so reads overlap recent writes.","Ch 6, DDIA 8"],
+   ["Sharding","Splitting data across nodes by a key so each node holds a subset.","Ch 1, Dataflow 5"],
+   ["Replication","Keeping copies of data on several nodes for availability and reads.","Ch 1, Dataflow 4"],
+   ["Quorum","Reading or writing W or R of N replicas so reads overlap recent writes.","Ch 6, Dataflow 8"],
    ["Idempotency","Repeating an operation has the same effect as doing it once.","REST 2, DB 5"],
-   ["Backpressure","Slowing producers when consumers cannot keep up.","DDIA 9"],
+   ["Backpressure","Slowing producers when consumers cannot keep up.","Dataflow 9"],
    ["Fanout","Delivering one event to many readers or subscribers.","Ch 11"],
    ["Consistent hashing","Ring-based key placement that moves few keys when nodes change.","Ch 5"],
-   ["Consensus","Nodes agreeing on one value despite failures, as in Raft.","DDIA 8"],
+   ["Consensus","Nodes agreeing on one value despite failures, as in Raft.","Dataflow 8"],
    ["Token bucket","Rate limit that allows bursts up to a capacity and refills over time.","Ch 4"],
    ["CDN","Edge servers that cache static bytes close to users.","Ch 1, Ch 14"],
-   ["Write amplification","Extra disk writes caused by the storage engine's own bookkeeping.","DDIA 2"],
+   ["Write amplification","Extra disk writes caused by the storage engine's own bookkeeping.","Dataflow 2"],
    ["Index","Extra structure that speeds lookups at the cost of writes and space.","DB 4"],
-   ["Isolation level","How much concurrent transactions can see of each other's changes.","DB 3, DDIA 6"],
-   ["Eventual consistency","Replicas converge once writes stop, but reads may be stale meanwhile.","Ch 6, DDIA 4"],
-   ["Partition key","The field that decides which node stores a record.","DDIA 5"],
-   ["Hot key","A key that gets far more traffic than others and overloads one node.","DDIA 5"],
-   ["Change data capture","Streaming a database's changes to other systems.","DDIA 10"],
+   ["Isolation level","How much concurrent transactions can see of each other's changes.","DB 3, Dataflow 6"],
+   ["Eventual consistency","Replicas converge once writes stop, but reads may be stale meanwhile.","Ch 6, Dataflow 4"],
+   ["Partition key","The field that decides which node stores a record.","Dataflow 5"],
+   ["Hot key","A key that gets far more traffic than others and overloads one node.","Dataflow 5"],
+   ["Change data capture","Streaming a database's changes to other systems.","Dataflow 10"],
    ["REST","Style with resources, URLs, HTTP methods and stateless requests.","REST 1"],
    ["WebSocket","A persistent two-way connection between client and server.","Ch 12"],
-   ["Snapshot","A consistent view of data at one point in time.","Git 1, DDIA 6"],
-   ["Schema evolution","Changing data formats so old and new code can both read them.","DDIA 3"],
-   ["p99 latency","The response time that 99 percent of requests beat.","DDIA 1"]
+   ["Snapshot","A consistent view of data at one point in time.","Git 1, Dataflow 6"],
+   ["Schema evolution","Changing data formats so old and new code can both read them.","Dataflow 3"],
+   ["p99 latency","The response time that 99 percent of requests beat.","Dataflow 1"]
   ];
   return `<div class="qcard"><h2>Glossary</h2><dl class="gloss">${G.map(([t,d,c])=>`<dt><b>${esc(t)}</b> <span class="muted">${esc(c)}</span></dt><dd>${esc(d)}</dd>`).join("")}</dl></div>`;
 }
@@ -4361,7 +4361,7 @@ function renderPath(){
   const P = [
    {level:"Beginner (1 to 2 weeks)", items:["Ch 1 Scale from zero","Ch 2 Estimation","Ch 3 Framework","DB 1 Relational basics","Git 1 Fundamentals"]},
    {level:"Intermediate (3 to 4 weeks)", items:["Ch 4 Rate limiter","Ch 5 Consistent hashing","Ch 6 Key-value store","Ch 8 URL shortener","DB 2 to 4 Joins, transactions, indexes","REST 1 to 2 APIs"]},
-   {level:"Advanced (5+ weeks)", items:["Ch 9 to 15 applied designs","DDIA 4 to 8, replication to consensus","DB 5 Distributed data","Walkthroughs: chat, feed, rate limiter, YouTube","Review tab, a few questions a day"]}
+   {level:"Advanced (5+ weeks)", items:["Ch 9 to 15 applied designs","Dataflow 4 to 8, replication to consensus","DB 5 Distributed data","Walkthroughs: chat, feed, rate limiter, YouTube","Review tab, a few questions a day"]}
   ];
   return P.map(p=>`<div class="qcard"><h2>${esc(p.level)}</h2><ol class="tree">${p.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ol></div>`).join("");
 }
