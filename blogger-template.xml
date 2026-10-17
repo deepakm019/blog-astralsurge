@@ -2227,6 +2227,90 @@ body.static_page .article-brand { margin-top: 26px; margin-bottom: 22px; }
   .article-brand-secondary { font-size: .62rem; }
 }
 
+/* ---- Header layout (consolidated; overrides earlier header rules) ----
+   Three flex groups: left (brand + XP/Streak), centre (nav links),
+   right (Focus mode, Display, theme toggle). No absolute positioning
+   inside the bar; the mobile menu is the only absolutely placed element. */
+.top .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  max-width: 1280px;
+  height: auto;
+  min-height: 64px;
+  padding-inline: 24px;
+}
+.top-start,
+.top-end,
+.top-tools {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  min-width: 0;
+}
+.top-start { gap: 14px; }
+.top-end { gap: 8px; }
+.top-tools { gap: 6px; }
+.top .brand,
+.top .xp-pill,
+.top .tool-btn,
+.top .icon-btn,
+.nav-toggle { flex-shrink: 0; }
+.main-nav {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+  position: static;
+}
+.main-nav ul {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.main-nav a {
+  display: block;
+  white-space: nowrap;
+  padding: 9px 10px;
+}
+.top .tool-btn { white-space: nowrap; }
+
+/* Below 1240px the links move into the hamburger menu so nothing collides */
+@media (max-width: 1239px) {
+  .top .wrap { gap: 12px; }
+  .main-nav { display: none; }
+  .nav-toggle { display: grid; margin-left: auto; }
+  .top.nav-open .main-nav {
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 12px 24px 16px;
+    background: color-mix(in srgb, var(--bg) 97%, transparent);
+    border-bottom: 1px solid var(--border-strong);
+    box-shadow: var(--shadow-lg);
+  }
+  .top.nav-open .main-nav ul { flex-direction: column; align-items: stretch; gap: 4px; }
+  .top.nav-open .main-nav a { padding: 12px 14px; border-radius: 11px; }
+}
+@media (max-width: 760px) {
+  .top .wrap { padding-inline: 18px; }
+}
+@media (max-width: 620px) {
+  .top .wrap { padding-inline: 14px; gap: 8px; }
+}
+
+/* The article's own brand block duplicates the sticky navbar */
+.article-brand { display: none; }
+
 ]]></b:skin>
 </head>
 
@@ -2277,20 +2361,12 @@ Streak <b id='xp-pill-streak'>0</b></span>
     </b:section>
 
     <div class='top-end'>
-    <div class='top-end'>
     <button aria-controls='main-nav' aria-expanded='false' aria-label='Open menu' class='icon-btn nav-toggle' id='nav-toggle' type='button'>&#9776;</button>
     <div aria-label='Reading tools' class='top-tools no-print' role='group'>
       <button aria-pressed='false' class='tool-btn' id='focus-toggle' type='button'>Focus mode</button>
       <button aria-controls='settings' aria-expanded='false' class='tool-btn' id='settings-toggle' type='button'>&#9881; Display</button>
       <button aria-label='Switch between dark and light theme' class='icon-btn' id='theme-toggle' type='button'>&#9680;</button>
-    <div aria-label='Reading tools' class='top-tools no-print' role='group'>
-      <button aria-pressed='false' class='tool-btn' id='focus-toggle' type='button'>Focus mode</button>
-      <button aria-controls='settings' aria-expanded='false' class='tool-btn' id='settings-toggle' type='button'>&#9881; Display</button>
-      <button aria-label='Switch between dark and light theme' class='icon-btn' id='theme-toggle' type='button'>&#9680;</button>
     </div>
-    </div>
-  </div>
-</header>
     </div>
   </div>
 </header>
