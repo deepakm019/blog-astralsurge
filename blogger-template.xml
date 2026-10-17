@@ -529,7 +529,7 @@ footer .title{display:none}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:.01ms!important;scroll-behavior:auto!important}
-  .card:hover,.feature:hover{transform:none}
+  .card:hover,.feature:hover{transform:none},.quest-card:hover{transform:none}
 }
 
 
