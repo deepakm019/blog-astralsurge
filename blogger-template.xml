@@ -34,6 +34,7 @@
   <script>//<![CDATA[
   (function(){
     var DEFAULTS={theme:'dark',accent:'lime',custom:'#b6f06a',bg:'aurora',motion:'off',font:'inter',measure:'standard',size:100,focus:false};
+    var DEFAULTS={theme:'dark',accent:'lime',custom:'#b6f06a',bg:'aurora',motion:'off',font:'inter',measure:'standard',size:100,focus:false};
     var PRESETS={
       lime:{dark:'#b6f06a',light:'#3f7d12'},
       teal:{dark:'#5eecd0',light:'#0b7a68'},
@@ -112,6 +113,7 @@
   --body-font:var(--font);
   --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --radius:16px;--max:1280px;--reading:740px;--post-lh:1.9;
+  --radius:16px;--max:1280px;--reading:740px;--post-lh:1.9;
   --accent:#b6f06a;--accent-ink:#0a1409;
   --grid:color-mix(in srgb,var(--accent) 5%,transparent);
   --grid-strong:color-mix(in srgb,var(--accent) 16%,transparent);
@@ -160,6 +162,7 @@ a:hover{color:var(--accent)}
 img{max-width:100%;height:auto;display:block}
 button{font:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 32px}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 32px}
 .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 h1,h2,h3{text-wrap:balance}
@@ -210,6 +213,15 @@ html.is-hidden body::before,html.is-hidden body::after,html.is-hidden .hero::bef
 }
 .main-nav ul{display:flex;flex-wrap:nowrap;gap:4px;list-style:none;margin:0;padding:0}
 .main-nav a{display:block;white-space:nowrap;color:var(--muted);font-size:.9rem;font-weight:500;padding:9px 13px;border-radius:9px;transition:background .18s,color .18s}
+.main-nav{flex:1 1 auto;display:flex;justify-content:center;min-width:0}
+.top-start{display:flex;align-items:center;gap:16px;min-width:0}
+.top-end{display:flex;align-items:center;justify-content:flex-end;gap:6px;min-width:0}
+@media (min-width:961px){
+  .top .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:16px}
+  .main-nav{justify-content:center}
+}
+.main-nav ul{display:flex;flex-wrap:nowrap;gap:4px;list-style:none;margin:0;padding:0}
+.main-nav a{display:block;white-space:nowrap;color:var(--muted);font-size:.9rem;font-weight:500;padding:9px 13px;border-radius:9px;transition:background .18s,color .18s}
 .main-nav a:hover,.main-nav a[aria-current="page"]{color:var(--text);background:var(--surface-2)}
 .icon-btn{width:36px;height:36px;flex:0 0 auto;border:1px solid var(--border);background:transparent;color:var(--muted);border-radius:9px;cursor:pointer;display:grid;place-items:center;font-size:15px;transition:color .15s,border-color .15s}
 .icon-btn:hover{color:var(--text);border-color:var(--border-strong)}
@@ -222,10 +234,18 @@ html.is-hidden body::before,html.is-hidden body::after,html.is-hidden .hero::bef
 .xp-pill b{color:var(--text);font-weight:600}
 .xp-pill .sep{opacity:.5}
 .footer-tools{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;width:100%;padding-bottom:20px;margin-bottom:4px;border-bottom:1px solid var(--border)}
+/* ---------- 6. Header tools, XP pill, footer tools + settings panel ---------- */
+.top-tools{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.top .tool-btn{min-height:34px;padding:4px 11px;font-size:.78rem;white-space:nowrap}
+.xp-pill{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;min-height:32px;padding:4px 12px;border:1px solid var(--border-strong);border-radius:999px;background:var(--surface);color:var(--muted);font:600 .76rem var(--mono);white-space:nowrap}
+.xp-pill b{color:var(--text);font-weight:600}
+.xp-pill .sep{opacity:.5}
+.footer-tools{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;width:100%;padding-bottom:20px;margin-bottom:4px;border-bottom:1px solid var(--border)}
 .site-follow{display:flex;align-items:center;gap:10px;padding-left:16px;border-left:1px solid var(--border);font-size:.8rem;color:var(--muted)}
 .site-follow a{color:var(--text);font-weight:600}
 .site-follow a:hover{color:var(--accent)}
 
+.settings{position:fixed;top:82px;right:max(16px,calc((100vw - var(--max)) / 2 + 24px));z-index:80;width:min(360px,calc(100vw - 32px));max-height:calc(100vh - 140px);overflow:auto;padding:18px 18px 16px;border:1px solid var(--border-strong);border-radius:16px;background:var(--surface);box-shadow:var(--shadow-lg)}
 .settings{position:fixed;top:82px;right:max(16px,calc((100vw - var(--max)) / 2 + 24px));z-index:80;width:min(360px,calc(100vw - 32px));max-height:calc(100vh - 140px);overflow:auto;padding:18px 18px 16px;border:1px solid var(--border-strong);border-radius:16px;background:var(--surface);box-shadow:var(--shadow-lg)}
 .settings-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 4px;font-weight:700}
 .opt{border:0;padding:0;margin:16px 0 0;min-width:0}
@@ -293,6 +313,7 @@ html.is-hidden body::before,html.is-hidden body::after,html.is-hidden .hero::bef
 /* ---------- 9. Story lists (homepage grid, archive rows) ---------- */
 .grid{display:flex;flex-direction:column;gap:12px;margin:0;padding:0;list-style:none}
 .card{display:grid;grid-template-columns:minmax(180px,34%) minmax(0,1fr);min-height:164px;border:1px solid color-mix(in srgb,var(--border) 70%,transparent);border-radius:12px;background:var(--surface);box-shadow:var(--shadow-sm);overflow:hidden;transition:transform .22s,border-color .22s,box-shadow .22s;min-width:0}
+.card{display:grid;grid-template-columns:minmax(180px,34%) minmax(0,1fr);min-height:164px;border:1px solid color-mix(in srgb,var(--border) 70%,transparent);border-radius:12px;background:var(--surface);box-shadow:var(--shadow-sm);overflow:hidden;transition:transform .22s,border-color .22s,box-shadow .22s;min-width:0}
 .card-img{display:block;position:relative;min-height:150px;height:100%;overflow:hidden;background:radial-gradient(circle at 80% 15%,color-mix(in srgb,var(--accent) 18%,transparent),transparent 40%),linear-gradient(135deg,var(--surface-2),var(--bg))}
 .card-img img{width:100%;height:100%;object-fit:cover;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
 .card-body{padding:17px 20px;display:flex;flex-direction:column;gap:8px;flex:1;min-width:0}
@@ -310,6 +331,7 @@ html.is-hidden body::before,html.is-hidden body::after,html.is-hidden .hero::bef
 .feature.no-img .feature-body{padding:clamp(22px,3vw,40px)}
 
 .home-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin:0;padding:0;list-style:none}
+.home-grid>.feature{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:stretch;min-width:0;border:1px solid color-mix(in srgb,var(--border) 70%,transparent);border-radius:18px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow-sm);transition:transform .22s,border-color .22s,box-shadow .22s}
 .home-grid>.feature{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:stretch;min-width:0;border:1px solid color-mix(in srgb,var(--border) 70%,transparent);border-radius:18px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow-sm);transition:transform .22s,border-color .22s,box-shadow .22s}
 .feature-img{display:block;position:relative;min-width:0;aspect-ratio:16/9;overflow:hidden;background:var(--surface-2)}
 .feature-img img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
@@ -403,6 +425,7 @@ html.is-hidden body::before,html.is-hidden body::after,html.is-hidden .hero::bef
 #main-col{min-width:0}
 .sidebar{position:sticky;top:90px;min-width:0}
 .sidebar .widget{margin:0 0 20px;padding:20px;background:linear-gradient(145deg,var(--surface),color-mix(in srgb,var(--surface) 86%,var(--accent)));border:1px solid color-mix(in srgb,var(--border) 70%,transparent);border-radius:14px;box-shadow:var(--shadow-sm)}
+.sidebar .widget{margin:0 0 20px;padding:20px;background:linear-gradient(145deg,var(--surface),color-mix(in srgb,var(--surface) 86%,var(--accent)));border:1px solid color-mix(in srgb,var(--border) 70%,transparent);border-radius:14px;box-shadow:var(--shadow-sm)}
 .sidebar h2.title{margin:0 0 14px;font:700 .95rem var(--font);letter-spacing:-.02em;color:var(--text)}
 .sidebar ul{list-style:none;margin:0;padding:0}
 .sidebar li{padding:9px 0;border-bottom:1px solid var(--border);font-size:.9rem}
@@ -430,6 +453,11 @@ html.focus-mode .hero,html.focus-mode .sec-head,html.focus-mode .site-follow,htm
 /* Homepage: the sidebar moves to the footer, so the story grid takes the full width */
 body.homepage .sidebar{display:none!important}
 body.homepage .layout{grid-template-columns:minmax(0,1fr)!important}
+html.focus-mode .hero,html.focus-mode .sec-head,html.focus-mode .site-follow,html.focus-mode .quest-hub{display:none}
+
+/* Homepage: the sidebar moves to the footer, so the story grid takes the full width */
+body.homepage .sidebar{display:none!important}
+body.homepage .layout{grid-template-columns:minmax(0,1fr)!important}
 
 /* ---------- 13. Utilities ---------- */
 .reading-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:60;pointer-events:none}
@@ -449,6 +477,35 @@ footer ul{display:flex;gap:18px;flex-wrap:wrap;list-style:none;margin:0;padding:
 footer a{color:var(--muted)}
 footer a:hover{color:var(--accent)}
 footer .title{display:none}
+/* Footer: share and follow row, then a compact row with Categories and Archive */
+#footer{display:flex;flex-wrap:wrap;gap:20px 40px;width:100%;align-items:flex-start}
+#footer .widget{margin:0;min-width:0}
+#Label1,#BlogArchive1{flex:1 1 230px;max-width:360px}
+#Label1 h2.title,#BlogArchive1 h2.title{display:block;margin:0 0 10px;font:600 .68rem var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+#Label1 .widget-content > ul{display:flex;flex-wrap:wrap;gap:6px 14px}
+#Label1 li{border:0;padding:0}
+#BlogArchive1 .widget-content{max-height:220px;overflow:auto}
+#BlogArchive1 ul ul{display:block}
+
+/* ---------- Quest hub (homepage, under the hero) ---------- */
+.quest-hub{margin:0 0 32px}
+.quest-hub-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px;margin:0 0 14px}
+.quest-hub-head h2{margin:0;font-size:1.25rem;letter-spacing:-.02em}
+.quest-hub-head p{margin:0;color:var(--muted);font-size:.9rem}
+.quest-hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0;padding:0;list-style:none}
+.quest-card{display:flex;flex-direction:column;gap:12px;min-width:0;padding:20px;border:1px solid color-mix(in srgb,var(--border) 70%,transparent);border-radius:var(--radius);background:linear-gradient(145deg,var(--surface),color-mix(in srgb,var(--surface) 86%,var(--accent)));box-shadow:var(--shadow-sm);transition:transform .22s,border-color .22s,box-shadow .22s}
+.quest-card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:var(--shadow-lg)}
+.quest-card .quest-kicker{font:600 .68rem var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.quest-card h3{margin:0;font-size:1.08rem;line-height:1.3;letter-spacing:-.02em;overflow-wrap:anywhere}
+.quest-card h3 a{color:var(--text)}
+.quest-card h3 a:hover{color:var(--accent)}
+.quest-card p{margin:0;color:var(--muted);font-size:.88rem;line-height:1.6}
+.quest-stats{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:auto;font-size:.8rem;color:var(--muted)}
+.quest-stats b{color:var(--text);font:600 .8rem var(--mono)}
+.quest-bar{height:6px;background:var(--surface-2);border-radius:999px;overflow:hidden}
+.quest-bar span{display:block;height:100%;width:0;background:var(--accent);transition:width .4s ease}
+.quest-go{align-self:flex-start;display:inline-flex;align-items:center;min-height:34px;padding:6px 14px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:.84rem}
+.quest-go:hover{color:var(--accent-ink)}
 /* Footer: share and follow row, then a compact row with Categories and Archive */
 #footer{display:flex;flex-wrap:wrap;gap:20px 40px;width:100%;align-items:flex-start}
 #footer .widget{margin:0;min-width:0}
@@ -529,9 +586,28 @@ footer .title{display:none}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:.01ms!important;scroll-behavior:auto!important}
-  .card:hover,.feature:hover{transform:none}
+  .card:hover,.feature:hover{transform:none},.quest-card:hover{transform:none}
 }
 
+
+/* ---------- Header tools, XP pill and quest hub: responsive ---------- */
+@media (max-width:1180px){
+  .main-nav a{padding:9px 9px;font-size:.86rem}
+  .top .wrap{gap:12px}
+}
+@media (max-width:960px){
+  .quest-hub-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:760px){
+  /* The Display panel also carries Focus mode under Extras, so the header button can go */
+  #focus-toggle{display:none}
+  .settings{top:74px}
+  .quest-card{padding:16px}
+}
+@media (max-width:620px){
+  .xp-pill{display:none}
+  .settings{top:68px}
+}
 
 /* ---------- Header tools, XP pill and quest hub: responsive ---------- */
 @media (max-width:1180px){
@@ -2201,12 +2277,20 @@ Streak <b id='xp-pill-streak'>0</b></span>
     </b:section>
 
     <div class='top-end'>
+    <div class='top-end'>
     <button aria-controls='main-nav' aria-expanded='false' aria-label='Open menu' class='icon-btn nav-toggle' id='nav-toggle' type='button'>&#9776;</button>
     <div aria-label='Reading tools' class='top-tools no-print' role='group'>
       <button aria-pressed='false' class='tool-btn' id='focus-toggle' type='button'>Focus mode</button>
       <button aria-controls='settings' aria-expanded='false' class='tool-btn' id='settings-toggle' type='button'>&#9881; Display</button>
       <button aria-label='Switch between dark and light theme' class='icon-btn' id='theme-toggle' type='button'>&#9680;</button>
+    <div aria-label='Reading tools' class='top-tools no-print' role='group'>
+      <button aria-pressed='false' class='tool-btn' id='focus-toggle' type='button'>Focus mode</button>
+      <button aria-controls='settings' aria-expanded='false' class='tool-btn' id='settings-toggle' type='button'>&#9881; Display</button>
+      <button aria-label='Switch between dark and light theme' class='icon-btn' id='theme-toggle' type='button'>&#9680;</button>
     </div>
+    </div>
+  </div>
+</header>
     </div>
   </div>
 </header>
@@ -9454,6 +9538,62 @@ Use after a training run has logged its metrics.
   if(themeBtn) themeBtn.addEventListener('click',function(){
     change('theme',(S.theme==='light'||S.theme==='paper')?'dark':'light');
   });
+
+  /* Quest progress: read-only view of the three quests' own saved state.
+     Each quest keeps its own key, so XP never mixes between quests. Streaks count
+     only when the last answered day was today or yesterday. */
+  var QUESTS=[
+    {id:'sdq',  key:'sdq-v1',  lastField:'lastDay'},
+    {id:'agx',  key:'agx-v1',  lastField:'last'},
+    {id:'dbml', key:'dbml-v1', lastField:'last'}
+  ];
+  function dayKeyOf(dt){ return dt.getFullYear()+'-'+(dt.getMonth()+1)+'-'+dt.getDate(); }
+  function readQuest(q){
+    var out={xp:0, streak:0};
+    try{
+      var s=JSON.parse(localStorage.getItem(q.key));
+      if(!s || typeof s!=='object' || Array.isArray(s)) return out;
+      var xp=Number(s.xp);
+      out.xp=Number.isFinite(xp) ? Math.max(0,Math.min(1000000000,Math.floor(xp))) : 0;
+      var day=s.daily;
+      if(day && typeof day==='object' && !Array.isArray(day)){
+        var st=Number(day.streak);
+        var last=typeof day[q.lastField]==='string' ? day[q.lastField] : '';
+        var live=(last===dayKeyOf(new Date())) || (last===dayKeyOf(new Date(Date.now()-86400000)));
+        out.streak=(live && Number.isFinite(st)) ? Math.max(0,Math.min(1000000,Math.floor(st))) : 0;
+      }
+    }catch(e){}
+    return out;
+  }
+  function renderQuestProgress(){
+    var total=0, best=0, byId={};
+    QUESTS.forEach(function(q){
+      var r=readQuest(q);
+      byId[q.id]=r; total+=r.xp; if(r.streak>best) best=r.streak;
+    });
+    /* Header pill: combined XP and the highest current streak */
+    var px=d.getElementById('xp-pill-xp'), ps=d.getElementById('xp-pill-streak');
+    if(px) px.textContent=total.toLocaleString('en-US');
+    if(ps) ps.textContent=String(best);
+    /* Homepage hub: each card shows only its own quest */
+    d.querySelectorAll('#quest-hub [data-quest]').forEach(function(card){
+      var r=byId[card.getAttribute('data-quest')];
+      if(!r) return;
+      var set=function(sel,text){ var el=card.querySelector(sel); if(el) el.textContent=text; };
+      set('[data-q-level]', String(Math.floor(r.xp/100)+1));
+      set('[data-q-xp]', r.xp.toLocaleString('en-US'));
+      set('[data-q-streak]', String(r.streak));
+      var bar=card.querySelector('[data-q-bar]');
+      if(bar) bar.style.width=(r.xp%100)+'%';
+    });
+  }
+  renderQuestProgress();
+  win.addEventListener('storage',renderQuestProgress);
+  win.addEventListener('pageshow',renderQuestProgress);
+  win.addEventListener('focus',renderQuestProgress);
+  d.addEventListener('visibilitychange',function(){ if(!d.hidden) renderQuestProgress(); });
+  /* Quizzes answer on click; refresh the pill just after the quest has saved */
+  d.addEventListener('click',function(){ win.setTimeout(renderQuestProgress,60); },true);
 
   /* Quest progress: read-only view of the three quests' own saved state.
      Each quest keeps its own key, so XP never mixes between quests. Streaks count
